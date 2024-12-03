@@ -55,7 +55,6 @@ function ResponsiveAppBar() {
               color: 'inherit',
               textDecoration: 'none',
             }}
-            href="/"
           >
             Hogugu
           </Typography>
