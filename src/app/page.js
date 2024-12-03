@@ -1,13 +1,16 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AppBar from './components/AppBar';
 import Card from './components/Card';
 import Pagination from "./components/Pagination";
 import SearchDialog from "./components/SearchDialog";
-
+import BottomBar from "./components/BottomBar";
 
 export default function Home() {
-  const [therapists, setTherapists] = useState(["A", "B", "c", "D", "E", "F", "G"])
+  const [therapists, setTherapists] = useState([])
+  useEffect(() => {
+    setTherapists(["A", "B", "c", "D", "E", "F", "G"]);
+  }, [])
   return (
     <>
       <AppBar />
@@ -20,10 +23,8 @@ export default function Home() {
           )}
           <Pagination />
         </main >
-        <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-          footer
-        </footer>
       </div >
+      <BottomBar />
     </>
   );
 }

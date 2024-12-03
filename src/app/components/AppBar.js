@@ -45,6 +45,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -54,7 +55,6 @@ function ResponsiveAppBar() {
               color: 'inherit',
               textDecoration: 'none',
             }}
-            href="/"
           >
             Hogugu
           </Typography>
