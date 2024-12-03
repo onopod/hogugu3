@@ -1,5 +1,4 @@
 "use client"
-import Link from "next/link";
 import { useState } from "react";
 import AppBar from './components/AppBar';
 import Card from './components/Card';
@@ -15,7 +14,6 @@ export default function Home() {
       <div className="items-center justify-items-center min-h-screen p-8">
         <main className="flex flex-col gap-8">
           <SearchDialog />
-          <Link href="./therapist">saki.</Link>
           {therapists.map((post, idx) => (
             <Card key={idx} />
           )

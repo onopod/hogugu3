@@ -1,9 +1,9 @@
 "use client"
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import Rating from '@mui/material/Rating';
 import Image from "next/image";
 import AppBar from '../components/AppBar';
-
+import BookingForm from "../components/BookingForm";
 
 export default function Home() {
     return (
@@ -25,6 +25,11 @@ export default function Home() {
                             size="small" value={4.5} />
                         <Box sx={{ ml: 2 }}>(4.5)</Box>
                     </Box>
+                    <Box>
+                        <Typography>もみほぐし:60min 6000円</Typography>
+                        <Typography>もみほぐし:60min 6000円</Typography>
+                    </Box>
+                    <BookingForm />
 
 
                 </main >
