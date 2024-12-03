@@ -23,8 +23,8 @@ export default function Home() {
           )}
           <Pagination />
         </main >
-        <BottomBar />
       </div >
+      <BottomBar />
     </>
   );
 }

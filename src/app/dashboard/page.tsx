@@ -2,6 +2,7 @@
 
 import { Box } from "@mui/material";
 import AppBar from "../components/AppBar";
+import BottomBar from "../components/BottomBar";
 import SnackBar from "../components/SnackBar";
 export default function Dashboard() {
     return (
@@ -17,6 +18,7 @@ export default function Dashboard() {
                     </Box>
                 </main>
             </div>
+            <BottomBar />
         </>
     )
 }
