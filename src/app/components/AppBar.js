@@ -45,6 +45,7 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -112,6 +113,7 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
+            Hogugu
             Hogugu
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
