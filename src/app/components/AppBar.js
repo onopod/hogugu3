@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import Link from "next/link";
 import * as React from 'react';
 
-const pages = ['Products', 'Pricing', 'Blog'];
+const pages = ['login', 'register'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
 function ResponsiveAppBar() {
@@ -45,7 +45,6 @@ function ResponsiveAppBar() {
             variant="h6"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -55,6 +54,7 @@ function ResponsiveAppBar() {
               color: 'inherit',
               textDecoration: 'none',
             }}
+            href="/"
           >
             Hogugu
           </Typography>
@@ -87,8 +87,10 @@ function ResponsiveAppBar() {
               sx={{ display: { xs: 'block', md: 'none' } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem key={page}>
+                  <Link href={"./" + page}>
+                    <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                  </Link>
                 </MenuItem>
               ))}
             </Menu>
@@ -98,7 +100,7 @@ function ResponsiveAppBar() {
             variant="h5"
             noWrap
             component="a"
-            href="#app-bar-with-responsive-menu"
+            href="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -110,15 +112,14 @@ function ResponsiveAppBar() {
               textDecoration: 'none',
             }}
           >
-            <Link href="/">
-              Hogugu
-            </Link>
+            Hogugu
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
             {pages.map((page) => (
+
               <Button
                 key={page}
-                onClick={handleCloseNavMenu}
+                href={"./" + page}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
                 {page}
@@ -149,6 +150,7 @@ function ResponsiveAppBar() {
             >
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
+
                   <Typography sx={{ textAlign: 'center' }}>{setting}</Typography>
                 </MenuItem>
               ))}
