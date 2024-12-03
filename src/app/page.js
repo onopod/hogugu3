@@ -4,7 +4,7 @@ import AppBar from './components/AppBar';
 import Card from './components/Card';
 import Pagination from "./components/Pagination";
 import SearchDialog from "./components/SearchDialog";
-
+import BottomBar from "./components/BottomBar";
 
 export default function Home() {
   const [therapists, setTherapists] = useState([])
@@ -23,9 +23,7 @@ export default function Home() {
           )}
           <Pagination />
         </main >
-        <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-          footer
-        </footer>
+        <BottomBar />
       </div >
     </>
   );
