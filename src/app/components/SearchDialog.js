@@ -1,8 +1,8 @@
+import { MenuItem, Select } from '@mui/material';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import * as React from 'react';
@@ -21,7 +21,7 @@ export default function FormDialog() {
     return (
         <React.Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
-                Open form dialog
+                検索
             </Button>
             <Dialog
                 open={open}
@@ -38,27 +38,23 @@ export default function FormDialog() {
                     },
                 }}
             >
-                <DialogTitle>Subscribe</DialogTitle>
+                <DialogTitle>検索</DialogTitle>
                 <DialogContent>
-                    <DialogContentText>
-                        To subscribe to this website, please enter your email address here. We
-                        will send updates occasionally.
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        required
-                        margin="dense"
-                        id="name"
-                        name="email"
-                        label="Email Address"
-                        type="email"
-                        fullWidth
-                        variant="standard"
-                    />
+
+                    <Select name="area">
+                        <MenuItem value="東京">東京</MenuItem>
+                        <MenuItem value="大阪">大阪</MenuItem>
+                    </Select>
+                    <Select>
+                        <MenuItem value="もみほぐし">もみほぐし</MenuItem>
+                        <MenuItem value="オイル">オイル</MenuItem>
+                    </Select>
+                    <TextField label="フリーワード" />
+
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleClose}>Cancel</Button>
-                    <Button type="submit">Subscribe</Button>
+                    <Button type="submit">検索</Button>
+                    <Button onClick={handleClose}>キャンセル</Button>
                 </DialogActions>
             </Dialog>
         </React.Fragment>
