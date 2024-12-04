@@ -1,18 +1,11 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import CssBaseline from '@mui/material/CssBaseline';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import SettingsIcon from '@mui/icons-material/Settings';
 import MessageIcon from '@mui/icons-material/Message';
 import HotelIcon from '@mui/icons-material/Hotel';
 import Paper from '@mui/material/Paper';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
-
 function refreshMessages() {
     const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
@@ -27,9 +20,7 @@ export default function FixedBottomNavigation() {
 
 
     return (
-        <Box sx={{ pb: 7 }} ref={ref}>
-            <CssBaseline />
-
+        <Box maxWidth="sm" sx={{ display: "flex", pb: 7 }} ref={ref}>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                 <BottomNavigation
                     showLabels
@@ -38,9 +29,9 @@ export default function FixedBottomNavigation() {
                         setValue(newValue);
                     }}
                 >
-                    <BottomNavigationAction href="#" label="Message" icon={<MessageIcon />} />
-                    <BottomNavigationAction href="#" label="Reservation" icon={<HotelIcon />} />
-                    <BottomNavigationAction href="#" label="Setting" icon={<SettingsIcon />} />
+                    <BottomNavigationAction href="/message" label="Message" icon={<MessageIcon />} />
+                    <BottomNavigationAction href="/reservation" label="Reservation" icon={<HotelIcon />} />
+                    <BottomNavigationAction href="/setting" label="Setting" icon={<SettingsIcon />} />
                 </BottomNavigation>
             </Paper>
         </Box>
