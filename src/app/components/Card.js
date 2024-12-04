@@ -9,12 +9,10 @@ import Collapse from '@mui/material/Collapse';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import { red } from '@mui/material/colors';
 import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Box, Link } from "@mui/material";
+import { Button, Chip, Box, Link } from "@mui/material";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 
 const ExpandMore = styled((props) => {
@@ -50,32 +48,32 @@ export default function RecipeReviewCard() {
   };
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card>
 
       <CardHeader
         avatar={
-          <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
-          </Avatar>
+          <Avatar alt="Sasaki Yuka" src="/avatar.jpg" sx={{ width: 64, height: 64 }} />
         }
         action={
-          <IconButton aria-label="settings">
-            <MoreVertIcon />
+          <IconButton size="large" >
+            <FavoriteIcon />
           </IconButton>
         }
-        title="Shrimp and Chorizo Paella"
-        subheader="September 14, 2016"
+        title="Sasaki Yuka"
+        subheader={
+          <>
+            <Chip label="もみほぐし" size="small" color="success" />
+            <Chip label="オイル" size="small" />
+          </>
+        }
       />
-
       <CardMedia
         component="img"
         height="194"
-        image="https://mui.com/static/images/cards/paella.jpg"
-
-        alt="Paella dish"
+        image="/paella.jpg"
+        alt="施術イメージ"
       />
       <CardContent>
-        <h3>山田 花子 </h3>
         <Box><span>返答率 - </span><span>返答時間 - </span> </Box>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
           世田谷から出発🛫
@@ -88,10 +86,10 @@ export default function RecipeReviewCard() {
         </Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Link href="/therapist"> 詳細 </Link>
+        <Button href="/therapist"> 詳細 </Button>
 
         <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
+
         </IconButton>
         <ExpandMore
           expand={expanded}
