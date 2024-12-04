@@ -2,10 +2,9 @@
 import { useEffect, useState } from "react";
 import AppBar from './components/AppBar';
 import Card from './components/Card';
-import Pagination from "./components/Pagination";
 import SearchDialog from "./components/SearchDialog";
 import BottomBar from "./components/BottomBar";
-import { Skeleton } from "@mui/material";
+import { Box, Stack, Pagination, Skeleton } from "@mui/material";
 
 export default function Home() {
   const [therapists, setTherapists] = useState(false)
@@ -24,7 +23,9 @@ export default function Home() {
                 <Card key={idx} />
               )
               )}
-              <Pagination />
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination count={3} color="primary" size="large" />
+              </Box>
             </>
           ) : (
             <>
