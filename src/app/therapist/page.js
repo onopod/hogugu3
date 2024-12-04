@@ -1,11 +1,11 @@
 "use client"
-import { Box, Typography } from '@mui/material';
-import Rating from '@mui/material/Rating';
+import { Box, Typography, Rating } from '@mui/material';
 import Image from "next/image";
 import AppBar from '../components/AppBar';
+import BottomBar from "../components/BottomBar";
 import BookingForm from "../components/BookingForm";
 
-export default function Home() {
+export default function TherapistPage() {
     return (
         <>
             <AppBar />
@@ -13,11 +13,19 @@ export default function Home() {
                 <main className="flex flex-col gap-8">
                     <Image
                         src="/paella.jpg"
-                        layout="response"
-                        width={400}
-                        height={320}
+                        width={500}
+                        height={300}
                         alt="" />
                     <h1>山田 花子</h1>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+                        世田谷から出発🛫
+
+                        ヨガインストラクターによる
+                        タイ古式マッサージ🇹🇭🧘‍♂️✨
+
+                        肩・首・頭の疲れ、
+                        腰痛お任せください！
+                    </Typography>
                     <Box sx={{ width: 200, display: 'flex', alignItems: 'center' }}>
 
                         <Rating name="half-rating"
@@ -31,9 +39,9 @@ export default function Home() {
                     </Box>
                     <BookingForm />
 
-
                 </main >
             </div >
+            <BottomBar />
         </>
     );
 }
