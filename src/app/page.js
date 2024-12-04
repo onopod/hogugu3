@@ -4,7 +4,7 @@ import AppBar from './components/AppBar';
 import Card from './components/Card';
 import SearchDialog from "./components/SearchDialog";
 import BottomBar from "./components/BottomBar";
-import { Box, Stack, Pagination, Skeleton } from "@mui/material";
+import { Box, Pagination, Skeleton } from "@mui/material";
 
 export default function Home() {
   const [therapists, setTherapists] = useState(false)
@@ -32,8 +32,8 @@ export default function Home() {
               <Skeleton />
             </>
           ))}
-        </main >
-      </div >
+        </main>
+      </div>
       <BottomBar />
     </>
   );
