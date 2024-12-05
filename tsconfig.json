@@ -36,7 +36,8 @@
     "src/app/components/AppBar.js",
     "src/app/page.js",
     "src/app/api/therapists/[id]/route.js",
-    "src/app/api/therapists/route.js"
+    "src/app/api/therapists/route.js",
+    "prisma/seed.js"
   ],
   "exclude": [
     "node_modules"
