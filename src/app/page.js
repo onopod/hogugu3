@@ -7,9 +7,13 @@ import Card from './components/Card';
 import SearchDialog from "./components/SearchDialog";
 
 export default function Home() {
-  const [therapists, setTherapists] = useState(false)
+  const [therapists, setTherapists] = useState(false);
   useEffect(() => {
-    setTherapists(["A", "B", "c", "D", "E", "F", "G"]);
+    fetch('/api/therapists')
+      .then((res) => res.json())
+      .then((data) => {
+        setTherapists(data.therapists)
+      })
   }, [])
   return (
     <>
@@ -18,8 +22,8 @@ export default function Home() {
         {(therapists ? (
           <>
             <SearchDialog />
-            {therapists.map((post, idx) => (
-              <Card key={idx} />
+            {therapists.map((therapist, idx) => (
+              <Card key={idx} therapist={therapist} />
             )
             )}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
