@@ -1,11 +1,11 @@
-import * as React from 'react';
-import Box from '@mui/material/Box';
+import HotelIcon from '@mui/icons-material/Hotel';
+import MessageIcon from '@mui/icons-material/Message';
+import SettingsIcon from '@mui/icons-material/Settings';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-import SettingsIcon from '@mui/icons-material/Settings';
-import MessageIcon from '@mui/icons-material/Message';
-import HotelIcon from '@mui/icons-material/Hotel';
+import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import * as React from 'react';
 function refreshMessages() {
     const getRandomInt = (max) => Math.floor(Math.random() * Math.floor(max));
 
