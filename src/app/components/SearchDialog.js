@@ -1,6 +1,6 @@
-import { Fragment, forwardRef, useState } from 'react';
-import { Dialog, DialogContent, DialogTitle, Button, MenuItem, Select, TextField, Stack, AppBar, Toolbar, IconButton, Typography, Slide } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import { AppBar, Button, Dialog, DialogContent, IconButton, MenuItem, Select, Slide, Stack, TextField, Toolbar, Typography } from '@mui/material';
+import { Fragment, forwardRef, useState } from 'react';
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -23,9 +23,11 @@ export default function FullScreenDialog() {
 
     return (
         <Fragment>
-            <Button variant="outlined" onClick={handleClickOpen}>
-                検索
-            </Button>
+            <Stack sx={{ mt: 1, mb: 1 }}>
+                <Button variant="outlined" onClick={handleClickOpen}>
+                    検索
+                </Button>
+            </Stack>
             <Dialog
                 fullScreen
                 open={open}
@@ -43,7 +45,7 @@ export default function FullScreenDialog() {
                             <CloseIcon />
                         </IconButton>
                         <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-                            Sound
+                            検索
                         </Typography>
                         <Button autoFocus color="inherit" onClick={handleClose}>
                             save
@@ -51,8 +53,8 @@ export default function FullScreenDialog() {
                     </Toolbar>
                 </AppBar>
                 <DialogContent>
-                    <DialogTitle>検索</DialogTitle>
                     <Stack spacing={2}>
+                        地域
                         <Select onChange={(e) => setArea(e.target.value)}
                             value={area}
                             label="area"
@@ -60,6 +62,7 @@ export default function FullScreenDialog() {
                             <MenuItem value="東京">東京</MenuItem>
                             <MenuItem value="大阪">大阪</MenuItem>
                         </Select>
+                        メニュー
                         <Select onChange={(e) => setMenu(e.target.value)}
                             value={menu}
                             label="menu"
@@ -72,6 +75,6 @@ export default function FullScreenDialog() {
 
                 </DialogContent>
             </Dialog>
-        </Fragment>
+        </Fragment >
     );
 }
