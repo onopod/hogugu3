@@ -11,7 +11,7 @@ async function main() {
     }
 }
 
-export const GET = async (req: Request, res: NextResponse) => {
+export const GET = async (req, res) => {
     try {
         await main();
         const therapists = await prisma.therapist.findMany();
@@ -23,7 +23,7 @@ export const GET = async (req: Request, res: NextResponse) => {
     }
 };
 
-export const POST = async (req: Request, res: NextResponse) => {
+export const POST = async (req) => {
     console.log("POST");
 
     try {

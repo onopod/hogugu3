@@ -12,9 +12,9 @@ async function main() {
     }
 }
 
-export const GET = async (req: Request, res: NextResponse) => {
+export const GET = async (req, res) => {
     try {
-        const id: number = parseInt(req.url.split("/therapists/")[1]);
+        const id = parseInt(req.url.split("/therapists/")[1]);
         await main();
 
         const post = await prisma.therapist.findFirst({ where: { id } });
@@ -31,9 +31,9 @@ export const GET = async (req: Request, res: NextResponse) => {
     }
 };
 
-export const PUT = async (req: Request, res: NextResponse) => {
+export const PUT = async (req, res) => {
     try {
-        const id: number = parseInt(req.url.split("/therapists/")[1]);
+        const id = parseInt(req.url.split("/therapists/")[1]);
         const { title, description } = await req.json();
 
         await main();
@@ -51,9 +51,9 @@ export const PUT = async (req: Request, res: NextResponse) => {
     }
 };
 
-export const DELETE = async (req: Request, res: NextResponse) => {
+export const DELETE = async (req, res) => {
     try {
-        const id: number = parseInt(req.url.split("/therapists/")[1]);
+        const id = parseInt(req.url.split("/therapists/")[1]);
 
         await main();
 

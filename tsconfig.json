@@ -34,7 +34,9 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/app/components/AppBar.js",
-    "src/app/page.js"
+    "src/app/page.js",
+    "src/app/api/therapists/[id]/route.js",
+    "src/app/api/therapists/route.js"
   ],
   "exclude": [
     "node_modules"
