@@ -1,0 +1,19 @@
+POST http://localhost:3000/api/users
+content-type: application/json
+
+{
+    "name": "yamada taro",
+    "mail": "ono@example.com", 
+    "password": "$2a$10$eepy4uU7oWd50SoBZZWvw.HuKpBaiF2RtBZYat9I66dviX0.Mxgxa"
+}
+
+
+###
+
+POST http://localhost:3000/api/users
+content-type: application/json
+
+{
+    "mail": "ono2@example.com", 
+    "password": "$2a$10$eepy4uU7oWd50SoBZZWvw.HuKpBaiF2RtBZYat9I66dviX0.Mxgxa"
+}
