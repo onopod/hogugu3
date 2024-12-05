@@ -37,7 +37,10 @@
     "src/app/page.js",
     "src/app/api/therapists/[id]/route.js",
     "src/app/api/therapists/route.js",
-    "prisma/seed.js"
+    "prisma/seed.js",
+    "src/app/api/users/route.js",
+    "src/app/login/page.js",
+    "src/app/register/page.js"
   ],
   "exclude": [
     "node_modules"
