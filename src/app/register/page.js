@@ -3,7 +3,7 @@ import { Button, Container, FormControl, Stack, TextField } from "@mui/material"
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import AppBar from "../components/AppBar";
-export default function Login() {
+export default function Register() {
     const router = useRouter();
 
     const { register, handleSubmit } = useForm();

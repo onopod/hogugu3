@@ -1,20 +1,39 @@
 "use client"
-import { Button, Container, FormControl, TextField } from "@mui/material";
+import { Button, Container, FormControl, Stack, TextField } from "@mui/material";
+import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 import AppBar from "../components/AppBar";
 export default function Login() {
+    const router = useRouter();
+
     const { register, handleSubmit } = useForm();
-    const onSubmit = data => console.log(data)
+    const onSubmit = data => {
+        console.log(data);
+        fetch('/api/users', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                router.push("/login")
+            })
+    }
 
     return (
         <>
             <AppBar />
             <Container maxWidth="sm">
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <FormControl>
-                        <TextField id="mail" {...register('mail')} label="メールアドレス" />
-                        <TextField id="password" {...register('password')} type="password" label="パスワード" />
-                        <Button type="submit">ログイン</Button>
+                    <FormControl fullWidth>
+                        <Stack spacing={2} sx={{ mt: 1, mb: 1 }}>
+                            <TextField id="mail" {...register('mail')} placeholder="メールアドレス" />
+                            <TextField id="password" {...register('password')} type="password" placeholder="パスワード" />
+                            <Button type="submit" variant="outlined" fullWidth>新規登録</Button>
+                        </Stack>
                     </FormControl>
                 </form>
             </Container>
