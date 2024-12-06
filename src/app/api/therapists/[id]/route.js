@@ -17,13 +17,16 @@ export const GET = async (req, res) => {
         const id = parseInt(req.url.split("/therapists/")[1]);
         await main();
 
-        const post = await prisma.therapist.findFirst({ where: { id } });
+        const therapist = await prisma.therapist.findFirst({
+            where: { id },
+            include: { menus: { include: { menu: true } } }
+        });
 
-        if (!post) {
+        if (!therapist) {
             return NextResponse.json({ message: "Not Found" }, { status: 404 });
         }
 
-        return NextResponse.json({ message: "Success", post }, { status: 200 });
+        return NextResponse.json({ message: "Success", therapist }, { status: 200 });
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {

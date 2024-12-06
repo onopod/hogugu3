@@ -73,12 +73,12 @@ export default function TherapistCard({ therapist }) {
         image="/paella.jpg"
         alt="施術イメージ"
       />
-      <CardContent>
+      <CardContent key={1}>
         <Box><span>返答率 - </span><span>返答時間 - </span> </Box>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>{therapist.comment}</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button href="/therapist/{therapist.id}"> 詳細 </Button>
+        <Button href={`/therapist/${therapist.id}`}> 詳細 </Button>
 
         <IconButton aria-label="add to favorites">
 
@@ -93,10 +93,15 @@ export default function TherapistCard({ therapist }) {
         </ExpandMore>
       </CardActions >
       <Collapse in={expanded} timeout="auto" unmountOnExit >
-        <CardContent>
-          <Typography sx={{ marginBottom: 2 }}> !もみほぐし: 60min 6000円 </Typography>
-          <Typography sx={{ marginBottom: 2 }}> もみほぐし: 60min 6000円 </Typography>
-          <Typography sx={{ marginBottom: 2 }}> もみほぐし: 60min 6000円 </Typography>
+        <CardContent key={2}>
+          {therapist.menus && therapist.menus.map((menu, idx) => (
+            <>
+              <Typography key={idx} sx={{ marginBottom: 2 }}>
+                {menu.menu.name}: {menu.treatmentTime}min {menu.price}円
+              </Typography>
+            </>
+          )
+          )}
         </CardContent>
       </Collapse>
     </Card >

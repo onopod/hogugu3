@@ -14,15 +14,18 @@ import BookingConfirmDialog from "./BookingConfirmDialog";
 
 dayjs.locale('ja');
 
-export default function RadioButtonsGroup() {
+export default function BookingForm({ therapist }) {
     return (
         <FormControl>
             予約
             <FormLabel>メニュー</FormLabel>
             <RadioGroup defaultValue="female" name="menu">
-                <FormControlLabel value="female" control={<Radio />} label="もみほぐし＋オイルセット" />
-                <FormControlLabel value="male" control={<Radio />} label="もみほぐし＋フットセット" />
-                <FormControlLabel value="other" control={<Radio />} label="オイルトリートメント" />
+                {therapist.menus?.map((menu, idx) => (
+                    <>
+                        <Typography key={idx}>{menu.menu.name}:{menu.treatmentTime}min {menu.price}円</Typography>
+                        <FormControlLabel value="menu.menu.id" control={<Radio />} label={`${menu.menu.name}:${menu.treatmentTime}min ${menu.price}円`} />
+                    </>
+                ))}
             </RadioGroup>
             <FormLabel>予約時間</FormLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={{ year: 'YYYY年' }}>
