@@ -1,11 +1,12 @@
 "use client"
 
+import AppBar from "@/app/components/AppBar";
 import BottomBar from "@/app/components/BottomBar";
 import { Box, Container, Rating, Typography } from '@mui/material';
 import Image from "next/image";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
-import AppBar from '../../components/AppBar';
+import BookingForm from "../../components/BookingForm";
 
 export default function TherapistPage() {
     const params = useParams();
@@ -41,6 +42,7 @@ export default function TherapistPage() {
                             {menu.menu.name}:{menu.treatmentTime}min {menu.price}円
                         </Typography>
                     ))}
+                    <BookingForm therapist={therapist} />
                 </Box>
             </Container >
             <BottomBar />

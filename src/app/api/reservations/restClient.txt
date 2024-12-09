@@ -1,1 +1,12 @@
 GET http://localhost:3000/api/reservations
+
+###
+
+POST http://localhost:3000/api/reservations
+content-type: application/json
+
+{
+    "userId": 1, 
+    "therapistMenuId": 1,
+    "startDt": "2024-12-08T21:00" 
+}

@@ -50,7 +50,7 @@ model Reservation {
   userId          Int
   therapistMenu   TherapistsOnMenus @relation(fields: [therapistMenuId], references: [id])
   therapistMenuId Int
-  startDt         DateTime
+  startDt         DateTime          @default(now())
   created         DateTime          @default(now())
 
   @@index([userId, therapistMenuId])

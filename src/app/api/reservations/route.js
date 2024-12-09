@@ -38,3 +38,25 @@ export const GET = async (req, res) => {
     }
 };
 
+
+
+export const POST = async (req) => {
+    const userId = 1;
+    try {
+        const { therapistMenuId, startDt } = await req.json();
+        await main();
+        const reservation = await prisma.reservation.create({
+
+            data: {
+                userId,
+                therapistMenuId,
+                startDt: startDt + ":00.000+09:00"
+            }
+        });
+        return NextResponse.json({ message: "Success", reservation }, { status: 201 });
+    } catch (err) {
+        return NextResponse.json({ message: "Error", err }, { status: 500 });
+    } finally {
+        await prisma.$disconnect();
+    }
+};
