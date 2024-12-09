@@ -14,7 +14,9 @@ async function main() {
 export const GET = async (req, res) => {
     try {
         await main();
-        const therapists = await prisma.therapist.findMany();
+        const therapists = await prisma.therapist.findMany({
+            include: { menus: { include: { menu: true } } }
+        });
         return NextResponse.json({ message: "Success", therapists }, { status: 200 });
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });

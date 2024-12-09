@@ -48,7 +48,7 @@ export default function TherapistCard({ therapist }) {
   };
 
   return (
-    <Card>
+    <Card key={therapist.id}>
 
       <CardHeader
         avatar={
@@ -78,9 +78,10 @@ export default function TherapistCard({ therapist }) {
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>{therapist.comment}</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button href="/therapist/{therapist.id}"> 詳細 </Button>
+        <Button href={`/therapist/${therapist.id}`}> 詳細 </Button>
 
         <IconButton aria-label="add to favorites">
+
 
         </IconButton>
         <ExpandMore
@@ -94,9 +95,12 @@ export default function TherapistCard({ therapist }) {
       </CardActions >
       <Collapse in={expanded} timeout="auto" unmountOnExit >
         <CardContent>
-          <Typography sx={{ marginBottom: 2 }}> !もみほぐし: 60min 6000円 </Typography>
-          <Typography sx={{ marginBottom: 2 }}> もみほぐし: 60min 6000円 </Typography>
-          <Typography sx={{ marginBottom: 2 }}> もみほぐし: 60min 6000円 </Typography>
+          {therapist.menus && therapist.menus.map((menu, idx) => (
+            <Typography key={idx} sx={{ marginBottom: 2 }}>
+              {menu.menu.name}: {menu.treatmentTime}min {menu.price}円
+            </Typography>
+          )
+          )}
         </CardContent>
       </Collapse>
     </Card >

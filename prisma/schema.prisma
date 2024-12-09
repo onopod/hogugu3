@@ -18,7 +18,26 @@ model User {
 }
 
 model Therapist {
-  id      Int     @id @default(autoincrement())
+  id      Int                 @id @default(autoincrement())
   name    String
   comment String?
+  menus   TherapistsOnMenus[]
+}
+
+model Menu {
+  id         Int                 @id @default(autoincrement())
+  name       String
+  therapists TherapistsOnMenus[]
+}
+
+model TherapistsOnMenus {
+  id            Int        @id @default(autoincrement())
+  therapist     Therapist? @relation(fields: [therapistId], references: [id])
+  therapistId   Int?
+  menu          Menu?      @relation(fields: [menuId], references: [id])
+  menuId        Int?
+  treatmentTime Int?
+  price         Int?
+
+  @@index([therapistId, menuId])
 }

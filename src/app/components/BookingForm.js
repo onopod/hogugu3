@@ -1,28 +1,23 @@
-import { MenuItem, Select } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material';
+import { AdapterDayjs, DateTimePicker, LocalizationProvider, renderTimeViewClock } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 import BookingConfirmDialog from "./BookingConfirmDialog";
 
 dayjs.locale('ja');
 
-export default function RadioButtonsGroup() {
+export default function BookingForm({ therapist }) {
     return (
         <FormControl>
             予約
             <FormLabel>メニュー</FormLabel>
             <RadioGroup defaultValue="female" name="menu">
-                <FormControlLabel value="female" control={<Radio />} label="もみほぐし＋オイルセット" />
-                <FormControlLabel value="male" control={<Radio />} label="もみほぐし＋フットセット" />
-                <FormControlLabel value="other" control={<Radio />} label="オイルトリートメント" />
+                {therapist.menus?.map((menu, idx) => (
+                    <>
+                        <Typography key={idx}>{menu.menu.name}:{menu.treatmentTime}min {menu.price}円</Typography>
+                        <FormControlLabel value="menu.menu.id" control={<Radio />} label={`${menu.menu.name}:${menu.treatmentTime}min ${menu.price}円`} />
+                    </>
+                ))}
             </RadioGroup>
             <FormLabel>予約時間</FormLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={{ year: 'YYYY年' }}>
