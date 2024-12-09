@@ -24,6 +24,7 @@ export default function Home() {
             <SearchDialog />
             {therapists.map((therapist, idx) => (
               <Card key={idx} therapist={therapist} />
+
             )
             )}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
