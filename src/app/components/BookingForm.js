@@ -1,13 +1,5 @@
-import { MenuItem, Select } from '@mui/material';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
+import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material';
+import { AdapterDayjs, DateTimePicker, LocalizationProvider, renderTimeViewClock } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ja';
 import BookingConfirmDialog from "./BookingConfirmDialog";
