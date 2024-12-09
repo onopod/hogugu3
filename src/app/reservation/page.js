@@ -1,4 +1,5 @@
 "use client"
+import { format } from "date-fns";
 import PropTypes from 'prop-types';
 import * as React from 'react';
 
@@ -42,6 +43,16 @@ export default function ReservationPage() {
         setValue(newValue);
     };
 
+    const [reservations, setReservations] = React.useState([])
+
+    React.useEffect(() => {
+        fetch("/api/reservations")
+            .then(req => req.json())
+            .then(data => {
+                setReservations(data.reservations)
+            })
+    }, [])
+
     return (
         <>
             <AppBar />
@@ -58,24 +69,18 @@ export default function ReservationPage() {
                     </Box>
                     <CustomTabPanel value={value} index={0}>
                         <Stack spacing={2} sx={{ mt: 1 }}>
-                            <Stack direction="row" spacing={2}>
-                                <Box>
-                                    <Avatar alt="Tanaka Mitsuru" src="/avatar.jpg" />
-                                </Box>
-                                <Box>
-                                    <Typography>Tanaka Risa</Typography>
-                                    <Typography>2024/12/24 14:00から90分 オイルマッサージ</Typography>
-                                </Box>
-                            </Stack>
-                            <Stack direction="row" spacing={2}>
-                                <Box>
-                                    <Avatar alt="Tanaka Mitsuru" src="/avatar.jpg" />
-                                </Box>
-                                <Box>
-                                    <Typography>Tanaka Risa</Typography>
-                                    <Typography>2024/12/24 14:00から90分 オイルマッサージ</Typography>
-                                </Box>
-                            </Stack>
+                            {reservations.map((reservation) => (
+                                <Stack direction="row" spacing={2} key={reservation.id}>
+                                    <Box>
+                                        <Avatar alt={reservation.therapistMenu.therapist.name} src="/avatar.jpg" />
+                                    </Box>
+                                    <Box>
+                                        <Typography>{reservation.therapistMenu.therapist.name}</Typography>
+                                        <Typography>{format(reservation.startDt, "yyyy/MM/dd kk:mm")}から{reservation.therapistMenu.treatmentTime}分 {reservation.therapistMenu.menu.name}</Typography>
+                                    </Box>
+                                </Stack>
+                            ))}
+
                         </Stack>
                     </CustomTabPanel>
                     <CustomTabPanel value={value} index={1}>
