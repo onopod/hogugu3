@@ -26,7 +26,6 @@ export const GET = async (req, res) => {
 };
 
 export const POST = async (req) => {
-    console.log("POST");
 
     try {
         const { name, comment } = await req.json();

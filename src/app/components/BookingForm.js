@@ -1,43 +1,44 @@
-import { FormControl, FormControlLabel, FormLabel, MenuItem, Radio, RadioGroup, Select, Typography } from '@mui/material';
-import { AdapterDayjs, DateTimePicker, LocalizationProvider, renderTimeViewClock } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import 'dayjs/locale/ja';
-import BookingConfirmDialog from "./BookingConfirmDialog";
-
-dayjs.locale('ja');
+import { Button, FormControl, FormLabel, MenuItem, Select } from '@mui/material';
+import { useRouter } from 'next/navigation';
+import { useForm } from "react-hook-form";
 
 export default function BookingForm({ therapist }) {
+    const router = useRouter();
+    const { register, handleSubmit } = useForm()
+    const onSubmit = data => {
+        console.log(data);
+        fetch('/api/reservations', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                console.log(data)
+                router.push("/reservation")
+            })
+    }
+
     return (
-        <FormControl>
-            予約
-            <FormLabel>メニュー</FormLabel>
-            <RadioGroup defaultValue="female" name="menu">
-                {therapist.menus?.map((menu, idx) => (
-                    <>
-                        <Typography key={idx}>{menu.menu.name}:{menu.treatmentTime}min {menu.price}円</Typography>
-                        <FormControlLabel value="menu.menu.id" control={<Radio />} label={`${menu.menu.name}:${menu.treatmentTime}min ${menu.price}円`} />
-                    </>
-                ))}
-            </RadioGroup>
-            <FormLabel>予約時間</FormLabel>
-            <LocalizationProvider dateAdapter={AdapterDayjs} dateFormats={{ year: 'YYYY年' }}>
-                <DateTimePicker label="予約日時"
-                    format="YYYY/MM/DD hh:mm"
-                    slotProps={{ calendarHeader: { format: 'YYYY年MM月' } }}
-                    views={['year', 'month', 'day', 'hours', 'minutes']}
-                    viewRenderers={{
-                        hours: renderTimeViewClock,
-                        minutes: renderTimeViewClock
-                    }} />
-            </LocalizationProvider>
-            から
-            <Select label="tm">
-                <MenuItem value={60}>60分</MenuItem>
-                <MenuItem value={90}>90分</MenuItem>
-                <MenuItem value={120}>120分</MenuItem>
-            </Select>
-            金額：12000円
-            <BookingConfirmDialog>予約</BookingConfirmDialog>
-        </FormControl>
+        <form onSubmit={handleSubmit(onSubmit)}>
+            <FormControl fullWidth>
+                予約
+                <FormLabel>メニュー</FormLabel>
+
+                <Select id="therapistMenuId" name="therapistMenuId" label="therapistMenuId" defaultValue={0} {...register("therapistMenuId")}>
+                    <MenuItem value={0}>選択</MenuItem>
+                    {therapist.menus?.map((menu, idx) => (
+                        <MenuItem key={idx} value={menu.menu.id}>
+                            {menu.menu.name}:{menu.treatmentTime}分 {menu.price}円
+                        </MenuItem>
+                    ))}
+                </Select>
+                <FormLabel>予約時間</FormLabel>
+                <input type="datetime-local" {...register("startDt")} />
+                <Button type="submit">予約</Button>
+            </FormControl>
+        </form>
     );
 }
