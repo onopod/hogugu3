@@ -17,7 +17,7 @@ async function main() {
 const authOptions = {
     providers: [
         CredentialsProvider({
-            name: 'Ninjin Sirisiri',
+            name: 'Hogugu login',
             credentials: {
                 mail: {
                     label: 'mail',
@@ -32,12 +32,9 @@ const authOptions = {
                         mail: credentials.mail,
                     }
                 });
-                const matched = bcrypt.compare(credentials?.password, user.password)
+                const matched = await bcrypt.compare(credentials?.password, user.password)
                 if (matched) {
-                    // 今回は null を返さなければなんでもよいので適当
-                    return {
-                        id: user.id,
-                    }
+                    return user
                 } else {
                     return null
                 }
