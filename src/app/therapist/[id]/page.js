@@ -17,7 +17,7 @@ export default function TherapistPage() {
             .then((data) => {
                 setTherapist(data.therapist)
             })
-    }, [])
+    }, [params.id])
     return (
         <>
             <AppBar />
