@@ -4,9 +4,6 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 
 const bcrypt = require('bcrypt');
 
-
-
-
 const prisma = new PrismaClient();
 
 async function main() {
@@ -35,7 +32,7 @@ const authOptions = {
                         mail: credentials.mail,
                     }
                 });
-                const matched = compare(credentials?.password, user.password)
+                const matched = bcrypt.compare(credentials?.password, user.password)
                 if (matched) {
                     // 今回は null を返さなければなんでもよいので適当
                     return {
