@@ -1,23 +1,23 @@
 import MenuIcon from '@mui/icons-material/Menu';
 import SpaIcon from '@mui/icons-material/Spa';
-import AppBar from '@mui/material/AppBar';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
-import Link from "next/link";
+import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
+import { signIn, signOut, useSession } from "next-auth/react";
+import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
-const pages = ['login', 'register'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
 
-function ResponsiveAppBar() {
+function MyAppBar() {
+  const router = useRouter();
+  const { data: session } = useSession();
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
   return (
     <AppBar position="static">
       <Container maxWidth="sm">
@@ -48,14 +48,40 @@ function ResponsiveAppBar() {
             }}
           >Hogugu</Typography>
           <Box sx={{ flexGrow: 0 }}>
-            <IconButton sx={{ p: 0 }}>
-              <Avatar alt="Remy Sharp" src="/avatar.jpg" />
+            <IconButton sx={{ p: 0 }}
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+            >
+              <Avatar alt={session?.user?.name ? session.user.name[0] : "profile"}>
+                {session?.user?.name ? session.user.name[0].toUpperCase() : ""}
+              </Avatar>
             </IconButton>
-
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              {session ? (
+                <div key={1}>
+                  <MenuItem onClick={() => router.push("/profile")}>プロフィール</MenuItem>
+                  <MenuItem onClick={() => signOut()}>ログアウト</MenuItem>
+                </div>
+              )
+                :
+                <MenuItem onClick={() => signIn()}>ログイン</MenuItem>
+              }
+            </Menu>
           </Box>
         </Toolbar>
       </Container>
-    </AppBar>
+    </AppBar >
   );
 }
-export default ResponsiveAppBar;
+export default MyAppBar;

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import AppBar from './components/AppBar';
 import BottomBar from "./components/BottomBar";
 import Card from './components/Card';
-import LoginBtn from "./components/LoginBtn";
 import SearchDialog from "./components/SearchDialog";
 
 export default function Home() {
@@ -20,7 +19,6 @@ export default function Home() {
     <>
       <AppBar />
       <Container maxWidth="sm">
-        <LoginBtn />
         {(therapists ? (
           <>
             <SearchDialog />
