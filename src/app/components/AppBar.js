@@ -5,7 +5,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import * as React from 'react';
 
-
 function MyAppBar() {
   const router = useRouter();
   const { data: session } = useSession();
@@ -55,9 +54,15 @@ function MyAppBar() {
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
             >
-              <Avatar alt={session?.user?.name ? session.user.name[0] : "profile"}>
-                {session?.user?.name ? session.user.name[0].toUpperCase() : ""}
-              </Avatar>
+              {session ? (
+                <Avatar alt={session.user.name[0]}
+                  src={`/userImg/${session.user.id}/${session.user.image}`}>
+                  {session.user.name[0].toUpperCase()}
+                </Avatar>
+              )
+                :
+                <Avatar alt="profile" />
+              }
             </IconButton>
             <Menu
               id="basic-menu"

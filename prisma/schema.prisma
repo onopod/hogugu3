@@ -11,11 +11,12 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  name         String?
-  mail         String        @unique
-  password     String
-  reservations Reservation[]
+  id            Int           @id @default(autoincrement())
+  name          String?
+  mail          String        @unique
+  password      String
+  imageFileName String?
+  reservations  Reservation[]
 }
 
 model Therapist {

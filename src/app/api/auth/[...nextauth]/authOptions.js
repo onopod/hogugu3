@@ -47,7 +47,7 @@ const authOptions = {
     callbacks: {
         async jwt({ token, user }) {
             if (user) {
-                token.id = user.id; // JWTトークンに`id`を追加
+                token.id = user.id;
             }
             return token;
         },
@@ -55,7 +55,8 @@ const authOptions = {
             if (token?.id) {
                 session.user = {
                     ...session.user,
-                    id: token.id, // tokenからidを取得
+                    image: token.picture,
+                    id: token.id,
                 };
             }
             // console.log("Session:", session); // デバッグ用ログ
