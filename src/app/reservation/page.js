@@ -69,7 +69,7 @@ export default function ReservationPage() {
                     </Box>
                     <CustomTabPanel value={value} index={0}>
                         <Stack spacing={2} sx={{ mt: 1 }}>
-                            {reservations.map((reservation) => (
+                            {reservations ? reservations.map((reservation) => (
                                 <Stack direction="row" spacing={2} key={reservation.id}>
                                     <Box>
                                         <Avatar alt={reservation.therapistMenu.therapist.name} src="/avatar.jpg" />
@@ -79,7 +79,7 @@ export default function ReservationPage() {
                                         <Typography>{format(reservation.startDt, "yyyy/MM/dd kk:mm")}から{reservation.therapistMenu.treatmentTime}分 {reservation.therapistMenu.menu.name}</Typography>
                                     </Box>
                                 </Stack>
-                            ))}
+                            )) : ""}
 
                         </Stack>
                     </CustomTabPanel>
