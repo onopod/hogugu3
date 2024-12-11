@@ -18,12 +18,10 @@ export const GET = async (req, res) => {
 
     try {
         await main();
-        const user = await prisma.user.findFirstOrThrow({
-            where: { mail: session.user.email }
-        })
+
         const reservations = await prisma.reservation.findMany({
             where: {
-                userId: user.id
+                userId: session.user.id
             },
             include: {
                 therapistMenu: {
@@ -39,8 +37,6 @@ export const GET = async (req, res) => {
         });
         return NextResponse.json({ message: "Success", reservations }, { status: 200 });
     } catch (err) {
-        console.log("err is");
-        console.log(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {
         await prisma.$disconnect();

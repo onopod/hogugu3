@@ -31,17 +31,37 @@ const authOptions = {
                         mail: credentials.mail,
                     }
                 });
-                const matched = await bcrypt.compare(credentials?.password, user.password)
+                const matched = credentials?.password && await bcrypt.compare(credentials.password, user.password);
                 if (matched) {
                     return {
                         ...user,
-                        email: user.mail
-                    }
+                        email: user.mail,
+                        image: user.imageFileName
+                    };
                 } else {
                     return null
                 }
             },
         }),
     ],
+    callbacks: {
+        async jwt({ token, user }) {
+            if (user) {
+                token.id = user.id; // JWTトークンに`id`を追加
+            }
+            return token;
+        },
+        async session({ session, token }) {
+            if (token?.id) {
+                session.user = {
+                    ...session.user,
+                    id: token.id, // tokenからidを取得
+                };
+            }
+            // console.log("Session:", session); // デバッグ用ログ
+            // console.log("Token:", token); // デバッグ用ログ
+            return session;
+        },
+    }
 }
 export default authOptions;
