@@ -7,7 +7,7 @@ import BottomBar from "../components/BottomBar";
 export default function ProfilePage() {
     const [user, setUser] = useState({});
     useEffect(() => {
-        fetch("/api/user/me")
+        fetch("/api/users/me")
             .then(res => res.json())
             .then(data => {
                 setUser(data.user);
@@ -17,7 +17,7 @@ export default function ProfilePage() {
         <>
             <AppBar />
             <Container maxWidth="sm">
-                {user.name}
+                {user?.name}
             </Container>
             <BottomBar />
         </>
