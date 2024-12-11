@@ -1,5 +1,7 @@
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
+import authOptions from "../auth/[...nextauth]/authOptions";
 
 const prisma = new PrismaClient();
 
@@ -12,11 +14,16 @@ async function main() {
 }
 
 export const GET = async (req, res) => {
+    const session = await getServerSession(authOptions);
+
     try {
         await main();
+        const user = await prisma.user.findFirstOrThrow({
+            where: { mail: session.user.email }
+        })
         const reservations = await prisma.reservation.findMany({
             where: {
-                userId: 1
+                userId: user.id
             },
             include: {
                 therapistMenu: {
@@ -32,6 +39,8 @@ export const GET = async (req, res) => {
         });
         return NextResponse.json({ message: "Success", reservations }, { status: 200 });
     } catch (err) {
+        console.log("err is");
+        console.log(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {
         await prisma.$disconnect();
@@ -41,14 +50,18 @@ export const GET = async (req, res) => {
 
 
 export const POST = async (req) => {
-    const userId = 1;
+    const session = await getServerSession(authOptions);
+
     try {
         const { therapistMenuId, startDt } = await req.json();
         await main();
+        const user = await prisma.user.findFirstOrThrow({
+            where: { mail: session.user.email }
+        })
         const reservation = await prisma.reservation.create({
 
             data: {
-                userId,
+                userId: user.id,
                 therapistMenuId,
                 startDt: startDt + ":00.000+09:00"
             }
