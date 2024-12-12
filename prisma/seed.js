@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 
 async function main() {
     // truncate
+    await prisma.message.deleteMany({})
     await prisma.reservation.deleteMany({})
     await prisma.therapistsOnMenus.deleteMany({})
     await prisma.therapist.deleteMany({})
@@ -26,8 +27,8 @@ async function main() {
     // therapist
     await prisma.therapist.createMany({
         data: [
-            { id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。' },
-            { id: 2, name: 'みく', comment: 'がんばります' }
+            { id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。', imageFileName: "tavatar.jpg" },
+            { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg" }
         ]
     })
     // therapistsOnMenus
@@ -56,6 +57,16 @@ async function main() {
                 { userId: 1, therapistMenuId: 1, startDt: "2024-12-08T21:00:00.000+09:00" },
                 { userId: 1, therapistMenuId: 6, startDt: "2024-12-09T22:30:00.000+09:00" },
                 { userId: 2, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" },
+            ]
+        })
+
+        // message 
+        await prisma.message.createMany({
+            data: [
+                { userId: 1, therapistId: 1, message: "こんにちは", isUserSend: true, created: "2024-12-08T21:00:00.000+09:00" },
+                { userId: 1, therapistId: 1, message: "どうかされましたか？", created: "2024-12-08T21:01:00.000+09:00" },
+                { userId: 1, therapistId: 1, message: "予約についてのお問い合わせです。", isUserSend: true, created: "2024-12-08T21:02:00.000+09:00" },
+                { userId: 2, therapistId: 1, message: "初めて問い合わせします", isUserSend: true, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
             ]
         })
     })
