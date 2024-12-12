@@ -1,7 +1,7 @@
+import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { PrismaClient } from "@prisma/client";
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
-import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 
 const prisma = new PrismaClient();
 
@@ -17,7 +17,6 @@ export const GET = async (req, res) => {
     const session = await getServerSession(authOptions);
     try {
         await main();
-
         const senders = await prisma.therapist.findMany({
             where: {
                 messages: {
@@ -39,6 +38,7 @@ export const GET = async (req, res) => {
         console.log(senders);
         return NextResponse.json({ message: "Success", senders }, { status: 200 });
     } catch (err) {
+        console.dir(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {
         await prisma.$disconnect();

@@ -4,6 +4,7 @@ CREATE TABLE "User" (
     "name" TEXT,
     "mail" TEXT NOT NULL,
     "password" TEXT NOT NULL,
+    "imageFileName" TEXT,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -24,7 +25,7 @@ CREATE TABLE "Message" (
     "therapistId" INTEGER NOT NULL,
     "userId" INTEGER NOT NULL,
     "message" TEXT,
-    "isUserSend" BOOLEAN DEFAULT true,
+    "isUserSend" BOOLEAN DEFAULT false,
     "isRead" BOOLEAN DEFAULT false,
     "created" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 

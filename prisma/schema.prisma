@@ -8,34 +8,34 @@ datasource db {
 }
 
 model User {
-  id           Int           @id @default(autoincrement())
-  name         String?
-  mail         String        @unique
-  password     String
+  id            Int           @id @default(autoincrement())
+  name          String?
+  mail          String        @unique
+  password      String
   imageFileName String?
-  reservations Reservation[]
-  messages Message[]
+  reservations  Reservation[]
+  messages      Message[]
 }
 
 model Therapist {
-  id      Int                 @id @default(autoincrement())
-  name    String
-  comment String?
+  id            Int                 @id @default(autoincrement())
+  name          String
+  comment       String?
   imageFileName String?
-  menus   TherapistsOnMenus[]
-  messages Message[]
+  menus         TherapistsOnMenus[]
+  messages      Message[]
 }
 
 model Message {
-  id Int @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   therapistId Int
-  therapist Therapist @relation(fields: [therapistId], references: [id])
-  userId Int
-  user User @relation(fields: [userId], references: [id])
-  message String?
-  isUserSend Boolean? @default(false)
-  isRead Boolean? @default(false)
-  created DateTime @default(now())
+  therapist   Therapist @relation(fields: [therapistId], references: [id])
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  message     String
+  isUserSend  Boolean   @default(false)
+  isRead      Boolean   @default(false)
+  created     DateTime  @default(now())
 }
 
 model Menu {
