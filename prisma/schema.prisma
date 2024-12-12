@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,19 +8,34 @@ datasource db {
 }
 
 model User {
-  id            Int           @id @default(autoincrement())
-  name          String?
-  mail          String        @unique
-  password      String
+  id           Int           @id @default(autoincrement())
+  name         String?
+  mail         String        @unique
+  password     String
   imageFileName String?
-  reservations  Reservation[]
+  reservations Reservation[]
+  messages Message[]
 }
 
 model Therapist {
   id      Int                 @id @default(autoincrement())
   name    String
   comment String?
+  imageFileName String?
   menus   TherapistsOnMenus[]
+  messages Message[]
+}
+
+model Message {
+  id Int @id @default(autoincrement())
+  therapistId Int
+  therapist Therapist @relation(fields: [therapistId], references: [id])
+  userId Int
+  user User @relation(fields: [userId], references: [id])
+  message String?
+  isUserSend Boolean? @default(true)
+  isRead Boolean? @default(false)
+  created DateTime @default(now())
 }
 
 model Menu {
