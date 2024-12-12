@@ -24,7 +24,7 @@ export default function MessageSenderPage() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [params.id])
 
-    const { register, handleSubmit } = useForm();
+    const { register, handleSubmit, reset } = useForm();
     const onSubmit = data => {
         fetch(`/api/messages/senders/${params.id}`, {
             method: "POST",
@@ -36,7 +36,10 @@ export default function MessageSenderPage() {
                 isUserSend: true
             })
         })
-        fetchMessages();
+            .then(() => {
+                reset();
+                fetchMessages();
+            })
     }
 
     return (
