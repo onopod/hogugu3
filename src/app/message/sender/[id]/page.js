@@ -18,7 +18,7 @@ export default function MessageSenderPage() {
                 setMessages(data.messages);
                 console.log(messages);
             })
-    }, [])
+    }, [messages, params.id])
     return (
         <>
             <AppBar />
