@@ -15,30 +15,27 @@ async function main() {
 
 export const GET = async (req, res) => {
     const session = await getServerSession(authOptions);
+    console.log(session);
     try {
         await main();
-
-        const senders = await prisma.therapist.findMany({
+        const therapistId = parseInt(req.url.split("/senders/")[1]);
+        const messages = await prisma.message.findMany({
             where: {
-                messages: {
-                    some: {}
-                }
+                userId: session.user.id,
+                therapistId: therapistId
             },
             include: {
-                messages: {
-                    where: {
-                        userId: session.user.id
-                    },
-                    take: 1,
-                    orderBy: [
-                        { created: "desc" }
-                    ]
-                }
+                therapist: true,
+                user: true
+            },
+            orderBy: {
+                created: "desc"
             }
         });
-        console.log(senders);
-        return NextResponse.json({ message: "Success", senders }, { status: 200 });
+        console.log(messages);
+        return NextResponse.json({ message: "Success", messages }, { status: 200 });
     } catch (err) {
+        console.dir(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {
         await prisma.$disconnect();
