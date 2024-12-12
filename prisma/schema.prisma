@@ -32,7 +32,7 @@ model Message {
   userId Int
   user User @relation(fields: [userId], references: [id])
   message String?
-  isUserSend Boolean? @default(true)
+  isUserSend Boolean? @default(false)
   isRead Boolean? @default(false)
   created DateTime @default(now())
 }

@@ -10,31 +10,35 @@ import FormatItalicRoundedIcon from '@mui/icons-material/FormatItalicRounded';
 import FormatListBulletedRoundedIcon from '@mui/icons-material/FormatListBulletedRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import StrikethroughSRoundedIcon from '@mui/icons-material/StrikethroughSRounded';
+import { format } from "date-fns";
 
-export default function MessageDetailList() {
+export default function Messages({ messages }) {
     return (
         <>
-            <Box className="message-area">
-                <Stack spacing={1}>
-                    <Box>
-                        <Stack spacing={1} direction="row">
-                            <Avatar src="/avatar.jpg" />
-                            <Stack>
-                                <Typography>ご予約sdafasdfありがとうございます</Typography>
-                                <Typography>ご予約sdafasdfありがとうございます</Typography>
-                                <Typography>ご予約sdafasdfありがとうございます</Typography>
+            <Box className="message-area" sx={{ m: 2 }}>
+                <Stack spacing={1} direction="column-reverse">
+                    {messages ? messages.map(message => (
+                        <Box key={message.id}>
+                            <Stack spacing={1}
+                                direction={message.isUserSend == true ? "row-reverse" : "row"}>
+                                {message.isUserSend == true ?
+                                    <Avatar src={message.user.imageFileName ? `/userImg/${message.user.id}/${message.user.imageFileName}` : ""}>
+                                        {message.user.name ? message.user.name[0].toUpperCase() : ""}
+                                    </Avatar>
+                                    :
+                                    <Avatar src={message.therapist.imageFileName ? `/therapistImg/${message.therapist.id}/${message.therapist.imageFileName}` : ""}>
+                                        {message.therapist.name ? message.therapist.name[0].toUpperCase() : ""}
+                                    </Avatar>
+                                }
+                                <Stack >
+                                    <Typography>{message.message}</Typography>
+                                </Stack>
                             </Stack>
-                        </Stack>
-                    </Box>
-                    <Box>
-                        <Stack spacing={1} direction="row-reverse">
-                            <Avatar src="/avatar.jpg" />
-                            <Stack>
-                                <Typography>よろしくお願いします。</Typography>
-                                <Typography>fasfsdfsdfsよろしくお願いします。</Typography>
+                            <Stack direction={message.isUserSend == true ? "row-reverse" : "row"}>
+                                <Typography>{format(message.created, "yyyy/MM/dd kk:mm")}</Typography>
                             </Stack>
-                        </Stack>
-                    </Box>
+                        </Box>
+                    )) : ""}
                 </Stack>
             </Box>
             <Box className="message-input-area">

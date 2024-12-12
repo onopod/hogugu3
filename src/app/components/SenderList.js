@@ -5,7 +5,7 @@ export default function SenderList({ senders }) {
         <List>
             {senders ? senders.map((sender, idx) => (
 
-                <ListItemButton key={idx} href={`/messagedetail/${sender.id}`}>
+                <ListItemButton key={idx} href={`/message/sender/${sender.id}`}>
                     {sender.messages[0].isRead ? (
                         <Avatar alt={sender.name} src={sender.imageFileName ? `/therapistImg/${sender.id}/${sender.imageFileName}` : ""}>
                             {sender.name[0].toUpperCase()}
