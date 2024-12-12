@@ -12,6 +12,7 @@ model User {
   name         String?
   mail         String        @unique
   password     String
+  imageFileName String?
   reservations Reservation[]
   messages Message[]
 }
