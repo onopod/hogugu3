@@ -7,18 +7,36 @@ import Card from './components/Card';
 import SearchDialog from "./components/SearchDialog";
 
 export default function Home() {
-  const [therapists, setTherapists] = useState(false);
+  const pageSize = 10;
+  const [itemCount, setItemCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [therapists, setTherapists] = useState([]);
+  const [count, setCount] = useState(0);
+
   useEffect(() => {
-    fetch('/api/therapists')
+    const searchParams = new URLSearchParams();
+    searchParams.set("page", page);
+    searchParams.set("pageSize", pageSize);
+
+    const url = ['/api/therapists', searchParams.toString()].join("?");
+    fetch(url)
       .then((res) => res.json())
       .then((data) => {
-        setTherapists(data.therapists)
+        setTherapists(data.therapists);
+        setItemCount(data.itemCount);
+        setCount(Math.ceil(data.itemCount / pageSize))
       })
-  }, [])
+  }, [page])
+
+  const onPageChange = (_, page) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPage(page)
+  }
   return (
     <>
       <AppBar />
       <Container maxWidth="sm">
+        {itemCount}件
         {(therapists ? (
           <>
             <SearchDialog />
@@ -28,7 +46,9 @@ export default function Home() {
             )
             )}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
-              <Pagination count={3} color="primary" size="large" />
+              <Pagination
+                onChange={onPageChange}
+                count={count} color="primary" size="large" />
             </Box>
           </>
         ) : (

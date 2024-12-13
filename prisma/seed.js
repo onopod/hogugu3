@@ -28,7 +28,32 @@ async function main() {
     await prisma.therapist.createMany({
         data: [
             { id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。', imageFileName: "tavatar.jpg" },
-            { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg" }
+            { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg" },
+            { id: 3, name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 4, name: '競', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 5, name: '中川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 6, name: '梁', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 7, name: '村松', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 8, name: '野田', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 9, name: '西田', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 10, name: '針', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 11, name: '河村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 12, name: '亨夏', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 13, name: '倉増', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 14, name: '奥村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 15, name: '大沢', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 16, name: '早川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 17, name: '大西', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 18, name: '中西', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 19, name: '小酒', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 20, name: '田中', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 21, name: '下関', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 22, name: '安部', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 23, name: '道渕', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 24, name: '小倉', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 25, name: '押樋', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 26, name: '岡村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 27, name: '苔田', comment: 'がんばります', imageFileName: 'tavatar.jpg' }
         ]
     })
     // therapistsOnMenus

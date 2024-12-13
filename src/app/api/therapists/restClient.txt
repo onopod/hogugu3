@@ -1,1 +1,5 @@
 GET http://localhost:3000/api/therapists
+
+###
+
+GET http://localhost:3000/api/therapists?page=2
