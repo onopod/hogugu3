@@ -2,4 +2,4 @@ GET http://localhost:3000/api/therapists
 
 ###
 
-GET http://localhost:3000/api/therapists?page=2
+GET http://localhost:3000/api/therapists?page=1&prefectureId=27
