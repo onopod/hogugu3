@@ -6,7 +6,7 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ handleSubmit, onSubmit, setValue, watch }) {
+export default function FullScreenDialog({ prefectures, handleSubmit, onSubmit, setValue, watch }) {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -57,13 +57,11 @@ export default function FullScreenDialog({ handleSubmit, onSubmit, setValue, wat
                         <Stack spacing={2}>
                             地域
                             <Select id="prefectureId"
-                                value={selectedPrefecture} // 選択された値を設定
-
-                                onChange={(e) => setValue("prefectureId", e.target.value)} // 選択値を更新
+                                value={selectedPrefecture}
+                                onChange={(e) => setValue("prefectureId", e.target.value)}
                                 displayEmpty
                                 label="prefecture">
-                                <MenuItem value={27}>大阪</MenuItem>
-                                <MenuItem value={28}>京都</MenuItem>
+                                {prefectures.map(prefecture => <MenuItem key={prefecture.id} value={prefecture.id}>{prefecture.name}</MenuItem>)}
                             </Select>
                             メニュー
                             <Select onChange={(e) => setMenu(e.target.value)}

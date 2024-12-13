@@ -15,6 +15,17 @@ export default function Home() {
   const [prefectureId, setPrefectureId] = useState(null);
   const [therapists, setTherapists] = useState([]);
   const [count, setCount] = useState(0);
+  const [prefectures, setPrefectures] = useState([])
+
+  useEffect(() => {
+    fetch("/api/prefectures")
+      .then(res => res.json())
+      .then(data => {
+        console.dir(data)
+        setPrefectures(data.prefectures)
+      })
+  }, [])
+
 
   useEffect(() => {
     const searchParams = new URLSearchParams();
@@ -55,7 +66,7 @@ export default function Home() {
         {itemCount}件
         {(therapists ? (
           <>
-            <SearchDialog register={register} handleSubmit={handleSubmit} onSubmit={onSubmit} setValue={setValue} watch={watch} />
+            <SearchDialog prefectures={prefectures} register={register} handleSubmit={handleSubmit} onSubmit={onSubmit} setValue={setValue} watch={watch} />
             {therapists.map((therapist, idx) => (
               <Card key={idx} therapist={therapist} />
 
