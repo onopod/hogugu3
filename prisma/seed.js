@@ -12,8 +12,73 @@ async function main() {
     await prisma.therapist.deleteMany({})
     await prisma.menu.deleteMany({})
     await prisma.user.deleteMany({})
+    await prisma.prefecture.deleteMany({})
+    await prisma.region.deleteMany({})
 
-
+    // region
+    await prisma.region.createMany({
+        data: [
+            { id: 1, name: '北海道地方', kana: 'ホッカイドウ' },
+            { id: 2, name: '東北地方', kana: 'トウホクチホウ' },
+            { id: 3, name: '関東地方', kana: 'カントウチホウ' },
+            { id: 4, name: '中部地方', kana: 'チュウブチホウ' },
+            { id: 5, name: '近畿地方', kana: 'キンキチホウ' },
+            { id: 6, name: '中国地方', kana: 'チュウゴクチホウ' },
+            { id: 7, name: '四国地方', kana: 'シコクチホウ' },
+            { id: 8, name: '九州地方', kana: 'キュウシュウチホウ' }
+        ]
+    })
+    await prisma.prefecture.createMany({
+        data: [
+            { id: 1, regionId: 1, name: '北海道', kana: 'ホッカイドウ' },
+            { id: 2, regionId: 2, name: '青森県', kana: 'アオモリケン' },
+            { id: 3, regionId: 2, name: '岩手県', kana: 'イワテケン' },
+            { id: 4, regionId: 2, name: '宮城県', kana: 'ミヤギケン' },
+            { id: 5, regionId: 2, name: '秋田県', kana: 'アキタケン' },
+            { id: 6, regionId: 2, name: '山形県', kana: 'ヤマガタケン' },
+            { id: 7, regionId: 2, name: '福島県', kana: 'フクシマケン' },
+            { id: 8, regionId: 3, name: '茨城県', kana: 'イバラキケン' },
+            { id: 9, regionId: 3, name: '栃木県', kana: 'トチギケン' },
+            { id: 10, regionId: 3, name: '群馬県', kana: 'グンマケン' },
+            { id: 11, regionId: 3, name: '埼玉県', kana: 'サイタマケン' },
+            { id: 12, regionId: 3, name: '千葉県', kana: 'チバケン' },
+            { id: 13, regionId: 3, name: '東京都', kana: 'トウキョウト' },
+            { id: 14, regionId: 3, name: '神奈川県', kana: 'カナガワケン' },
+            { id: 15, regionId: 4, name: '新潟県', kana: 'ニイガタケン' },
+            { id: 16, regionId: 4, name: '富山県', kana: 'トヤマケン' },
+            { id: 17, regionId: 4, name: '石川県', kana: 'イシカワケン' },
+            { id: 18, regionId: 4, name: '福井県', kana: 'フクイケン' },
+            { id: 19, regionId: 4, name: '山梨県', kana: 'ヤマナシケン' },
+            { id: 20, regionId: 4, name: '長野県', kana: 'ナガノケン' },
+            { id: 21, regionId: 4, name: '岐阜県', kana: 'ギフケン' },
+            { id: 22, regionId: 4, name: '静岡県', kana: 'シズオカケン' },
+            { id: 23, regionId: 4, name: '愛知県', kana: 'アイチケン' },
+            { id: 24, regionId: 5, name: '三重県', kana: 'ミエケン' },
+            { id: 25, regionId: 5, name: '滋賀県', kana: 'シガケン' },
+            { id: 26, regionId: 5, name: '京都府', kana: 'キョウトフ' },
+            { id: 27, regionId: 5, name: '大阪府', kana: 'オオサカフ' },
+            { id: 28, regionId: 5, name: '兵庫県', kana: 'ヒョウゴケン' },
+            { id: 29, regionId: 5, name: '奈良県', kana: 'ナラケン' },
+            { id: 30, regionId: 5, name: '和歌山県', kana: 'ワカヤマケン' },
+            { id: 31, regionId: 6, name: '鳥取県', kana: 'トットリケン' },
+            { id: 32, regionId: 6, name: '島根県', kana: 'シマネケン' },
+            { id: 33, regionId: 6, name: '岡山県', kana: 'オカヤマケン' },
+            { id: 34, regionId: 6, name: '広島県', kana: 'ヒロシマケン' },
+            { id: 35, regionId: 6, name: '山口県', kana: 'ヤマグチケン' },
+            { id: 36, regionId: 7, name: '徳島県', kana: 'トクシマケン' },
+            { id: 37, regionId: 7, name: '香川県', kana: 'カガワケン' },
+            { id: 38, regionId: 7, name: '愛媛県', kana: 'エヒメケン' },
+            { id: 39, regionId: 7, name: '高知県', kana: 'コウチケン' },
+            { id: 40, regionId: 8, name: '福岡県', kana: 'フクオカケン' },
+            { id: 41, regionId: 8, name: '佐賀県', kana: 'サガケン' },
+            { id: 42, regionId: 8, name: '長崎県', kana: 'ナガサキケン' },
+            { id: 43, regionId: 8, name: '熊本県', kana: 'クマモトケン' },
+            { id: 44, regionId: 8, name: '大分県', kana: 'オオイタケン' },
+            { id: 45, regionId: 8, name: '宮崎県', kana: 'ミヤザキケン' },
+            { id: 46, regionId: 8, name: '鹿児島県', kana: 'カゴシマケン' },
+            { id: 47, regionId: 8, name: '沖縄県', kana: 'オキナワケン' }
+        ]
+    })
     // menu
     await prisma.menu.createMany({
         data: [
@@ -27,9 +92,9 @@ async function main() {
     // therapist
     await prisma.therapist.createMany({
         data: [
-            { id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。', imageFileName: "tavatar.jpg" },
-            { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg" },
-            { id: 3, name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。', imageFileName: "tavatar.jpg", prefectureId: 27 },
+            { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg", prefectureId: 27 },
+            { id: 3, name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg', prefectureId: 26 },
             { id: 4, name: '競', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
             { id: 5, name: '中川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
             { id: 6, name: '梁', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
@@ -72,8 +137,8 @@ async function main() {
     await bcrypt.hash("password", 10, async (_, hashedPassword) => {
         await prisma.user.createMany({
             data: [
-                { id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', password: hashedPassword, imageFileName: "avatar.jpg" },
-                { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg" }
+                { id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', password: hashedPassword, imageFileName: "avatar.jpg", prefectureId: 27 },
+                { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 }
             ]
         })
         // reservation
