@@ -19,7 +19,6 @@ export default function Home() {
     searchParams.set("pageSize", pageSize);
 
     const url = ['/api/therapists', searchParams.toString()].join("?");
-    console.log(url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -30,6 +29,7 @@ export default function Home() {
   }, [page])
 
   const onPageChange = (_, page) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setPage(page)
   }
   return (
