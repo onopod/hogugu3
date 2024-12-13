@@ -2,29 +2,31 @@
 
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
 import AppBar from "../components/AppBar";
 import BottomBar from "../components/BottomBar";
 import Profile from "../components/Profile";
-import { useForm } from "react-hook-form";
 
 export default function ProfilePage() {
     const [user, setUser] = useState({})
     const { handleSubmit, register, reset } = useForm({
         defaultValues: {
-            "name": user.name,
-            "mail": user.mail
+            name: user.name,
+            mail: user.mail,
+            imageFileName: user.imageFileName
         }
     });
     const onSubmit = data => {
+        console.log(data.imageFileName[0])
+        // FormDataを作成
+        const formData = new FormData();
+        formData.append("name", data.name); // テキストフィールドを追加
+        formData.append("mail", data.mail);
+        formData.append("imageFileName", data.imageFileName[0]); // ファイルを追加
+
         fetch('/api/users/me', {
             method: "PUT",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                name: data.name,
-                mail: data.mail
-            })
+            body: formData
         })
     }
     useEffect(() => {
@@ -32,7 +34,7 @@ export default function ProfilePage() {
             .then(res => res.json())
             .then(data => {
                 setUser(data.user);
-                reset({ name: data.user.name, mail: data.user.mail });
+                reset({ name: data.user.name, mail: data.user.mail, imageFileName: data.user.imageFileName });
             })
         // eslint-disable-next-line
     }, [])
@@ -40,7 +42,7 @@ export default function ProfilePage() {
         <>
             <AppBar />
             <Container maxWidth="sm">
-                <Profile handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} />
+                <Profile user={user} handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} />
             </Container>
             <BottomBar />
         </>
