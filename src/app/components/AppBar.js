@@ -56,7 +56,7 @@ function MyAppBar() {
             >
               {session ? (
                 <Avatar alt={session.user.name[0]}
-                  src={`/userImg/${session.user.id}/${session.user.image}`}>
+                  src={session.user.image ? `/userImg/${session.user.id}/${session.user.image}` : ""}>
                   {session.user.name[0].toUpperCase()}
                 </Avatar>
               )
