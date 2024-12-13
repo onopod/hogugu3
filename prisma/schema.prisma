@@ -6,32 +6,35 @@ datasource db {
   provider = "postgres"
   url      = env("DATABASE_URL")
 }
-model Prefecture {
-  id Int @id
-  regionId Int
-  region Region @relation(fields: [regionId], references: [id])
-  name String 
-  kana String
-  user User[]
-  therapist Therapist[]
 
+model Prefecture {
+  id        Int         @id
+  regionId  Int
+  region    Region      @relation(fields: [regionId], references: [id])
+  name      String
+  kana      String
+  user      User[]
+  therapist Therapist[]
 }
+
 model Region {
-  id Int @id
-  name String
-  kana String
+  id          Int          @id
+  name        String
+  kana        String
   prefectures Prefecture[]
 }
+
 model User {
   id            Int           @id @default(autoincrement())
   name          String?
   mail          String        @unique
   password      String
   imageFileName String?
-  prefectureId Int?
-  prefecture Prefecture? @relation(fields: [prefectureId], references: [id])
+  prefectureId  Int?
+  prefecture    Prefecture?   @relation(fields: [prefectureId], references: [id])
   reservations  Reservation[]
   messages      Message[]
+  favorites     Favorite[]
 }
 
 model Therapist {
@@ -39,10 +42,22 @@ model Therapist {
   name          String
   comment       String?
   imageFileName String?
-  prefectureId Int?
-  prefecture Prefecture? @relation(fields: [prefectureId], references: [id])
+  prefectureId  Int?
+  prefecture    Prefecture?         @relation(fields: [prefectureId], references: [id])
   menus         TherapistsOnMenus[]
   messages      Message[]
+  favorites     Favorite[]
+}
+
+model Favorite {
+  id          Int       @id @default(autoincrement())
+  therapistId Int
+  therapist   Therapist @relation(fields: [therapistId], references: [id])
+  userId      Int
+  user        User      @relation(fields: [userId], references: [id])
+  created     DateTime  @default(now())
+
+  @@unique([therapistId, userId])
 }
 
 model Message {
@@ -73,7 +88,7 @@ model TherapistsOnMenus {
   price         Int?
   Reservation   Reservation[]
 
-  @@index([therapistId, menuId])
+  @@unique([therapistId, menuId])
 }
 
 model Reservation {

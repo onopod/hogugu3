@@ -6,6 +6,7 @@ const prisma = new PrismaClient()
 
 async function main() {
     // truncate
+    await prisma.favorite.deleteMany({})
     await prisma.message.deleteMany({})
     await prisma.reservation.deleteMany({})
     await prisma.therapistsOnMenus.deleteMany({})
@@ -157,6 +158,15 @@ async function main() {
                 { userId: 1, therapistId: 1, message: "どうかされましたか？", created: "2024-12-08T21:01:00.000+09:00" },
                 { userId: 1, therapistId: 1, message: "予約についてのお問い合わせです。", isUserSend: true, created: "2024-12-08T21:02:00.000+09:00" },
                 { userId: 2, therapistId: 1, message: "初めて問い合わせします", isUserSend: true, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
+            ]
+        })
+
+        // favorite
+        await prisma.favorite.createMany({
+            data: [
+                { userId: 1, therapistId: 1 },
+                { userId: 1, therapistId: 2 },
+                { userId: 2, therapistId: 2 }
             ]
         })
     })

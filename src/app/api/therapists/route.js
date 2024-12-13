@@ -1,8 +1,20 @@
+import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import { PrismaClient } from "@prisma/client";
+import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+    log: [
+        {
+            emit: "event",
+            level: "query",
+        },
+    ],
+});
 
+prisma.$on("query", async (e) => {
+    console.log(`${e.query} ${e.params}`)
+});
 async function main() {
     try {
         await prisma.$connect();
@@ -12,6 +24,8 @@ async function main() {
 }
 
 export const GET = async (req, res) => {
+    const session = await getServerSession(authOptions);
+
     try {
         await main();
         const prefectureId = parseInt(req.nextUrl.searchParams.get("prefectureId"));
@@ -47,7 +61,12 @@ export const GET = async (req, res) => {
                         menu: true
                     }
                 },
-                prefecture: true
+                prefecture: true,
+                favorites: {
+                    where: {
+                        userId: session.user.id
+                    },
+                }
             }
         });
         const itemCount = await prisma.therapist.count({
@@ -55,7 +74,6 @@ export const GET = async (req, res) => {
         });
         return NextResponse.json({ message: "Success", itemCount, therapists }, { status: 200 });
     } catch (err) {
-        console.dir(err)
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {
         await prisma.$disconnect();
