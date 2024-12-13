@@ -14,11 +14,18 @@ async function main() {
 export const GET = async (req, res) => {
     try {
         await main();
+        const take = parseInt(req.nextUrl.searchParams.get("pageSize")) || 10;
+        const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
+
         const therapists = await prisma.therapist.findMany({
+            skip: (page - 1) * take,
+            take: take,
             include: { menus: { include: { menu: true } } }
         });
-        return NextResponse.json({ message: "Success", therapists }, { status: 200 });
+        const itemCount = await prisma.therapist.count();
+        return NextResponse.json({ message: "Success", therapists, itemCount: itemCount }, { status: 200 });
     } catch (err) {
+        console.dir(err)
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     } finally {
         await prisma.$disconnect();
