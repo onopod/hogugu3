@@ -1,3 +1,5 @@
+"use client"
+
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import { Box, Button, Chip } from "@mui/material";
 import Avatar from '@mui/material/Avatar';
@@ -7,10 +9,12 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Collapse from '@mui/material/Collapse';
+import { pink } from '@mui/material/colors';
 import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import * as React from 'react';
+import { useState } from "react";
 
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
@@ -40,9 +44,9 @@ const ExpandMore = styled((props) => {
   ],
 }));
 
-export default function TherapistCard({ therapist }) {
+export default function TherapistCard({ therapist, handleFavoriteClick }) {
   const [expanded, setExpanded] = React.useState(false);
-
+  const [favorite, setFavorite] = useState(therapist.favorites.length);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -56,7 +60,10 @@ export default function TherapistCard({ therapist }) {
         }
         action={
           <IconButton size="large" >
-            <FavoriteIcon />
+            <FavoriteIcon sx={favorite ? { color: pink[300] } : {}} onClick={() => {
+              setFavorite(favorite ? 0 : 1)
+              handleFavoriteClick(therapist.id)
+            }} />
           </IconButton>
         }
         title={therapist.name}

@@ -19,7 +19,6 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [prefectures, setPrefectures] = useState([])
   const [menus, setMenus] = useState([])
-
   useEffect(() => {
     fetch("/api/prefectures")
       .then(res => res.json())
@@ -72,7 +71,9 @@ export default function Home() {
     setMenuId(data.menuId)
     setFreeWord(data.freeWord)
   }
-
+  const handleFavoriteClick = (therapistId) => {
+    fetch(`/api/favorites/toggle/${therapistId}`)
+  }
 
   return (
     <>
@@ -82,7 +83,7 @@ export default function Home() {
         {itemCount}件
         {(therapists ? (
           <>
-            {therapists.map((therapist, idx) => <Card key={idx} therapist={therapist} />)}
+            {therapists.map((therapist, idx) => <Card key={idx} therapist={therapist} handleFavoriteClick={handleFavoriteClick} />)}
             <Box sx={{ display: 'flex', justifyContent: 'center' }}>
               <Pagination
                 onChange={onPageChange}
