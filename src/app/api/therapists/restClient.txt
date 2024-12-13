@@ -7,3 +7,6 @@ GET http://localhost:3000/api/therapists?page=1&prefectureId=27
 
 ### 
 GET http://localhost:3000/api/therapists?page=1&menuId=2
+
+###
+GET http://localhost:3000/api/therapists?freeWord=がんばり

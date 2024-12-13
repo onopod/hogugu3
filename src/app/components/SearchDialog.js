@@ -6,7 +6,7 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ prefectures, menus, handleSubmit, onSubmit, setValue, watch }) {
+export default function FullScreenDialog({ prefectures, menus, handleSubmit, onSubmit, register, setValue, watch }) {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -70,7 +70,7 @@ export default function FullScreenDialog({ prefectures, menus, handleSubmit, onS
                                 label="menu">
                                 {menus.map(menu => <MenuItem key={menu.id} value={menu.id}>{menu.name}</MenuItem>)}
                             </Select>
-                            <TextField label="フリーワード" />
+                            <TextField id="freeWord" {...register("freeWord")} label="フリーワード" />
                         </Stack>
                     </DialogContent>
                 </form>

@@ -14,6 +14,7 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [prefectureId, setPrefectureId] = useState(null);
   const [menuId, setMenuId] = useState(null);
+  const [freeWord, setFreeWord] = useState(null)
   const [therapists, setTherapists] = useState([]);
   const [count, setCount] = useState(0);
   const [prefectures, setPrefectures] = useState([])
@@ -39,6 +40,9 @@ export default function Home() {
     if (menuId) {
       searchParams.set("menuId", menuId);
     }
+    if (freeWord) {
+      searchParams.set("freeWord", freeWord)
+    }
 
     const url = ['/api/therapists', searchParams.toString()].join("?");
     fetch(url)
@@ -48,7 +52,7 @@ export default function Home() {
         setItemCount(data.itemCount);
         setCount(Math.ceil(data.itemCount / pageSize))
       })
-  }, [page, prefectureId, menuId])
+  }, [page, prefectureId, menuId, freeWord])
 
   const onPageChange = (_, page) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -60,11 +64,13 @@ export default function Home() {
     defaultValues: {
       prefectureId: "",
       menuId: "",
+      freeWord: "",
     },
   });
   const onSubmit = data => {
     setPrefectureId(data.prefectureId)
     setMenuId(data.menuId)
+    setFreeWord(data.freeWord)
   }
 
 
@@ -72,7 +78,7 @@ export default function Home() {
     <>
       <AppBar />
       <Container maxWidth="sm">
-        <SearchDialog prefectures={prefectures} menus={menus} register={register} handleSubmit={handleSubmit} onSubmit={onSubmit} setValue={setValue} watch={watch} />
+        <SearchDialog prefectures={prefectures} menus={menus} handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} setValue={setValue} watch={watch} />
         {itemCount}件
         {(therapists ? (
           <>

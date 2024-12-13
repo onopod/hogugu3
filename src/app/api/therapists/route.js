@@ -26,10 +26,17 @@ export const GET = async (req, res) => {
         await main();
         const prefectureId = parseInt(req.nextUrl.searchParams.get("prefectureId"));
         const menuId = parseInt(req.nextUrl.searchParams.get("menuId"))
+        const freeWord = req.nextUrl.searchParams.get("freeWord")
         const take = parseInt(req.nextUrl.searchParams.get("pageSize")) || 10;
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const where = {
             ...(prefectureId && { prefectureId }),
+            ...(freeWord && {
+                OR: [
+                    { name: { contains: freeWord } },
+                    { comment: { contains: freeWord } }
+                ]
+            }),
             ...(menuId && {
                 menus: {
                     some: {
