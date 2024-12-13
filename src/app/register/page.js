@@ -8,7 +8,6 @@ export default function Register() {
 
     const { register, handleSubmit } = useForm();
     const onSubmit = data => {
-        console.log(data);
         fetch('/api/users', {
             method: "POST",
             headers: {
@@ -18,7 +17,6 @@ export default function Register() {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
                 router.push("/login")
             })
     }

@@ -1,18 +1,8 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-const prisma = new PrismaClient({
-    log: [
-        {
-            emit: "event",
-            level: "query",
-        },
-    ],
-});
+const prisma = new PrismaClient();
 
-prisma.$on("query", async (e) => {
-    console.log(`${e.query} ${e.params}`)
-});
 async function main() {
     try {
         await prisma.$connect();
