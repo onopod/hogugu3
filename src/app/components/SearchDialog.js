@@ -6,7 +6,7 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ prefectures, handleSubmit, onSubmit, setValue, watch }) {
+export default function FullScreenDialog({ prefectures, menus, handleSubmit, onSubmit, setValue, watch }) {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -17,9 +17,8 @@ export default function FullScreenDialog({ prefectures, handleSubmit, onSubmit, 
         setOpen(false);
     };
 
-
-    const [menu, setMenu] = useState("");
     const selectedPrefecture = watch("prefectureId");
+    const selectedMenuId = watch("menuId");
 
     return (
         <Fragment>
@@ -64,12 +63,12 @@ export default function FullScreenDialog({ prefectures, handleSubmit, onSubmit, 
                                 {prefectures.map(prefecture => <MenuItem key={prefecture.id} value={prefecture.id}>{prefecture.name}</MenuItem>)}
                             </Select>
                             メニュー
-                            <Select onChange={(e) => setMenu(e.target.value)}
-                                value={menu}
-                                label="menu"
-                                name="menu">
-                                <MenuItem value="もみほぐし">もみほぐし</MenuItem>
-                                <MenuItem value="オイル">オイル</MenuItem>
+                            <Select id="menuId"
+                                value={selectedMenuId}
+                                onChange={(e) => setValue("menuId", e.target.value)}
+                                displayEmpty
+                                label="menu">
+                                {menus.map(menu => <MenuItem key={menu.id} value={menu.id}>{menu.name}</MenuItem>)}
                             </Select>
                             <TextField label="フリーワード" />
                         </Stack>

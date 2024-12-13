@@ -25,10 +25,20 @@ export const GET = async (req, res) => {
     try {
         await main();
         const prefectureId = parseInt(req.nextUrl.searchParams.get("prefectureId"));
+        const menuId = parseInt(req.nextUrl.searchParams.get("menuId"))
         const take = parseInt(req.nextUrl.searchParams.get("pageSize")) || 10;
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const where = {
-            prefectureId: prefectureId,
+            ...(prefectureId && { prefectureId }),
+            ...(menuId && {
+                menus: {
+                    some: {
+                        id: {
+                            equals: menuId
+                        }
+                    }
+                }
+            })
         }
         const therapists = await prisma.therapist.findMany({
             where,
