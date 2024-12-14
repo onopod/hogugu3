@@ -1,14 +1,11 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
-import { PrismaClient } from "@prisma/client";
+import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient()
 
 export const GET = async (req) => {
     const session = await getServerSession(authOptions);
     try {
-        await prisma.$connect();
         const therapistId = parseInt(req.url.split("/toggle/")[1]);
         const therapistId_userId = {
             therapistId: therapistId,
@@ -24,7 +21,5 @@ export const GET = async (req) => {
         }
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 };
