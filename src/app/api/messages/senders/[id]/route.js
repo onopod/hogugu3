@@ -1,22 +1,11 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
-import { PrismaClient } from "@prisma/client";
+import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
-
-const prisma = new PrismaClient();
-
-async function main() {
-    try {
-        await prisma.$connect();
-    } catch (err) {
-        return Error("DB接続に失敗しました");
-    }
-}
 
 export const GET = async (req, res) => {
     const session = await getServerSession(authOptions);
     try {
-        await main();
         const therapistId = parseInt(req.url.split("/senders/")[1]);
         const messages = await prisma.message.findMany({
             where: {
@@ -35,8 +24,6 @@ export const GET = async (req, res) => {
     } catch (err) {
         console.dir(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 };
 
@@ -48,7 +35,7 @@ export const POST = async (req) => {
 
     try {
         const { message, isUserSend } = await req.json();
-        await main();
+
         const msg = await prisma.message.create({
             data: {
                 userId: session.user.id,
@@ -60,7 +47,5 @@ export const POST = async (req) => {
         return NextResponse.json({ message: "Success", msg }, { status: 201 });
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
-    } finally {
-        await prisma.$disconnect();
     }
 };

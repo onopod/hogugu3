@@ -1,17 +1,7 @@
-import { PrismaClient } from "@prisma/client";
+import prisma from '@/lib/prisma';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 const bcrypt = require('bcrypt');
-
-const prisma = new PrismaClient();
-
-async function main() {
-    try {
-        await prisma.$connect();
-    } catch (err) {
-        return Error("DB接続に失敗しました");
-    }
-}
 
 const authOptions = {
     providers: [
@@ -25,7 +15,6 @@ const authOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                await main();
                 const user = await prisma.user.findFirstOrThrow({
                     where: {
                         mail: credentials.mail,
@@ -59,8 +48,6 @@ const authOptions = {
                     id: token.id,
                 };
             }
-            // console.log("Session:", session); // デバッグ用ログ
-            // console.log("Token:", token); // デバッグ用ログ
             return session;
         },
     }

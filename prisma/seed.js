@@ -1,8 +1,5 @@
-const { PrismaClient } = require('@prisma/client')
+import prisma from '@/lib/prisma';
 const bcrypt = require("bcrypt");
-
-const prisma = new PrismaClient()
-
 
 async function main() {
     // truncate
@@ -176,7 +173,4 @@ main()
     .catch(e => {
         console.error(e)
         process.exit(1)
-    })
-    .finally(async () => {
-        await prisma.$disconnect()
     })
