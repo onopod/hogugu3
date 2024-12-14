@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const authOptions = {
     providers: [
         CredentialsProvider({
-            name: 'Hogugu login',
+            name: 'Hogugu',
             credentials: {
                 mail: {
                     label: 'mail',

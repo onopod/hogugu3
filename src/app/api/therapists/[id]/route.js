@@ -1,9 +1,9 @@
 import prisma from '@/lib/prisma';
 import { NextResponse } from "next/server";
 
-export const GET = async (req, res) => {
+export const GET = async (req, { params }) => {
     try {
-        const id = parseInt(req.url.split("/therapists/")[1]);
+        const id = parseInt((await params).id);
 
         const therapist = await prisma.therapist.findFirst({
             where: { id },
@@ -20,30 +20,26 @@ export const GET = async (req, res) => {
     }
 };
 
-export const PUT = async (req, res) => {
+export const PUT = async (req, { params }) => {
     try {
-        const id = parseInt(req.url.split("/therapists/")[1]);
+        const id = parseInt((await params).id);
         const { title, description } = await req.json();
-
         const post = await prisma.therapists.update({
             data: { title, description },
             where: { id },
         });
-
         return NextResponse.json({ message: "Success", post }, { status: 200 });
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };
 
-export const DELETE = async (req, res) => {
+export const DELETE = async () => {
     try {
-        const id = parseInt(req.url.split("/therapists/")[1]);
-
+        const id = parseInt((await params).id);
         const post = await prisma.therapist.delete({
             where: { id },
         });
-
         return NextResponse.json({ message: "Success", post }, { status: 200 });
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });

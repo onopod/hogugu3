@@ -7,7 +7,6 @@ import { join } from "path";
 
 export const GET = async (req, res) => {
     const session = await getServerSession(authOptions);
-
     try {
         const user = await prisma.user.findFirstOrThrow({
             where: {
@@ -23,13 +22,9 @@ export const GET = async (req, res) => {
 
 export const PUT = async (req) => {
     const session = await getServerSession(authOptions);
-
     try {
-
-        // FormData を取得
         const formData = await req.formData();
 
-        // フィールドを取得
         const name = formData.get("name");
         const mail = formData.get("mail");
         const imageFile = formData.get("imageFileName");
@@ -47,8 +42,6 @@ export const PUT = async (req) => {
         // ファイルをサーバー上に保存
         await fs.writeFile(filePath, buffer);
 
-
-
         const user = await prisma.user.update({
             where: { id: session.user.id },
             data: { name, mail, imageFileName: imageFile.name }
@@ -56,7 +49,6 @@ export const PUT = async (req) => {
         console.dir(user);
         return NextResponse.json({ message: "Success", user }, { status: 200 });
     } catch (err) {
-        console.dir(err)
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };

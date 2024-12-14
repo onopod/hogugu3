@@ -1,0 +1,9 @@
+// restClientの変数設定
+vscodeのsettings.jsonに下記を追記
+
+    "rest-client.environmentVariables": {
+        "$shared": {
+            "host": "localhost:3000",
+            "cookie": "next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..7hJ3SOErD9taN_DG.UjEKfRz24ZJIc1cjA_TXvOf6U_ZHffdPqzPwe2VeJzzBxhFgqj8lhmIkerzDwyVXBzGNWVRSvw_g-E3pjfGMrttBA7dkstiFM8f6svtJEjGbM6wjaS8USisOhpYNgLFYoVkBGznuqbdyzI3J3cRbj9X50jJyePGau-qWNs2lgmdneUJLPvX1kWbjjJ6c0t9cYwebfyOa28LHYyT1a5T3mWdWct4.5gwExPU-n9VBgwd_yj16ZA"
+        }
+    }

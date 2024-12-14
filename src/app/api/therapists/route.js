@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
-export const GET = async (req, res) => {
+export const GET = async (req) => {
     const session = await getServerSession(authOptions);
 
     try {
@@ -58,7 +58,6 @@ export const GET = async (req, res) => {
 };
 
 export const POST = async (req) => {
-
     try {
         const { name, comment } = await req.json();
         const therapists = await prisma.therapist.create({ data: { name, comment } });

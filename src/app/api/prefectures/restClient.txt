@@ -1,1 +1,1 @@
-GET http://localhost:3000/api/prefectures
+GET http://{{host}}/api/prefectures

@@ -2,14 +2,9 @@ import prisma from '@/lib/prisma';
 import { NextResponse } from "next/server";
 import authOptions from "../auth/[...nextauth]/authOptions";
 
-export const GET = async (req, res) => {
-
+export const GET = async () => {
     try {
-        const prefectures = await prisma.prefecture.findMany({
-            orderBy: {
-                id: "asc"
-            }
-        });
+        const prefectures = await prisma.prefecture.findMany({ orderBy: { id: "asc" } });
         return NextResponse.json({ message: "Success", prefectures }, { status: 200 });
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
@@ -20,7 +15,6 @@ export const GET = async (req, res) => {
 
 export const POST = async (req) => {
     const session = await getServerSession(authOptions);
-
     try {
         const { therapistMenuId, startDt } = await req.json();
         const user = await prisma.user.findFirstOrThrow({
@@ -38,5 +32,4 @@ export const POST = async (req) => {
     } catch (err) {
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
-
 };
