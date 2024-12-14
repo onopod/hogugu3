@@ -1,8 +1,8 @@
-GET http://localhost:3000/api/reservations
+GET http://{{host}}/api/reservations
 
 ###
 
-POST http://localhost:3000/api/reservations
+POST http://{{host}}/api/reservations
 content-type: application/json
 
 {

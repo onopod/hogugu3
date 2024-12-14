@@ -3,7 +3,7 @@ import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
-export const GET = async (req, res) => {
+export const GET = async () => {
     const session = await getServerSession(authOptions);
     try {
         const senders = await prisma.therapist.findMany({
@@ -24,10 +24,8 @@ export const GET = async (req, res) => {
                 }
             }
         });
-        console.log(senders);
         return NextResponse.json({ message: "Success", senders }, { status: 200 });
     } catch (err) {
-        console.dir(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };

@@ -3,12 +3,12 @@ import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
-export const GET = async (req) => {
+export const GET = async (_, { params }) => {
     const session = await getServerSession(authOptions);
+    const therapistId = parseInt((await params).id);
     try {
-        const therapistId = parseInt(req.url.split("/toggle/")[1]);
         const therapistId_userId = {
-            therapistId: therapistId,
+            therapistId: parseInt(therapistId),
             userId: session.user.id,
         }
         const favoriteCount = await prisma.favorite.count({ where: therapistId_userId });

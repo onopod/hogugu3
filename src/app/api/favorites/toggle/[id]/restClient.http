@@ -1,0 +1,2 @@
+http://{{host}}/api/favorites/toggle/1
+Cookie: {{cookie}}

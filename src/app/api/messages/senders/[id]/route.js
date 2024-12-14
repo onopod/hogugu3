@@ -3,10 +3,10 @@ import prisma from '@/lib/prisma';
 import { getServerSession } from "next-auth/next";
 import { NextResponse } from "next/server";
 
-export const GET = async (req, res) => {
+export const GET = async (req, { params }) => {
     const session = await getServerSession(authOptions);
     try {
-        const therapistId = parseInt(req.url.split("/senders/")[1]);
+        const therapistId = parseInt((await params).id);
         const messages = await prisma.message.findMany({
             where: {
                 userId: session.user.id,
@@ -22,16 +22,13 @@ export const GET = async (req, res) => {
         });
         return NextResponse.json({ message: "Success", messages }, { status: 200 });
     } catch (err) {
-        console.dir(err);
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };
 
-
-
-export const POST = async (req) => {
+export const POST = async (req, { params }) => {
     const session = await getServerSession(authOptions);
-    const therapistId = parseInt(req.url.split("/senders/")[1]);
+    const therapistId = parseInt((await params).id);
 
     try {
         const { message, isUserSend } = await req.json();
