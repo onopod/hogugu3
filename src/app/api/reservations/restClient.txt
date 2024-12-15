@@ -1,24 +1,11 @@
-POST https://api.line.me/v2/bot/message/push
-Content-Type: application/json
-Authorization: Bearer zLLkznjy3U/eyy7Ww2far23qbarExZbgwt0e49HiGpVWcSG/ezyNROA2Zy4SrM8rxmidWcsvwp2BYhbaFWIQ2YR10chD+o49GL7kDVL8sGdyf7SiG5Ik159SQ2lBBFS2eXKnaGfpGDzuWBbG66BwqgdB04t89/1O/w1cDnyilFU=
-
-{
-    "to": "U0e811ac314b25d7ac84753a8e270974c",
-    "messages": [
-        {
-            "type": "text",
-            "text": "teste"
-        }
-    ]
-}      
-###
 GET http://{{host}}/api/reservations
+Cookie: {{cookie}}
 
 ###
 
 POST http://{{host}}/api/reservations
 content-type: application/json
-
+Cookie: {{cookie}}
 {
     "userId": 1, 
     "therapistMenuId": 1,

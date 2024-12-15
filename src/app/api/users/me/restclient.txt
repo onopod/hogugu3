@@ -1,1 +1,2 @@
 GET http://{{host}}/api/users/me
+Cookie: {{cookie}}

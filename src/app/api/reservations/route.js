@@ -15,9 +15,10 @@ export const GET = async () => {
                 therapistMenu: {
                     include: {
                         therapist: true,
-                        menu: true,
+                        menu: true
                     }
-                }
+                },
+                status: true
             },
             orderBy: {
                 created: "desc"
