@@ -33,8 +33,7 @@ function MyAppBar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="/"
+            onClick={() => router.push("/")}
             sx={{
               display: "flex",
               flexGrow: 1,
@@ -43,6 +42,7 @@ function MyAppBar() {
               letterSpacing: '.2rem',
               color: 'inherit',
               textDecoration: 'none',
+              cursor: "pointer",
             }}
           >Hogugu</Typography>
           <Box sx={{ flexGrow: 0 }}>

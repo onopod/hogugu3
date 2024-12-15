@@ -1,11 +1,13 @@
-import { Badge, Avatar, List, ListItemAvatar, ListItemButton, ListItemText } from "@mui/material";
+import { Avatar, Badge, List, ListItemButton, ListItemText } from "@mui/material";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 export default function SenderList({ senders }) {
+    const router = useRouter();
     return (
         <List>
             {senders ? senders.map((sender, idx) => (
 
-                <ListItemButton key={idx} href={`/message/sender/${sender.id}`}>
+                <ListItemButton key={idx} onClick={() => router.push(`/message/sender/${sender.id}`)}>
                     {sender.messages[0].isRead ? (
                         <Avatar alt={sender.name} src={sender.imageFileName ? `/therapistImg/${sender.id}/${sender.imageFileName}` : ""}>
                             {sender.name[0].toUpperCase()}
