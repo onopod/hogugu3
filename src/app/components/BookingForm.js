@@ -1,16 +1,15 @@
-import { Button, FormControl, FormLabel, MenuItem, Select } from '@mui/material';
+import { Button, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 
 export default function BookingForm({ therapist }) {
     const router = useRouter();
-    const { register, handleSubmit, reset, watch, setValue } = useForm({
-        "defaultValues": {
+    const { control, handleSubmit, reset, setValue, register, formState: { errors } } = useForm({
+        defaultValues: {
             startDt: "",
             therapistMenuId: ""
         }
-    })
-    const selectedTherapistMenuId = watch("therapistMenuId");
+    });
 
     const onSubmit = data => {
         fetch('/api/reservations', {
@@ -19,31 +18,56 @@ export default function BookingForm({ therapist }) {
             body: JSON.stringify(data)
         })
             .then((res) => res.json())
-            .then((data) => {
-                router.push("/reservation")
-            })
-    }
+            .then(() => {
+                router.push("/reservation");
+            });
+    };
+
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
-            <FormControl fullWidth>
-                予約
+            <FormControl fullWidth error={!!errors.therapistMenuId}>
                 <FormLabel>メニュー</FormLabel>
-
-                <Select id="therapistMenuId"
-                    value={selectedTherapistMenuId}
-                    onChange={(e) => setValue("therapistMenuId", e.target.value)}
-                    label="therapistMenuId" >
-                    {therapist.menus?.map((menu, idx) => (
-                        <MenuItem key={idx} value={menu.menu.id}>
-                            {menu.menu.name}:{menu.treatmentTime}分 {menu.price}円
-                        </MenuItem>
-                    ))}
-                </Select>
-                <FormLabel>予約時間</FormLabel>
-                <input type="datetime-local" {...register("startDt")} />
-                <Button type="submit">予約</Button>
-                <Button onClick={() => reset()}>リセット</Button>
+                <Controller
+                    name="therapistMenuId"
+                    control={control}
+                    rules={{ required: "メニューを選択してください。" }}
+                    render={({ field }) => (
+                        <Select
+                            id="therapistMenuId"
+                            {...field}
+                            value={field.value}
+                            onChange={(e) => {
+                                field.onChange(e.target.value);
+                                setValue("therapistMenuId", e.target.value);
+                            }}
+                            label="therapistMenuId"
+                        >
+                            {therapist.menus?.map((menu, idx) => (
+                                <MenuItem key={idx} value={menu.menu.id}>
+                                    {menu.menu.name}:{menu.treatmentTime}分 {menu.price}円
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    )}
+                />
+                {errors.therapistMenuId && (
+                    <FormHelperText>{errors.therapistMenuId.message}</FormHelperText>
+                )}
             </FormControl>
+
+            <FormControl fullWidth error={!!errors.startDt}>
+                <FormLabel>予約時間</FormLabel>
+                <input
+                    type="datetime-local"
+                    {...register("startDt", { required: "予約時間を入力してください。" })}
+                />
+                {errors.startDt && (
+                    <FormHelperText>{errors.startDt.message}</FormHelperText>
+                )}
+            </FormControl>
+
+            <Button type="submit">予約リクエスト</Button>
+            <Button onClick={() => reset()}>リセット</Button>
         </form>
     );
 }
