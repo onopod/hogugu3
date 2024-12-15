@@ -4,6 +4,7 @@ import { ExpandMoreIcon, FavoriteIcon } from "@/app/icons";
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const ExpandMore = styled((props) => {
@@ -32,6 +33,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function TherapistCard({ therapist, handleFavoriteClick }) {
+  const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const [favorite, setFavorite] = useState(therapist.favorites.length);
   const handleExpandClick = () => {
@@ -72,12 +74,8 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>{therapist.comment}</Typography>
       </CardContent>
       <CardActions disableSpacing>
-        <Button href={`/therapist/${therapist.id}`}> 詳細 </Button>
-
-        <IconButton aria-label="add to favorites">
-
-
-        </IconButton>
+        <Button onClick={() => router.push(`/therapist/${therapist.id}`)}> 詳細 </Button>
+        <IconButton aria-label="add to favorites" />
         <ExpandMore
           expand={expanded}
           onClick={handleExpandClick}
