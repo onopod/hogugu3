@@ -7,7 +7,19 @@ export const GET = async (req, { params }) => {
 
         const therapist = await prisma.therapist.findFirst({
             where: { id },
-            include: { menus: { include: { menu: true } } }
+            include: {
+                menus: {
+                    include: {
+                        menu: true,
+                        Reservation: {
+                            include: {
+                                review: true
+                            }
+                        }
+                    }
+                },
+
+            }
         });
 
         if (!therapist) {

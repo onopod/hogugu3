@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     // truncate
+    await prisma.review.deleteMany({})
     await prisma.favorite.deleteMany({})
     await prisma.message.deleteMany({})
     await prisma.reservation.deleteMany({})
@@ -144,9 +145,9 @@ async function main() {
         // reservation
         await prisma.reservation.createMany({
             data: [
-                { userId: 1, therapistMenuId: 1, startDt: "2024-12-08T21:00:00.000+09:00" },
-                { userId: 1, therapistMenuId: 6, startDt: "2024-12-09T22:30:00.000+09:00" },
-                { userId: 2, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" },
+                { id: 1, userId: 1, therapistMenuId: 1, startDt: "2024-12-08T21:00:00.000+09:00" },
+                { id: 2, userId: 1, therapistMenuId: 5, startDt: "2024-12-09T22:30:00.000+09:00" },
+                { id: 3, userId: 2, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" },
             ]
         })
 
@@ -166,6 +167,14 @@ async function main() {
                 { userId: 1, therapistId: 1 },
                 { userId: 1, therapistId: 2 },
                 { userId: 2, therapistId: 2 }
+            ]
+        })
+
+        // review
+        await prisma.review.createMany({
+            data: [
+                { reservationId: 1, comment: "とても良かったです" },
+                { reservationId: 2, rate: 4, comment: "まあまあでした" }
             ]
         })
     })
