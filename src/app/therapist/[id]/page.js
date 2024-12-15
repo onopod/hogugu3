@@ -15,9 +15,15 @@ export default function TherapistPage() {
             .then((res) => res.json())
             .then((data) => {
                 setTherapist(data.therapist)
-                const reviews = data.therapist.menus?.map(menu => menu.Reservation).map(reservations => reservations.filter(reservation => reservation?.review).map(
-                    reservation => reservation?.review
-                )).filter(review => review?.length > 0).flat();
+                const reviews = data.therapist.menus?.map(
+                    menu => menu.reservations
+                ).map(
+                    reservations => reservations.filter(
+                        reservation => reservation?.review
+                    ).map(
+                        reservation => reservation?.review
+                    )
+                ).filter(review => review?.length > 0).flat();
                 setReviews(reviews)
             });
     }, [params.id])
