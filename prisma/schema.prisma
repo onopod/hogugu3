@@ -7,6 +7,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Status {
+  id   Int    @id
+  name String
+}
+
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -86,7 +91,7 @@ model TherapistsOnMenus {
   menuId        Int?
   treatmentTime Int?
   price         Int?
-  Reservation   Reservation[]
+  Reservations  Reservation[]
 
   @@unique([therapistId, menuId])
 }
