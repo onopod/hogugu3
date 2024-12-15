@@ -6,7 +6,7 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ prefectures, menus, handleSubmit, onSubmit, register, setValue, watch }) {
+export default function FullScreenDialog({ prefectures, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -47,9 +47,6 @@ export default function FullScreenDialog({ prefectures, menus, handleSubmit, onS
                             <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
                                 検索
                             </Typography>
-                            <Button type="submit" autoFocus color="inherit" onClick={handleClose}>
-                                save
-                            </Button>
                         </Toolbar>
                     </AppBar>
                     <DialogContent>
@@ -72,6 +69,8 @@ export default function FullScreenDialog({ prefectures, menus, handleSubmit, onS
                             </Select>
                             <TextField id="freeWord" {...register("freeWord")} label="フリーワード" />
                         </Stack>
+                        <Button type="submit" onClick={handleClose}>送信</Button>
+                        <Button onClick={() => reset()}>リセット</Button>
                     </DialogContent>
                 </form>
             </Dialog>
