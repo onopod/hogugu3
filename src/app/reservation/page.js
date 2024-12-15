@@ -76,7 +76,7 @@ export default function ReservationPage() {
                         <CustomTabPanel key={status.id} value={value} index={status.id - 1}>
                             <Stack spacing={2} sx={{ mt: 1 }}>
                                 {reservations ? reservations.filter(reservation => reservation.statusId == status.id).map((reservation) => (
-                                    <Stack key={reservation.id} direction="row" spacing={2} key={reservation.id}>
+                                    <Stack key={reservation.id} direction="row" spacing={2}>
                                         <Box>
                                             <Avatar alt={reservation.therapistMenu.therapist.name} src="/avatar.jpg" />
                                         </Box>
