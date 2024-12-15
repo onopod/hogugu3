@@ -9,9 +9,7 @@ export default function BookingForm({ therapist }) {
         console.log(data);
         fetch('/api/reservations', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
+            headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
         })
             .then((res) => res.json())
@@ -20,7 +18,6 @@ export default function BookingForm({ therapist }) {
                 router.push("/reservation")
             })
     }
-
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl fullWidth>

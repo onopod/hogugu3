@@ -1,4 +1,4 @@
-import CloseIcon from '@mui/icons-material/Close';
+import { CloseIcon } from '@/app/icons';
 import { AppBar, Button, Dialog, DialogContent, IconButton, MenuItem, Select, Slide, Stack, TextField, Toolbar, Typography } from '@mui/material';
 import { Fragment, forwardRef, useState } from 'react';
 

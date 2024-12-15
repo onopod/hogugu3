@@ -1,12 +1,10 @@
 "use client"
 
-import AppBar from "@/app/components/AppBar";
-import BottomBar from "@/app/components/BottomBar";
+import { AppBar, BookingForm, BottomBar } from "@/app/components";
 import { Box, Container, Rating, Typography } from '@mui/material';
 import Image from "next/image";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
-import BookingForm from "../../components/BookingForm";
 
 export default function TherapistPage() {
     const params = useParams();

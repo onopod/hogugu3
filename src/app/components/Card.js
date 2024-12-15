@@ -1,23 +1,10 @@
 "use client"
 
-import FavoriteIcon from '@mui/icons-material/Favorite';
-import { Box, Button, Chip } from "@mui/material";
-import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
-import Collapse from '@mui/material/Collapse';
+import { ExpandMoreIcon, FavoriteIcon } from "@/app/icons";
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import { pink } from '@mui/material/colors';
-import IconButton from '@mui/material/IconButton';
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import * as React from 'react';
 import { useState } from "react";
-
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -45,7 +32,7 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function TherapistCard({ therapist, handleFavoriteClick }) {
-  const [expanded, setExpanded] = React.useState(false);
+  const [expanded, setExpanded] = useState(false);
   const [favorite, setFavorite] = useState(therapist.favorites.length);
   const handleExpandClick = () => {
     setExpanded(!expanded);

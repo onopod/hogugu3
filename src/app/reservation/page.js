@@ -1,11 +1,9 @@
 "use client"
+import { AppBar, BottomBar } from '@/app/components';
+import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from '@mui/material';
 import { format } from "date-fns";
 import PropTypes from 'prop-types';
-import * as React from 'react';
-
-import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from '@mui/material';
-import AppBar from '../components/AppBar';
-import BottomBar from "../components/BottomBar";
+import { useEffect, useState } from 'react';
 
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -37,15 +35,15 @@ function a11yProps(index) {
 }
 
 export default function ReservationPage() {
-    const [value, setValue] = React.useState(0);
+    const [value, setValue] = useState(0);
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
 
-    const [reservations, setReservations] = React.useState([])
+    const [reservations, setReservations] = useState([])
 
-    React.useEffect(() => {
+    useEffect(() => {
         fetch("/api/reservations")
             .then(req => req.json())
             .then(data => {

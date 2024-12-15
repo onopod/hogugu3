@@ -1,8 +1,8 @@
 "use client"
+import { AppBar } from "@/app/components";
 import { Button, Container, FormControl, Stack, TextField } from "@mui/material";
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
-import AppBar from "../components/AppBar";
 export default function Login() {
     const router = useRouter();
 

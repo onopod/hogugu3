@@ -1,11 +1,9 @@
 "use client"
 
+import { AppBar, BottomBar, Profile } from "@/app/components";
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import AppBar from "../components/AppBar";
-import BottomBar from "../components/BottomBar";
-import Profile from "../components/Profile";
 
 export default function ProfilePage() {
     const [user, setUser] = useState({})

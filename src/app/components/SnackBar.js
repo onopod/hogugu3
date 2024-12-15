@@ -1,10 +1,8 @@
-import Alert from "@mui/material/Alert";
-import Box from '@mui/material/Box';
-import Snackbar from '@mui/material/Snackbar';
-import * as React from 'react';
+import { Alert, Box, Snackbar } from "@mui/material";
+import { useState } from "react";
 
 export default function PositionedSnackbar() {
-    const [state, setState] = React.useState({
+    const [state, setState] = useState({
         open: true,
         vertical: 'top',
         horizontal: 'center',
