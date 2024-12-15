@@ -99,6 +99,16 @@ model Reservation {
   therapistMenuId Int
   startDt         DateTime          @default(now())
   created         DateTime          @default(now())
+  review          Review?
 
   @@index([userId, therapistMenuId])
+}
+
+model Review {
+  id            Int         @id @default(autoincrement())
+  reservationId Int         @unique
+  reservation   Reservation @relation(fields: [reservationId], references: [id])
+  rate          Int         @default(5)
+  comment       String?
+  created       DateTime    @default(now())
 }

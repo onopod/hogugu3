@@ -1,6 +1,6 @@
 "use client"
 
-import { AppBar, BookingForm, BottomBar } from "@/app/components";
+import { AppBar, BookingForm, BottomBar, Review } from "@/app/components";
 import { Box, Container, Rating, Typography } from '@mui/material';
 import Image from "next/image";
 import { useParams } from 'next/navigation';
@@ -9,13 +9,19 @@ import { useEffect, useState } from "react";
 export default function TherapistPage() {
     const params = useParams();
     const [therapist, setTherapist] = useState({})
+    const [reviews, setReviews] = useState([])
     useEffect(() => {
         fetch(`/api/therapists/${params.id}`)
             .then((res) => res.json())
             .then((data) => {
                 setTherapist(data.therapist)
-            })
+                const reviews = data.therapist.menus?.map(menu => menu.Reservation).map(reservations => reservations.filter(reservation => reservation?.review).map(
+                    reservation => reservation?.review
+                )).filter(review => review?.length > 0).flat();
+                setReviews(reviews)
+            });
     }, [params.id])
+
     return (
         <>
             <AppBar />
@@ -40,6 +46,12 @@ export default function TherapistPage() {
                             {menu.menu.name}:{menu.treatmentTime}min {menu.price}円
                         </Typography>
                     ))}
+                    <div>レビュー</div>
+                    <div>
+                        {reviews.map((review) => (
+                            <Review key={review.id} review={review} />
+                        ))}
+                    </div>
                     <BookingForm therapist={therapist} />
                 </Box>
             </Container >
