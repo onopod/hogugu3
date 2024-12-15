@@ -1,19 +1,12 @@
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Link from '@mui/material/Link';
-import Slide from '@mui/material/Slide';
-import * as React from 'react';
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link, Slide } from '@mui/material';
+import { forwardRef, Fragment, useState } from 'react';
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
 export default function AlertDialogSlide() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
         setOpen(true);
@@ -24,7 +17,7 @@ export default function AlertDialogSlide() {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <Button variant="outlined" onClick={handleClickOpen}>
                 予約内容を確認
             </Button>
@@ -46,6 +39,6 @@ export default function AlertDialogSlide() {
                     <Button onClick={handleClose}>戻る</Button>
                 </DialogActions>
             </Dialog>
-        </React.Fragment>
+        </Fragment>
     );
 }

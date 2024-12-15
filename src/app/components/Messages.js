@@ -1,12 +1,7 @@
 "use client"
-import { Stack } from '@mui/joy';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import FormControl from '@mui/joy/FormControl';
-import Textarea from '@mui/joy/Textarea';
+import { SendRoundedIcon } from "@/app/icons";
+import { Box, Button, FormControl, Stack, Textarea } from '@mui/joy';
 import { Avatar, Typography } from "@mui/material";
-
-import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import { format } from "date-fns";
 
 export default function Messages({ messages, register, handleSubmit, onSubmit }) {

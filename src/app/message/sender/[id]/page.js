@@ -1,10 +1,7 @@
 "use client"
-import { useParams } from 'next/navigation';
-
-import AppBar from "@/app/components/AppBar";
-import BottomBar from "@/app/components/BottomBar";
-import Messages from "@/app/components/Messages";
+import { AppBar, BottomBar, Messages } from "@/app/components";
 import { Container } from "@mui/material";
+import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 

@@ -1,6 +1,5 @@
-import SearchIcon from '@mui/icons-material/Search';
-import Box from '@mui/material/Box';
-import Fab from '@mui/material/Fab';
+import { SearchIcon } from "@/app/icons";
+import { Box, Fab } from "@mui/material";
 
 export default function FloatingActionButtons() {
     return (

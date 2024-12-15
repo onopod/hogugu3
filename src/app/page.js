@@ -1,12 +1,9 @@
 "use client"
+
+import { AppBar, BottomBar, Card, SearchDialog } from '@/app/components';
 import { Box, Container, Pagination, Skeleton } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import AppBar from './components/AppBar';
-import BottomBar from "./components/BottomBar";
-import Card from './components/Card';
-import SearchDialog from "./components/SearchDialog";
-
 
 export default function Home() {
   const pageSize = 10;

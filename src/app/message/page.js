@@ -1,10 +1,9 @@
 "use client"
 
-import SenderList from "../components/SenderList";
-import AppBar from "../components/AppBar";
-import BottomBar from "../components/BottomBar";
+import { AppBar, BottomBar, SenderList } from "@/app/components";
 import { Container } from "@mui/material";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
 export default function MessageSenderPage() {
     const [senders, setSenders] = useState(null);
     useEffect(() => {

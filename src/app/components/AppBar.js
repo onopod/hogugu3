@@ -1,15 +1,14 @@
-import MenuIcon from '@mui/icons-material/Menu';
-import SpaIcon from '@mui/icons-material/Spa';
+import { MenuIcon, SpaIcon } from '@/app/icons';
 import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import { signIn, signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
-import * as React from 'react';
+import { useState } from "react";
 
 function MyAppBar() {
   const router = useRouter();
   const { data: session } = useSession();
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
