@@ -7,3 +7,8 @@ vscodeのsettings.jsonに下記を追記
             "cookie": "next-auth.session-token=eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIn0..7hJ3SOErD9taN_DG.UjEKfRz24ZJIc1cjA_TXvOf6U_ZHffdPqzPwe2VeJzzBxhFgqj8lhmIkerzDwyVXBzGNWVRSvw_g-E3pjfGMrttBA7dkstiFM8f6svtJEjGbM6wjaS8USisOhpYNgLFYoVkBGznuqbdyzI3J3cRbj9X50jJyePGau-qWNs2lgmdneUJLPvX1kWbjjJ6c0t9cYwebfyOa28LHYyT1a5T3mWdWct4.5gwExPU-n9VBgwd_yj16ZA"
         }
     }
+
+Channel ID
+2006673397
+Channel secret
+99957a8ffb6c09d1f3b9d471747bd47b
