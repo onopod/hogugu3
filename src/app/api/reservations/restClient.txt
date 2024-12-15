@@ -2,7 +2,7 @@ GET http://{{host}}/api/reservations
 Cookie: {{cookie}}
 
 ###
-POST http://{{host}}/api/reservations
+POST https://hogugu3-luvoyd9rj-ryo-onos-projects.vercel.app/api/reservations
 content-type: application/json
 Cookie: {{cookie}}
 

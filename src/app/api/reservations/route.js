@@ -34,12 +34,9 @@ export const POST = async (req) => {
     const session = await getServerSession(authOptions);
     try {
         const { therapistMenuId, startDt } = await req.json();
-        const user = await prisma.user.findFirstOrThrow({
-            where: { mail: session.user.email }
-        })
         const reservation = await prisma.reservation.create({
             data: {
-                userId: user.id,
+                userId: session.user.id,
                 therapistMenuId,
                 startDt: startDt + ":00.000+09:00"
             }
