@@ -11,7 +11,7 @@ export const GET = async (req, { params }) => {
                 menus: {
                     include: {
                         menu: true,
-                        Reservation: {
+                        reservations: {
                             include: {
                                 review: true
                             }

@@ -7,6 +7,12 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Status {
+  id           Int           @id
+  name         String
+  reservations Reservation[]
+}
+
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -86,7 +92,7 @@ model TherapistsOnMenus {
   menuId        Int?
   treatmentTime Int?
   price         Int?
-  Reservation   Reservation[]
+  reservations  Reservation[]
 
   @@unique([therapistId, menuId])
 }
@@ -100,6 +106,8 @@ model Reservation {
   startDt         DateTime          @default(now())
   created         DateTime          @default(now())
   review          Review?
+  statusId        Int               @default(1)
+  status          Status            @relation(fields: [statusId], references: [id])
 
   @@index([userId, therapistMenuId])
 }

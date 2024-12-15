@@ -12,8 +12,8 @@ function CustomTabPanel(props) {
         <div
             role="tabpanel"
             hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
+            id={`statusId-${index}`}
+            aria-labelledby={`statusId-${index}`}
             {...other}
         >
             {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
@@ -29,8 +29,8 @@ CustomTabPanel.propTypes = {
 
 function a11yProps(index) {
     return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
+        id: `statusId-${index}`,
+        'aria-controls': `statusId-${index}`,
     };
 }
 
@@ -41,8 +41,16 @@ export default function ReservationPage() {
         setValue(newValue);
     };
 
+    const [statuses, setStatuses] = useState([])
     const [reservations, setReservations] = useState([])
 
+    useEffect(() => {
+        fetch("/api/statuses")
+            .then(req => req.json())
+            .then(data => {
+                setStatuses(data.statuses)
+            })
+    }, [])
     useEffect(() => {
         fetch("/api/reservations")
             .then(req => req.json())
@@ -60,40 +68,27 @@ export default function ReservationPage() {
                         <Tabs variant="fullWidth"
                             value={value}
                             onChange={handleChange}
-                            aria-label="basic tabs example">
-                            <Tab label="現在の予約" {...a11yProps(0)} />
-                            <Tab label="過去の予約" {...a11yProps(1)} />
+                            aria-label="statusId">
+                            {statuses.map(status => <Tab key={status.id} label={status.name} {...a11yProps(status.id - 1)} />)}
                         </Tabs>
                     </Box>
-                    <CustomTabPanel value={value} index={0}>
-                        <Stack spacing={2} sx={{ mt: 1 }}>
-                            {reservations ? reservations.map((reservation) => (
-                                <Stack direction="row" spacing={2} key={reservation.id}>
-                                    <Box>
-                                        <Avatar alt={reservation.therapistMenu.therapist.name} src="/avatar.jpg" />
-                                    </Box>
-                                    <Box>
-                                        <Typography>{reservation.therapistMenu.therapist.name}</Typography>
-                                        <Typography>{format(reservation.startDt, "yyyy/MM/dd kk:mm")}から{reservation.therapistMenu.treatmentTime}分 {reservation.therapistMenu.menu.name}</Typography>
-                                    </Box>
-                                </Stack>
-                            )) : ""}
-
-                        </Stack>
-                    </CustomTabPanel>
-                    <CustomTabPanel value={value} index={1}>
-                        <Stack spacing={2} sx={{ mt: 1 }}>
-                            <Stack direction="row" spacing={2}>
-                                <Box>
-                                    <Avatar alt="Tanaka Mitsuru" src="/avatar.jpg" />
-                                </Box>
-                                <Box>
-                                    <Typography>Tanaka Risa</Typography>
-                                    <Typography>2024/12/24 14:00から90分 オイルマッサージ</Typography>
-                                </Box>
+                    {statuses.map(status => (
+                        <CustomTabPanel key={status.id} value={value} index={status.id - 1}>
+                            <Stack spacing={2} sx={{ mt: 1 }}>
+                                {reservations ? reservations.filter(reservation => reservation.statusId == status.id).map((reservation) => (
+                                    <Stack key={reservation.id} direction="row" spacing={2} key={reservation.id}>
+                                        <Box>
+                                            <Avatar alt={reservation.therapistMenu.therapist.name} src="/avatar.jpg" />
+                                        </Box>
+                                        <Box>
+                                            <Typography>{reservation.therapistMenu.therapist.name}</Typography>
+                                            <Typography>{format(reservation.startDt, "yyyy/MM/dd kk:mm")}から{reservation.therapistMenu.treatmentTime}分 {reservation.therapistMenu.menu.name}</Typography>
+                                        </Box>
+                                    </Stack>
+                                )) : ""}
                             </Stack>
-                        </Stack>
-                    </CustomTabPanel>
+                        </CustomTabPanel>
+                    ))}
                 </Box>
             </Container>
             <BottomBar />
