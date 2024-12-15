@@ -4,9 +4,15 @@ import { useForm } from "react-hook-form";
 
 export default function BookingForm({ therapist }) {
     const router = useRouter();
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit, reset, watch, setValue } = useForm({
+        "defaultValues": {
+            startDt: "",
+            therapistMenuId: ""
+        }
+    })
+    const selectedTherapistMenuId = watch("therapistMenuId");
+
     const onSubmit = data => {
-        console.log(data);
         fetch('/api/reservations', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -14,7 +20,6 @@ export default function BookingForm({ therapist }) {
         })
             .then((res) => res.json())
             .then((data) => {
-                console.log(data)
                 router.push("/reservation")
             })
     }
@@ -24,8 +29,10 @@ export default function BookingForm({ therapist }) {
                 予約
                 <FormLabel>メニュー</FormLabel>
 
-                <Select id="therapistMenuId" name="therapistMenuId" label="therapistMenuId" defaultValue={0} {...register("therapistMenuId")}>
-                    <MenuItem value={0}>選択</MenuItem>
+                <Select id="therapistMenuId"
+                    value={selectedTherapistMenuId}
+                    onChange={(e) => setValue("therapistMenuId", e.target.value)}
+                    label="therapistMenuId" >
                     {therapist.menus?.map((menu, idx) => (
                         <MenuItem key={idx} value={menu.menu.id}>
                             {menu.menu.name}:{menu.treatmentTime}分 {menu.price}円
@@ -35,6 +42,7 @@ export default function BookingForm({ therapist }) {
                 <FormLabel>予約時間</FormLabel>
                 <input type="datetime-local" {...register("startDt")} />
                 <Button type="submit">予約</Button>
+                <Button onClick={() => reset()}>リセット</Button>
             </FormControl>
         </form>
     );

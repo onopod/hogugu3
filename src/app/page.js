@@ -56,7 +56,7 @@ export default function Home() {
   }
 
 
-  const { register, handleSubmit, setValue, watch } = useForm({
+  const { register, handleSubmit, setValue, reset, watch } = useForm({
     defaultValues: {
       prefectureId: "",
       menuId: "",
@@ -76,7 +76,14 @@ export default function Home() {
     <>
       <AppBar />
       <Container maxWidth="sm">
-        <SearchDialog prefectures={prefectures} menus={menus} handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} setValue={setValue} watch={watch} />
+        <SearchDialog
+          prefectures={prefectures}
+          menus={menus}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          register={register} setValue={setValue}
+          watch={watch}
+          reset={reset} />
         {itemCount}件
         {(therapists ? (
           <>
