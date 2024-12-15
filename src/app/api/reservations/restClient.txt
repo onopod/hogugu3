@@ -2,10 +2,10 @@ GET http://{{host}}/api/reservations
 Cookie: {{cookie}}
 
 ###
-
 POST http://{{host}}/api/reservations
 content-type: application/json
 Cookie: {{cookie}}
+
 {
     "userId": 1, 
     "therapistMenuId": 1,
