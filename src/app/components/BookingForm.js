@@ -1,7 +1,7 @@
 import { Button, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
+import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from "react-hook-form";
-
 export default function BookingForm({ therapist }) {
     const router = useRouter();
     const { control, handleSubmit, reset, setValue, register, formState: { errors } } = useForm({
@@ -12,14 +12,28 @@ export default function BookingForm({ therapist }) {
     });
 
     const onSubmit = data => {
+        // 予約を登録
         fetch('/api/reservations', {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(data)
         })
-            .then((res) => res.json())
             .then(() => {
-                router.push("/reservation");
+                // メッセージを送信
+                fetch(`/api/messages/senders/${therapist.id}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: `セラピストへ予約リクエストを送信しました。
+予約日時：${format(data.startDt, "yyyy/MM/dd kk:mm")}
+メニュー：${therapist.menus.filter(menu => menu.id == data.therapistMenuId)[0].menu.name}
+                        `,
+                        messageStatusId: 3
+                    })
+                })
+                    .then(() => router.push("/reservation"))
             });
     };
 
