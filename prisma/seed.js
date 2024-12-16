@@ -16,7 +16,17 @@ async function main() {
     await prisma.prefecture.deleteMany({})
     await prisma.region.deleteMany({})
     await prisma.status.deleteMany({})
+    await prisma.messageStatus.deleteMany({})
 
+    // messageStatus
+    await prisma.messageStatus.createMany({
+        data: [
+            { id: 1, name: "ユーザーの送信" },
+            { id: 2, name: "セラピストの送信" },
+            { id: 3, name: "ユーザー用インフォメーション" },
+            { id: 4, name: "セラピスト用インフォメーション" }
+        ]
+    })
     // status
     await prisma.status.createMany({
         data: [
@@ -168,10 +178,10 @@ async function main() {
         // message 
         await prisma.message.createMany({
             data: [
-                { userId: 1, therapistId: 1, message: "こんにちは", isUserSend: true, created: "2024-12-08T21:00:00.000+09:00" },
-                { userId: 1, therapistId: 1, message: "どうかされましたか？", created: "2024-12-08T21:01:00.000+09:00" },
-                { userId: 1, therapistId: 1, message: "予約についてのお問い合わせです。", isUserSend: true, created: "2024-12-08T21:02:00.000+09:00" },
-                { userId: 2, therapistId: 1, message: "初めて問い合わせします", isUserSend: true, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
+                { userId: 1, therapistId: 1, message: "こんにちは", messageStatusId: 1, created: "2024-12-08T21:00:00.000+09:00" },
+                { userId: 1, therapistId: 1, message: "どうかされましたか？", messageStatusId: 2, created: "2024-12-08T21:01:00.000+09:00" },
+                { userId: 1, therapistId: 1, message: "予約についてのお問い合わせです。", messageStatusId: 1, created: "2024-12-08T21:02:00.000+09:00" },
+                { userId: 2, therapistId: 1, message: "初めて問い合わせします", messageStatusId: 1, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
             ]
         })
 

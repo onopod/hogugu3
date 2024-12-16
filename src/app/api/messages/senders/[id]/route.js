@@ -31,14 +31,14 @@ export const POST = async (req, { params }) => {
     const therapistId = parseInt((await params).id);
 
     try {
-        const { message, isUserSend } = await req.json();
+        const { message, messageStatusId } = await req.json();
 
         const msg = await prisma.message.create({
             data: {
                 userId: session.user.id,
                 therapistId,
                 message,
-                isUserSend
+                messageStatusId
             }
         });
         return NextResponse.json({ message: "Success", msg }, { status: 201 });

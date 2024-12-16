@@ -11,24 +11,27 @@ export default function Messages({ messages, register, handleSubmit, onSubmit })
         <>
             <Box className="message-area" sx={{ m: 2 }}>
                 <Stack spacing={1} direction="column-reverse">
-                    {messages ? messages.map(message => (
+                    {messages ? messages.filter(message => message.messageStatusId != 4).map(message => (
                         <Box key={message.id}>
                             <Stack spacing={1}
-                                direction={message.isUserSend == true ? "row-reverse" : "row"}>
-                                {message.isUserSend == true ?
+                                direction={message.messageStatusId == 1 ? "row-reverse" : "row"}>
+                                {message.messageStatusId == 1 ?
                                     <Avatar src={message.user.imageFileName ? `/userImg/${message.user.id}/${message.user.imageFileName}` : ""}>
                                         {message.user.name ? message.user.name[0].toUpperCase() : ""}
                                     </Avatar>
-                                    :
-                                    <Avatar src={message.therapist.imageFileName ? `/therapistImg/${message.therapist.id}/${message.therapist.imageFileName}` : ""}>
-                                        {message.therapist.name ? message.therapist.name[0].toUpperCase() : ""}
-                                    </Avatar>
+                                    : message.messageStatusId == 2 ?
+                                        <Avatar src={message.therapist.imageFileName ? `/therapistImg/${message.therapist.id}/${message.therapist.imageFileName}` : ""}>
+                                            {message.therapist.name ? message.therapist.name[0].toUpperCase() : ""}
+                                        </Avatar>
+                                        :
+                                        <Avatar>Info</Avatar>
+
                                 }
                                 <Stack >
-                                    <Typography>{message.message}</Typography>
+                                    {message.message.split(/\n/).map((m, idx) => <Typography key={idx}>{m}</Typography>)}
                                 </Stack>
                             </Stack>
-                            <Stack direction={message.isUserSend == true ? "row-reverse" : "row"}>
+                            <Stack direction={message.messageStatusId == 1 ? "row-reverse" : "row"}>
                                 <Typography>{format(message.created, (format(new Date(), "yyyy/MM/dd") == format(message.created, "yyyy/MM/dd") ? "" : "yyyy/MM/dd ") + "kk:mm")}</Typography>
                             </Stack>
                         </Box>

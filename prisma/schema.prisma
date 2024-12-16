@@ -13,6 +13,12 @@ model Status {
   reservations Reservation[]
 }
 
+model MessageStatus {
+  id       Int       @id
+  name     String
+  messages Message[]
+}
+
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -67,15 +73,16 @@ model Favorite {
 }
 
 model Message {
-  id          Int       @id @default(autoincrement())
-  therapistId Int
-  therapist   Therapist @relation(fields: [therapistId], references: [id])
-  userId      Int
-  user        User      @relation(fields: [userId], references: [id])
-  message     String
-  isUserSend  Boolean   @default(false)
-  isRead      Boolean   @default(false)
-  created     DateTime  @default(now())
+  id              Int           @id @default(autoincrement())
+  therapistId     Int
+  therapist       Therapist     @relation(fields: [therapistId], references: [id])
+  userId          Int
+  user            User          @relation(fields: [userId], references: [id])
+  message         String
+  messageStatusId Int           @default(1)
+  messageStatus   MessageStatus @relation(fields: [messageStatusId], references: [id])
+  isRead          Boolean       @default(false)
+  created         DateTime      @default(now())
 }
 
 model Menu {
@@ -108,8 +115,6 @@ model Reservation {
   review          Review?
   statusId        Int               @default(1)
   status          Status            @relation(fields: [statusId], references: [id])
-
-  @@index([userId, therapistMenuId])
 }
 
 model Review {

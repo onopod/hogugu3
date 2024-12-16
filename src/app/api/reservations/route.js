@@ -73,7 +73,7 @@ export const POST = async (req) => {
 
         return NextResponse.json({ message: "Success", reservation }, { status: 201 });
     } catch (err) {
-        //console.dir(err)
+        console.dir(err)
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };

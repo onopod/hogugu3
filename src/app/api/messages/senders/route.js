@@ -15,7 +15,10 @@ export const GET = async () => {
             include: {
                 messages: {
                     where: {
-                        userId: session.user.id
+                        userId: session.user.id,
+                        NOT: {
+                            messageStatusId: 4
+                        }
                     },
                     take: 1,
                     orderBy: [

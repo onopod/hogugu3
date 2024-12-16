@@ -29,8 +29,8 @@ export default function MessageSenderPage() {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({
-                ...data,
-                isUserSend: true
+                message: data.message,
+                messageStatusId: 1
             })
         })
             .then(() => {
