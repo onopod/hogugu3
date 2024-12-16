@@ -166,12 +166,11 @@ async function main() {
         // reservation
         await prisma.reservation.createMany({
             data: [
-                { userId: 1, therapistMenuId: 1, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00" },
-                { userId: 1, therapistMenuId: 1, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00" },
-                { userId: 1, therapistMenuId: 2, startDt: "2024-12-10T22:30:00.000+09:00" },
-                { userId: 1, therapistMenuId: 3, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
-                { userId: 1, therapistMenuId: 4, startDt: "2024-12-22T22:30:00.000+09:00" },
-                { userId: 2, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" }
+                { id: 1, userId: 1, therapistMenuId: 1, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00" },
+                { id: 2, userId: 1, therapistMenuId: 1, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00" },
+                { id: 3, userId: 1, therapistMenuId: 2, startDt: "2024-12-10T22:30:00.000+09:00" },
+                { id: 4, userId: 1, therapistMenuId: 3, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
+                { id: 5, userId: 2, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" }
             ]
         })
 
