@@ -3,8 +3,8 @@ import { AppBar, BottomBar } from "@/app/components";
 import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
-import "swiper/css"; // Swiper のスタイルをインポート
-import { Swiper, SwiperSlide } from "swiper/react"; // Swiper コンポーネントをインポート
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 function a11yProps(index) {
     return {
@@ -67,7 +67,6 @@ export default function ReservationPage() {
                             ))}
                         </Tabs>
                     </Box>
-                    {/* Swiper を使用 */}
                     <Swiper
                         onSlideChange={(swiper) => setValue(swiper.activeIndex)}
                         onSwiper={onSwiper}
