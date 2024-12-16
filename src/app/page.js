@@ -1,7 +1,7 @@
 "use client"
 
-import { AppBar, BottomBar, Card, SearchDialog } from '@/app/components';
-import { Box, Container, Pagination, Skeleton } from "@mui/material";
+import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
+import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -16,6 +16,8 @@ export default function Home() {
   const [count, setCount] = useState(0);
   const [prefectures, setPrefectures] = useState([])
   const [menus, setMenus] = useState([])
+  const [regions, setRegions] = useState([])
+
   useEffect(() => {
     fetch("/api/prefectures")
       .then(res => res.json())
@@ -23,6 +25,9 @@ export default function Home() {
     fetch("/api/menus")
       .then(res => res.json())
       .then(data => setMenus(data.menus))
+    fetch("/api/regions")
+      .then(res => res.json())
+      .then(data => setRegions(data.regions))
   }, [])
 
 
@@ -55,6 +60,13 @@ export default function Home() {
     setPage(page)
   }
 
+  const onPrefectureClick = (prefectureId) => {
+    reset()
+    setPage(1)
+    setPrefectureId(prefectureId)
+    setMenuId(null)
+    setFreeWord("")
+  }
 
   const { register, handleSubmit, setValue, reset, watch } = useForm({
     defaultValues: {
@@ -99,6 +111,19 @@ export default function Home() {
             <Skeleton />
           </>
         ))}
+        <h3>地域検索</h3>
+        <Stack direction="column" spacing={2}>
+          {regions.map(region => (
+            <Stack key={region.id} direction="column">
+              <Box>{region.name}</Box>
+              <Box>{region.prefectures?.map(prefecture => <Chip key={prefecture.id}
+                size="small"
+                label={prefecture.name}
+                onClick={() => onPrefectureClick(prefecture.id)} />)}</Box>
+            </Stack>
+          )
+          )}
+        </Stack>
       </Container>
       <BottomBar />
     </>
