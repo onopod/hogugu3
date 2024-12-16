@@ -1,10 +1,12 @@
 "use client"
 
 import { AppBar, BookingForm, BottomBar, Review } from "@/app/components";
-import { Box, Container, Rating, Typography } from '@mui/material';
+import { Box, Container, Rating, Tab, Tabs, Typography } from '@mui/material';
 import Image from "next/image";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
+import "swiper/css";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function TherapistPage() {
     const params = useParams();
@@ -28,6 +30,19 @@ export default function TherapistPage() {
             });
     }, [params.id])
 
+    const [value, setValue] = useState(0);
+    const [swiper, setSwiper] = useState(null);
+
+    const onSwiper = (currentSwiper) => {
+        const swiperInstance = currentSwiper;
+        setSwiper(swiperInstance);
+    };
+
+    const handleChange = (_, newValue) => {
+        swiper?.slideTo(newValue)
+        setValue(newValue);
+    };
+
     return (
         <>
             <AppBar />
@@ -47,17 +62,46 @@ export default function TherapistPage() {
                         precision={0.5}
                         size="small" value={4.5} />
                     <div sx={{ ml: 2 }}>(4.5)</div>
-                    {therapist.menus?.map((menu, idx) => (
-                        <Typography key={idx}>
-                            {menu.menu.name}:{menu.treatmentTime}min {menu.price}円
-                        </Typography>
-                    ))}
-                    <div>レビュー</div>
-                    <div>
-                        {reviews.map((review) => (
-                            <Review key={review.id} review={review} />
-                        ))}
-                    </div>
+                    <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+                        <Tabs
+                            variant="fullWidth"
+                            value={value}
+                            onChange={handleChange}
+                            aria-label="therapistSwiper"
+                        >
+                            <Tab
+                                id="therapistSwiper-1"
+                                label="メニュー"
+                                aria-controls="therapistSwiper-1"
+                            />
+                            <Tab
+                                id="therapistSwiper-2"
+                                label="レビュー"
+                                aria-controls="therapistSwiper-2"
+                            />
+                        </Tabs>
+                    </Box>
+
+                    <Swiper
+                        onSlideChange={(swiper) => setValue(swiper.activeIndex)}
+                        onSwiper={onSwiper}
+                        spaceBetween={10}
+                        slidesPerView={1}
+                    >
+                        <SwiperSlide>
+                            {therapist.menus?.map((menu, idx) => (
+                                <Typography key={idx}>
+                                    {menu.menu.name}:{menu.treatmentTime}min {menu.price}円
+                                </Typography>
+                            ))}
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            {reviews.map((review) => (
+                                <Review key={review.id} review={review} />
+                            ))}
+                        </SwiperSlide>
+                    </Swiper>
+
                     <BookingForm therapist={therapist} />
                 </Box>
             </Container >
