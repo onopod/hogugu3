@@ -5,6 +5,7 @@ const prisma = new PrismaClient();
 
 async function main() {
     // truncate
+    await prisma.history.deleteMany({})
     await prisma.review.deleteMany({})
     await prisma.favorite.deleteMany({})
     await prisma.message.deleteMany({})
@@ -200,6 +201,16 @@ async function main() {
                 { reservationId: 2, rate: 4, comment: "まあまあでした" }
             ]
         })
+
+        // history
+        await prisma.history.createMany({
+            data: [
+                { userId: 1, therapistId: 1 },
+                { userId: 1, therapistId: 2 },
+                { userId: 2, therapistId: 2 }
+            ]
+        })
+
     })
 }
 
