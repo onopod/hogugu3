@@ -1,3 +1,4 @@
+import CssBaseline from '@mui/material/CssBaseline';
 import type { Metadata } from "next";
 
 import localFont from "next/font/local";
@@ -35,7 +36,10 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
 
-        <Providers>{children}</Providers>
+        <Providers>
+          <CssBaseline />
+          {children}
+        </Providers>
       </body>
     </html>
   );

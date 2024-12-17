@@ -79,7 +79,10 @@ function MyAppBar() {
                 </div>
               )
                 :
-                <MenuItem onClick={() => signIn()}>ログイン</MenuItem>
+                <div key={2}>
+                  <MenuItem onClick={() => router.push("/register")}>新規登録</MenuItem>
+                  <MenuItem onClick={() => signIn()}>ログイン</MenuItem>
+                </div>
               }
             </Menu>
           </Box>
