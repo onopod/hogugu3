@@ -1,4 +1,11 @@
 export { default } from "next-auth/middleware";
+
 export const config = {
-    matcher: ["/((?!register|api|login|therapist).*)"],
+    matcher: [
+        "/reservation(.*)",
+        "/message(.*)",
+        "/profile(.*)",
+        "/logout(.*)",
+        "/favorites(.*)"
+    ]
 };

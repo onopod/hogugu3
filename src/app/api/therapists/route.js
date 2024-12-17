@@ -43,7 +43,7 @@ export const GET = async (req) => {
                 prefecture: true,
                 favorites: {
                     where: {
-                        userId: session.user.id
+                        userId: session ? session.user.id : 0
                     },
                 }
             }

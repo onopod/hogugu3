@@ -2,6 +2,7 @@
 
 import { AppBar, BookingForm, BottomBar, Review } from "@/app/components";
 import { Box, Container, Rating, Tab, Tabs, Typography } from '@mui/material';
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -9,6 +10,7 @@ import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function TherapistPage() {
+    const { data: session } = useSession();
     const params = useParams();
     const [therapist, setTherapist] = useState({})
     const [reviews, setReviews] = useState([])
@@ -30,12 +32,14 @@ export default function TherapistPage() {
             })
             .then(() => {
                 // 閲覧履歴
-                fetch(`/api/histories/${params.id}`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" }
-                })
+                if (session) {
+                    fetch(`/api/histories/${params.id}`, {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" }
+                    })
+                }
             });
-    }, [params.id])
+    }, [params.id, session])
 
     const [value, setValue] = useState(0);
     const [swiper, setSwiper] = useState(null);
@@ -108,8 +112,7 @@ export default function TherapistPage() {
                             ))}
                         </SwiperSlide>
                     </Swiper>
-
-                    <BookingForm therapist={therapist} />
+                    {session ? <BookingForm therapist={therapist} /> : ""}
                 </Box>
             </Container >
             <BottomBar />

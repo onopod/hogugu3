@@ -4,9 +4,9 @@ import { ExpandMoreIcon, FavoriteIcon } from "@/app/icons";
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
 
@@ -33,6 +33,8 @@ const ExpandMore = styled((props) => {
 }));
 
 export default function TherapistCard({ therapist, handleFavoriteClick }) {
+  const { data: session } = useSession();
+
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
   const [favorite, setFavorite] = useState(therapist.favorites.length);
@@ -44,16 +46,18 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
     <Card key={therapist.id}>
 
       <CardHeader
-        avatar={
-          <Avatar alt={therapist.name} src="/avatar.jpg" sx={{ width: 64, height: 64 }} />
-        }
+        avatar={<Avatar alt={therapist.name}
+          src={therapist.imageFileName ? `/therapistImg/${therapist.id}/${therapist.imageFileName}` : ""}
+          sx={{ width: 64, height: 64 }}>{therapist.name[0].toUpperCase()}</Avatar>}
         action={
-          <IconButton size="large" >
-            <FavoriteIcon sx={favorite ? { color: pink[300] } : {}} onClick={() => {
-              setFavorite(favorite ? 0 : 1)
-              handleFavoriteClick(therapist.id)
-            }} />
-          </IconButton>
+          session ?
+            <IconButton size="large" >
+              <FavoriteIcon sx={favorite ? { color: pink[300] } : {}} onClick={() => {
+                setFavorite(favorite ? 0 : 1)
+                handleFavoriteClick(therapist.id)
+              }} />
+            </IconButton>
+            : ""
         }
         title={therapist.name}
         subheader={
