@@ -27,6 +27,13 @@ export default function TherapistPage() {
                     )
                 ).filter(review => review?.length > 0).flat();
                 setReviews(reviews)
+            })
+            .then(() => {
+                // 閲覧履歴
+                fetch(`/api/histories/${params.id}`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" }
+                })
             });
     }, [params.id])
 
