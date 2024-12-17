@@ -1,3 +1,4 @@
+import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -9,5 +10,5 @@ import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import SettingsIcon from '@mui/icons-material/Settings';
 import SpaIcon from '@mui/icons-material/Spa';
 
-export { CloseIcon, ExpandMoreIcon, FavoriteIcon, HotelIcon, MenuIcon, MessageIcon, SearchIcon, SendRoundedIcon, SettingsIcon, SpaIcon };
+export { BookmarksIcon, CloseIcon, ExpandMoreIcon, FavoriteIcon, HotelIcon, MenuIcon, MessageIcon, SearchIcon, SendRoundedIcon, SettingsIcon, SpaIcon };
 
