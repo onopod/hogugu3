@@ -43,7 +43,6 @@ export const POST = async (req) => {
         });
 
         // 予約時にLineにメッセージを飛ばす
-        console.log("送信開始")
         const token = "zLLkznjy3U/eyy7Ww2far23qbarExZbgwt0e49HiGpVWcSG/ezyNROA2Zy4SrM8rxmidWcsvwp2BYhbaFWIQ2YR10chD+o49GL7kDVL8sGdyf7SiG5Ik159SQ2lBBFS2eXKnaGfpGDzuWBbG66BwqgdB04t89/1O/w1cDnyilFU="
 
         const response = await axios.post(
@@ -69,11 +68,9 @@ export const POST = async (req) => {
                 }
             }
         );
-        //console.log(response.data)
 
         return NextResponse.json({ message: "Success", reservation }, { status: 201 });
     } catch (err) {
-        console.dir(err)
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };

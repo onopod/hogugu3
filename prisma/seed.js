@@ -159,7 +159,7 @@ async function main() {
     await bcrypt.hash("password", 10, async (_, hashedPassword) => {
         await prisma.user.createMany({
             data: [
-                { id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', password: hashedPassword, imageFileName: "avatar.jpg", prefectureId: 27 },
+                { id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', password: hashedPassword, imageFileName: "avatar.jpg", prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西" },
                 { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 }
             ]
         })
