@@ -42,8 +42,11 @@ model User {
   mail          String        @unique
   password      String
   imageFileName String?
+  zipcode String?
   prefectureId  Int?
   prefecture    Prefecture?   @relation(fields: [prefectureId], references: [id])
+  city String?
+  address String?
   reservations  Reservation[]
   messages      Message[]
   favorites     Favorite[]

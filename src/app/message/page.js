@@ -10,7 +10,6 @@ export default function MessageSenderPage() {
         fetch("/api/messages/senders")
             .then(res => res.json())
             .then(data => {
-                console.log(data.senders);
                 setSenders(data.senders);
             })
     }, [])
