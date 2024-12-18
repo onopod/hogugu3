@@ -9,12 +9,14 @@ import { useForm } from "react-hook-form";
 export default function ProfilePage() {
     const router = useRouter();
     const [prefectures, setPrefectures] = useState([])
+    const [genders, setGenders] = useState([])
     const [user, setUser] = useState({})
     const { handleSubmit, control, register, watch, reset, setValue } = useForm({
         defaultValues: {
             name: "",
             mail: "",
             tel: "",
+            genderId: "",
             imageFileName: "",
             zipcode: "",
             prefectureId: "",
@@ -28,6 +30,7 @@ export default function ProfilePage() {
         formData.append("name", data.name);
         formData.append("mail", data.mail);
         formData.append("tel", data.tel);
+        formData.append("genderId", data.genderId);
         formData.append("imageFileName", data.imageFileName[0]);
         formData.append("prefectureId", data.prefectureId)
         formData.append("zipcode", data.zipcode)
@@ -41,8 +44,9 @@ export default function ProfilePage() {
             window.location.reload()
         })
     }
-    let zipcode = watch("zipcode");
-    useEffect(() => {
+    const zipcode = watch("zipcode")
+    const changeZipCode = () => {
+        console.log("zipcode is", zipcode)
         if (zipcode && zipcode.length == 7) {
             fetch("https://zipcloud.ibsnet.co.jp/api/search?" + new URLSearchParams({
                 zipcode: zipcode
@@ -57,8 +61,13 @@ export default function ProfilePage() {
                 })
         }
         // eslint-disable-next-line
-    }, [zipcode])
+    }
     useEffect(() => {
+        fetch("/api/genders")
+            .then(res => res.json())
+            .then(data => {
+                setGenders(data.genders)
+            })
         fetch("/api/prefectures")
             .then(res => res.json())
             .then(data => {
@@ -72,6 +81,7 @@ export default function ProfilePage() {
                             name: data.user.name || "",
                             mail: data.user.mail || "",
                             tel: data.user.tel || "",
+                            genderId: data.user.genderId || "",
                             imageFileName: data.user.imageFileName || "",
                             zipcode: data.user.zipcode || "",
                             prefectureId: data.user.prefectureId || "",
@@ -86,7 +96,7 @@ export default function ProfilePage() {
         <>
             <AppBar />
             <Container maxWidth="sm">
-                <Profile prefectures={prefectures} control={control} user={user} handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} />
+                <Profile changeZipCode={changeZipCode} prefectures={prefectures} genders={genders} control={control} user={user} handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} />
             </Container>
             <BottomBar />
         </>
