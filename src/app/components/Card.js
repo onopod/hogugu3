@@ -4,9 +4,11 @@ import { ExpandMoreIcon, FavoriteIcon } from "@/app/icons";
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
+import { subWeeks } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
 
@@ -75,6 +77,7 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
       />
       <CardContent>
         <Box>
+          {new Date(therapist.created) > subWeeks(new Date(), 4) ? "NEW" : ""}
           <span>返答率 {therapist.reservations.length == 0 ?
             "-" :
             `${(therapist.reservations.filter(reservation => reservation.replyDt != null).length / therapist.reservations.length * 100).toFixed(0)}%`
