@@ -20,11 +20,12 @@ model MessageStatus {
 }
 
 model Gender {
-  id Int @id
-  name String
-  users User[] 
+  id         Int         @id
+  name       String
+  users      User[]
   therapists Therapist[]
 }
+
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -45,10 +46,10 @@ model Region {
 model User {
   id            Int           @id @default(autoincrement())
   name          String?
-  genderId Int?
-  gender Gender? @relation(fields:[genderId], references:[id])
+  genderId      Int?
+  gender        Gender?       @relation(fields: [genderId], references: [id])
   mail          String        @unique
-  tel String?
+  tel           String?
   password      String
   imageFileName String?
   zipcode       String?
@@ -65,16 +66,17 @@ model User {
 model Therapist {
   id            Int                 @id @default(autoincrement())
   name          String
-  genderId Int?
-  gender Gender? @relation(fields:[genderId], references:[id])
+  genderId      Int?
+  gender        Gender?             @relation(fields: [genderId], references: [id])
   comment       String?
   imageFileName String?
   prefectureId  Int?
   prefecture    Prefecture?         @relation(fields: [prefectureId], references: [id])
-  city String?
-  workYear Int?
+  city          String?
+  workYear      Int?
+  created       DateTime            @default(now())
   menus         TherapistsOnMenus[]
-  reservations Reservation[]
+  reservations  Reservation[]
   messages      Message[]
   favorites     Favorite[]
   History       History[]
@@ -138,18 +140,17 @@ model Reservation {
   id              Int               @id @default(autoincrement())
   user            User              @relation(fields: [userId], references: [id])
   userId          Int
-  therapistId Int
-  therapist Therapist @relation(fields: [therapistId], references: [id])
+  therapistId     Int
+  therapist       Therapist         @relation(fields: [therapistId], references: [id])
   therapistMenu   TherapistsOnMenus @relation(fields: [therapistMenuId], references: [id])
   therapistMenuId Int
   startDt         DateTime          @default(now())
   created         DateTime          @default(now())
-  replyDt DateTime?
+  replyDt         DateTime?
   review          Review?
   statusId        Int               @default(1)
   status          Status            @relation(fields: [statusId], references: [id])
 }
-
 
 model Review {
   id            Int         @id @default(autoincrement())

@@ -54,7 +54,6 @@ export default function Home() {
     }
 
     const url = ['/api/therapists', searchParams.toString()].join("?");
-    console.log("url is", url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {

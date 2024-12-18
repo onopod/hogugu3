@@ -2,6 +2,7 @@
 
 import { AppBar, BookingForm, BottomBar, Review } from "@/app/components";
 import { Box, Container, Rating, Tab, Tabs, Typography } from '@mui/material';
+import { subWeeks } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useParams } from 'next/navigation';
@@ -75,6 +76,7 @@ export default function TherapistPage() {
                     <span>性別 {therapist?.gender?.name}</span>
                     {therapist.reservations ?
                         <Box>
+                            {new Date(therapist.created) > subWeeks(new Date(), 4) ? "NEW" : ""}
                             <span>返答率 {therapist.reservations.length == 0 ?
                                 "-" :
                                 `${(therapist.reservations.filter(reservation => reservation.replyDt != null).length / therapist.reservations.length * 100).toFixed(0)}%`
