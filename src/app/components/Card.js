@@ -74,7 +74,13 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
         alt="施術イメージ"
       />
       <CardContent>
-        <Box><span>返答率 - </span><span>返答時間 - </span> </Box>
+        <Box><span>返答率 {therapist.reservations.length == 0 ?
+          "-" :
+          `${(therapist.reservations.filter(reservation => reservation.replyDt != null).length / therapist.reservations.length * 100).toFixed(0)}%`
+        }</span><span>返答時間 {therapist.reservations.length == 0 ?
+          "-" :
+          `${(therapist.reservations.filter(reservation => reservation.replyDt != null).map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) / (1000 * 60))}分`
+        }</span> </Box>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>{therapist.comment}</Typography>
       </CardContent>
       <CardActions disableSpacing>

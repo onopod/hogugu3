@@ -8,6 +8,7 @@ export const GET = async (req, { params }) => {
         const therapist = await prisma.therapist.findFirst({
             where: { id },
             include: {
+                reservations: true,
                 menus: {
                     include: {
                         menu: true,

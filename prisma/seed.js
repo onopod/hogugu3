@@ -161,17 +161,18 @@ async function main() {
         await prisma.user.createMany({
             data: [
                 { id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', password: hashedPassword, imageFileName: "avatar.jpg", prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西" },
-                { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 }
+                { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 },
+                { id: 3, name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 26 }
             ]
         })
         // reservation
         await prisma.reservation.createMany({
             data: [
-                { id: 1, userId: 1, therapistMenuId: 1, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00" },
-                { id: 2, userId: 1, therapistMenuId: 1, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00" },
-                { id: 3, userId: 1, therapistMenuId: 2, startDt: "2024-12-10T22:30:00.000+09:00" },
-                { id: 4, userId: 1, therapistMenuId: 3, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
-                { id: 5, userId: 2, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" }
+                { id: 1, userId: 1, therapistId: 1, therapistMenuId: 1, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00", replyDt: "2024-12-06T21:10:00.000+09:00", created: "2024-12-06T21:00:00.000+09:00" },
+                { id: 2, userId: 1, therapistId: 1, therapistMenuId: 1, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00", replyDt: "2024-12-08T22:50:00.000+09:00", created: "2024-12-08T22:20:00.000+09:00" },
+                { id: 3, userId: 1, therapistId: 1, therapistMenuId: 2, startDt: "2024-12-10T22:30:00.000+09:00" },
+                { id: 4, userId: 1, therapistId: 1, therapistMenuId: 3, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
+                { id: 5, userId: 2, therapistId: 1, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" }
             ]
         })
 

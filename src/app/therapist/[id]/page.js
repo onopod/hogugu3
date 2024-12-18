@@ -53,7 +53,7 @@ export default function TherapistPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
-
+    console.dir(therapist.reservations.filter(reservation => reservation.replyDt != null).length)
     return (
         <>
             <AppBar />
@@ -73,6 +73,13 @@ export default function TherapistPage() {
                         precision={0.5}
                         size="small" value={4.5} />
                     <div sx={{ ml: 2 }}>(4.5)</div>
+                    <Box><span>返答率 {therapist.reservations.length == 0 ?
+                        "-" :
+                        `${(therapist.reservations.filter(reservation => reservation.replyDt != null).length / therapist.reservations.length * 100).toFixed(0)}%`
+                    }</span><span>返答時間 {therapist.reservations.length == 0 ?
+                        "-" :
+                        `${(therapist.reservations.filter(reservation => reservation.replyDt != null).map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) / (1000 * 60))}分`
+                    }</span> </Box>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
                             variant="fullWidth"
