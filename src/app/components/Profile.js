@@ -10,6 +10,7 @@ export default function Profile({ prefectures, user, control, handleSubmit, onSu
                     <Stack spacing={1}>
                         名前：<TextField id="name" {...register("name")} />
                         メールアドレス：<TextField id="mail" {...register("mail")} />
+                        電話番号：<TextField id="tel" {...register("tel")} />
                         プロフィール画像 <input id="imageFileName"
                             type="file"
                             {...register("imageFileName")}

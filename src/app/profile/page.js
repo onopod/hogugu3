@@ -12,13 +12,14 @@ export default function ProfilePage() {
     const [user, setUser] = useState({})
     const { handleSubmit, control, register, watch, reset, setValue } = useForm({
         defaultValues: {
-            name: user.name,
-            mail: user.mail,
-            imageFileName: user.imageFileName,
-            zipcode: user.zipcode,
+            name: "",
+            mail: "",
+            tel: "",
+            imageFileName: "",
+            zipcode: "",
             prefectureId: "",
-            city: user.city,
-            address: user.address
+            city: "",
+            address: ""
         }
     });
     const onSubmit = data => {
@@ -26,6 +27,7 @@ export default function ProfilePage() {
         const formData = new FormData();
         formData.append("name", data.name);
         formData.append("mail", data.mail);
+        formData.append("tel", data.tel);
         formData.append("imageFileName", data.imageFileName[0]);
         formData.append("prefectureId", data.prefectureId)
         formData.append("zipcode", data.zipcode)
@@ -67,13 +69,14 @@ export default function ProfilePage() {
                     .then(data => {
                         setUser(data.user);
                         reset({
-                            name: data.user.name,
-                            mail: data.user.mail,
-                            imageFileName: data.user.imageFileName,
-                            zipcode: data.user.zipcode,
-                            prefectureId: data.user.prefectureId,
-                            city: data.user.city,
-                            address: data.user.address
+                            name: data.user.name || "",
+                            mail: data.user.mail || "",
+                            tel: data.user.tel || "",
+                            imageFileName: data.user.imageFileName || "",
+                            zipcode: data.user.zipcode || "",
+                            prefectureId: data.user.prefectureId || "",
+                            city: data.user.city || "",
+                            address: data.user.address || ""
                         });
                     })
             })
