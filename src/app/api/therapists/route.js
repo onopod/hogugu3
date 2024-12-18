@@ -41,11 +41,8 @@ export const GET = async (req) => {
                     }
                 },
                 prefecture: true,
-                favorites: {
-                    where: {
-                        userId: session ? session.user.id : 0
-                    },
-                }
+                reservations: true,
+                ...(session ? { favorites: { where: { userId: session.user.id }, } } : {})
             }
         });
         const itemCount = await prisma.therapist.count({
@@ -53,6 +50,7 @@ export const GET = async (req) => {
         });
         return NextResponse.json({ message: "Success", itemCount, therapists }, { status: 200 });
     } catch (err) {
+        console.dir(err)
         return NextResponse.json({ message: "Error", err }, { status: 500 });
     }
 };
