@@ -37,7 +37,7 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
 
   const router = useRouter();
   const [expanded, setExpanded] = useState(false);
-  const [favorite, setFavorite] = useState(therapist.favorites.length);
+  const [favorite, setFavorite] = useState(therapist.favorites ? therapist.favorites.length : null);
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
