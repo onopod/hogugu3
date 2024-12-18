@@ -72,6 +72,7 @@ export default function TherapistPage() {
                         precision={0.5}
                         size="small" value={4.5} />
                     <div sx={{ ml: 2 }}>(4.5)</div>
+                    <span>性別 {therapist?.gender?.name}</span>
                     {therapist.reservations ?
                         <Box>
                             <span>返答率 {therapist.reservations.length == 0 ?
