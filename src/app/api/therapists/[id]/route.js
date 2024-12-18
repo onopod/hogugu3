@@ -10,6 +10,7 @@ export const GET = async (req, { params }) => {
             include: {
                 reservations: true,
                 prefecture: true,
+                gender: true,
                 menus: {
                     include: {
                         menu: true,

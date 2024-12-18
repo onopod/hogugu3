@@ -10,11 +10,13 @@ export default function Home() {
   const [itemCount, setItemCount] = useState(0);
   const [page, setPage] = useState(1);
   const [prefectureId, setPrefectureId] = useState(null);
+  const [genderId, setGenderId] = useState(null);
   const [menuId, setMenuId] = useState(null);
   const [freeWord, setFreeWord] = useState(null)
   const [therapists, setTherapists] = useState([]);
   const [count, setCount] = useState(0);
   const [prefectures, setPrefectures] = useState([])
+  const [genders, setGenders] = useState([])
   const [menus, setMenus] = useState([])
   const [regions, setRegions] = useState([])
 
@@ -22,6 +24,9 @@ export default function Home() {
     fetch("/api/prefectures")
       .then(res => res.json())
       .then(data => setPrefectures(data.prefectures))
+    fetch("/api/genders")
+      .then(res => res.json())
+      .then(data => setGenders(data.genders))
     fetch("/api/menus")
       .then(res => res.json())
       .then(data => setMenus(data.menus))
@@ -38,6 +43,9 @@ export default function Home() {
     if (prefectureId) {
       searchParams.set("prefectureId", prefectureId);
     }
+    if (genderId) {
+      searchParams.set("genderId", genderId);
+    }
     if (menuId) {
       searchParams.set("menuId", menuId);
     }
@@ -46,6 +54,7 @@ export default function Home() {
     }
 
     const url = ['/api/therapists', searchParams.toString()].join("?");
+    console.log("url is", url);
     fetch(url)
       .then((res) => res.json())
       .then((data) => {
@@ -53,7 +62,7 @@ export default function Home() {
         setItemCount(data.itemCount);
         setCount(Math.ceil(data.itemCount / pageSize))
       })
-  }, [page, prefectureId, menuId, freeWord])
+  }, [page, prefectureId, genderId, menuId, freeWord])
 
   const onPageChange = (_, page) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -71,12 +80,14 @@ export default function Home() {
   const { register, handleSubmit, setValue, reset, watch } = useForm({
     defaultValues: {
       prefectureId: "",
+      genderId: "",
       menuId: "",
       freeWord: "",
     },
   });
   const onSubmit = data => {
     setPrefectureId(data.prefectureId)
+    setGenderId(data.genderId)
     setMenuId(data.menuId)
     setFreeWord(data.freeWord)
   }
@@ -90,6 +101,7 @@ export default function Home() {
       <Container maxWidth="sm">
         <SearchDialog
           prefectures={prefectures}
+          genders={genders}
           menus={menus}
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}

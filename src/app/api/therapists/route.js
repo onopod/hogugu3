@@ -8,12 +8,14 @@ export const GET = async (req) => {
 
     try {
         const prefectureId = parseInt(req.nextUrl.searchParams.get("prefectureId"));
+        const genderId = parseInt(req.nextUrl.searchParams.get("genderId"));
         const menuId = parseInt(req.nextUrl.searchParams.get("menuId"))
         const freeWord = req.nextUrl.searchParams.get("freeWord")
         const take = parseInt(req.nextUrl.searchParams.get("pageSize")) || 10;
         const page = parseInt(req.nextUrl.searchParams.get("page")) || 1;
         const where = {
             ...(prefectureId && { prefectureId }),
+            ...(genderId && { genderId }),
             ...(freeWord && {
                 OR: [
                     { name: { contains: freeWord } },
@@ -40,6 +42,7 @@ export const GET = async (req) => {
                         menu: true
                     }
                 },
+                gender: true,
                 prefecture: true,
                 reservations: true,
                 ...(session ? { favorites: { where: { userId: session.user.id }, } } : {})

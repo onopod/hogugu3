@@ -6,7 +6,7 @@ const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function FullScreenDialog({ prefectures, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
+export default function FullScreenDialog({ prefectures, genders, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -18,6 +18,7 @@ export default function FullScreenDialog({ prefectures, menus, handleSubmit, onS
     };
 
     const selectedPrefecture = watch("prefectureId");
+    const selectedGender = watch("genderId");
     const selectedMenuId = watch("menuId");
 
     return (
@@ -58,6 +59,14 @@ export default function FullScreenDialog({ prefectures, menus, handleSubmit, onS
                                 displayEmpty
                                 label="prefecture">
                                 {prefectures.map(prefecture => <MenuItem key={prefecture.id} value={prefecture.id}>{prefecture.name}</MenuItem>)}
+                            </Select>
+                            性別
+                            <Select id="genderId"
+                                value={selectedGender}
+                                onChange={(e) => setValue("genderId", e.target.value)}
+                                displayEmpty
+                                label="gender">
+                                {genders.map(gender => <MenuItem key={gender.id} value={gender.id}>{gender.name}</MenuItem>)}
                             </Select>
                             メニュー
                             <Select id="menuId"
