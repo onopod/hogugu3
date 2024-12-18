@@ -61,6 +61,8 @@ model Therapist {
   imageFileName String?
   prefectureId  Int?
   prefecture    Prefecture?         @relation(fields: [prefectureId], references: [id])
+  city String?
+  workYear Int?
   menus         TherapistsOnMenus[]
   reservations Reservation[]
   messages      Message[]
