@@ -50,6 +50,9 @@ const authOptions = {
             }
             return session;
         },
+    },
+    pages: {
+        signIn: "/login"
     }
 }
 export default authOptions;
