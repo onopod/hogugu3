@@ -1,16 +1,17 @@
 "use client"
 
 import { AppBar, BookingForm, BottomBar, Review } from "@/app/components";
-import { Box, Container, Rating, Tab, Tabs, Typography } from '@mui/material';
+import { Box, Button, Container, FormControl, Rating, Tab, Tabs, Typography } from '@mui/material';
 import { subWeeks } from "date-fns";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
-import { useParams } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function TherapistPage() {
+    const router = useRouter();
     const { data: session } = useSession();
     const params = useParams();
     const [therapist, setTherapist] = useState({})
@@ -125,6 +126,11 @@ export default function TherapistPage() {
                             {reviews.map((review) => (
                                 <Review key={review.id} review={review} />
                             ))}
+                            <FormControl fullWidth>
+                                <Button onClick={() => router.push(`/review/${therapist.id}`)}>
+                                    もっと見る
+                                </Button>
+                            </FormControl>
                         </SwiperSlide>
                     </Swiper>
                     {session ? <BookingForm therapist={therapist} /> : ""}
