@@ -115,7 +115,10 @@ async function main() {
     // therapist
     await prisma.therapist.createMany({
         data: [
-            { id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。', imageFileName: "tavatar.jpg", prefectureId: 27 },
+            {
+                id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。',
+                imageFileName: "tavatar.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3
+            },
             { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg", prefectureId: 27 },
             { id: 3, name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg', prefectureId: 26 },
             { id: 4, name: '競', comment: 'がんばります', imageFileName: 'tavatar.jpg' },

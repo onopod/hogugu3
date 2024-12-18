@@ -9,6 +9,7 @@ export const GET = async (req, { params }) => {
             where: { id },
             include: {
                 reservations: true,
+                prefecture: true,
                 menus: {
                     include: {
                         menu: true,
