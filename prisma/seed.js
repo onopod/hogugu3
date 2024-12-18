@@ -18,7 +18,16 @@ async function main() {
     await prisma.region.deleteMany({})
     await prisma.status.deleteMany({})
     await prisma.messageStatus.deleteMany({})
+    await prisma.gender.deleteMany({})
 
+    // gender 
+    await prisma.gender.createMany({
+        data: [
+            { id: 1, name: "男性" },
+            { id: 2, name: "女性" },
+            { id: 3, name: "その他" }
+        ]
+    })
     // messageStatus
     await prisma.messageStatus.createMany({
         data: [
@@ -117,7 +126,8 @@ async function main() {
         data: [
             {
                 id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。',
-                imageFileName: "tavatar.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3
+                imageFileName: "tavatar.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3,
+                genderId: 2
             },
             { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg", prefectureId: 27 },
             { id: 3, name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg', prefectureId: 26 },
@@ -163,7 +173,12 @@ async function main() {
     await bcrypt.hash("password", 10, async (_, hashedPassword) => {
         await prisma.user.createMany({
             data: [
-                { id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678", password: hashedPassword, imageFileName: "avatar.jpg", prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西" },
+                {
+                    id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678",
+                    password: hashedPassword, imageFileName: "avatar.jpg",
+                    prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西",
+                    genderId: 1
+                },
                 { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 },
                 { id: 3, name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 26 }
             ]

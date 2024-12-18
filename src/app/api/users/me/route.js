@@ -26,6 +26,7 @@ export const PUT = async (req) => {
         const formData = await req.formData();
 
         const name = formData.get("name");
+        const genderId = parseInt(formData.get("genderId"));
         const mail = formData.get("mail");
         const tel = formData.get("tel");
         const imageFile = formData.get("imageFileName");
@@ -33,7 +34,8 @@ export const PUT = async (req) => {
         const prefectureId = parseInt(formData.get("prefectureId"))
         const city = formData.get("city")
         const address = formData.get("address")
-
+        console.log("pref is")
+        console.log(prefectureId);
         if (imageFile?.arrayBuffer) {
             const fileName = imageFile.name;
             const arrayBuffer = await imageFile.arrayBuffer();
@@ -52,6 +54,7 @@ export const PUT = async (req) => {
             where: { id: session.user.id },
             data: {
                 name,
+                genderId,
                 mail,
                 tel,
                 imageFileName: imageFile.name,

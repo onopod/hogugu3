@@ -19,6 +19,12 @@ model MessageStatus {
   messages Message[]
 }
 
+model Gender {
+  id Int @id
+  name String
+  users User[] 
+  therapists Therapist[]
+}
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -39,6 +45,8 @@ model Region {
 model User {
   id            Int           @id @default(autoincrement())
   name          String?
+  genderId Int?
+  gender Gender? @relation(fields:[genderId], references:[id])
   mail          String        @unique
   tel String?
   password      String
@@ -57,6 +65,8 @@ model User {
 model Therapist {
   id            Int                 @id @default(autoincrement())
   name          String
+  genderId Int?
+  gender Gender? @relation(fields:[genderId], references:[id])
   comment       String?
   imageFileName String?
   prefectureId  Int?
