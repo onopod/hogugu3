@@ -4,12 +4,13 @@ const bcrypt = require('bcrypt');
 
 export const POST = async (req) => {
     try {
-        const { name, mail, password } = await req.json();
+        const { name, mail, tel, password } = await req.json();
         const hashedPassword = await bcrypt.hash(password, 10);
         const user = await prisma.user.create({
             data: {
                 name,
                 mail,
+                tel,
                 password: hashedPassword
             }
         });

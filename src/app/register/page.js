@@ -40,6 +40,8 @@ export default function Register() {
                             {errors.name && (<FormHelperText>{errors.name.message}</FormHelperText>)}
                             <TextField id="mail" {...register('mail', { required: "メールアドレスを入力してください。" })} placeholder="メールアドレス" />
                             {errors.mail && (<FormHelperText>{errors.mail.message}</FormHelperText>)}
+                            <TextField id="tel" {...register('tel', { required: "電話番号を入力してください。" })} placeholder="電話番号" />
+                            {errors.tel && (<FormHelperText>{errors.tel.message}</FormHelperText>)}
                             <TextField id="password" {...register('password', { required: "パスワードを入力してください。" })} type="password" placeholder="パスワード" />
                             {errors.password && (<FormHelperText>{errors.password.message}</FormHelperText>)}
                             <Button type="submit" variant="outlined" fullWidth>新規登録</Button>

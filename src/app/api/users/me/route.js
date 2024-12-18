@@ -27,6 +27,7 @@ export const PUT = async (req) => {
 
         const name = formData.get("name");
         const mail = formData.get("mail");
+        const tel = formData.get("tel");
         const imageFile = formData.get("imageFileName");
         const zipcode = formData.get("zipcode")
         const prefectureId = parseInt(formData.get("prefectureId"))
@@ -52,6 +53,7 @@ export const PUT = async (req) => {
             data: {
                 name,
                 mail,
+                tel,
                 imageFileName: imageFile.name,
                 zipcode,
                 prefectureId,
