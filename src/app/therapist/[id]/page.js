@@ -1,8 +1,8 @@
 "use client"
 
 import { getReviews, getTherapist, setHistory } from "@/app/actions";
-import { AppBar, BookingForm, BottomBar, Reviews, Therapist } from "@/app/components";
-import { Box, Button, Container, FormControl, Tab, Tabs, Typography } from '@mui/material';
+import { AppBar, BookingForm, BottomBar, Menus, Reviews, Therapist } from "@/app/components";
+import { Box, Button, Container, FormControl, Tab, Tabs } from '@mui/material';
 import { useSession } from "next-auth/react";
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
@@ -73,16 +73,12 @@ export default function TherapistPage() {
                         slidesPerView={1}
                     >
                         <SwiperSlide>
-                            {therapist.menus?.map((menu, idx) => (
-                                <Typography key={idx}>
-                                    {menu.menu.name}:{menu.treatmentTime}min {menu.price}円
-                                </Typography>
-                            ))}
+                            <Menus therapist={therapist} />
                         </SwiperSlide>
                         <SwiperSlide>
-                            <Reviews reviews={reviews} />
+                            <Reviews reviews={reviews} more={true} />
                             <FormControl fullWidth>
-                                <Button onClick={() => router.push(`/review/${therapist.id}`)}>
+                                <Button onClick={() => router.push(`/therapist/${therapist.id}/review`)}>
                                     もっと見る
                                 </Button>
                             </FormControl>

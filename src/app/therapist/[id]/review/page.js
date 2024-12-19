@@ -1,10 +1,10 @@
 "use client"
 
-import { AppBar, BottomBar, ReviewHeader, ReviewList } from "@/app/components";
+import { getReviews, getTherapist } from "@/app/actions";
+import { AppBar, BottomBar, Reviews, Therapist } from "@/app/components";
 import { Container } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-import { getTherapist, getReviews } from "@/app/actions";
 
 export default function ReviewPage() {
     const params = useParams();
@@ -13,21 +13,21 @@ export default function ReviewPage() {
 
     useEffect(() => {
         const fetchTherapist = async () => {
-            setTherapist(await getTherapist(Number(params.therapistId)));
+            setTherapist(await getTherapist(Number(params.id)));
         }
         fetchTherapist();
 
         const fetchReviews = async () => {
-            setReviews(await getReviews(Number(params.therapistId)))
+            setReviews(await getReviews(Number(params.id)))
         }
         fetchReviews();
-    }, [params.therapistId])
+    }, [params])
     return (
         <>
             <AppBar />
             <Container maxWidth="sm">
-                <ReviewHeader therapist={therapist} />
-                <ReviewList reviews={reviews} />
+                <Therapist therapist={therapist} />
+                <Reviews reviews={reviews} />
             </Container>
             <BottomBar />
         </>
