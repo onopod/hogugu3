@@ -5,6 +5,61 @@ import prisma from '@/lib/prisma';
 import { subWeeks } from "date-fns";
 import { getServerSession } from "next-auth/next";
 
+const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
+    return {
+        ...(prefectureId && { prefectureId }),
+        ...(genderId && { genderId }),
+        ...(freeWord && {
+            OR: [
+                { name: { contains: freeWord } },
+                { comment: { contains: freeWord } }
+            ]
+        }),
+        ...(menuId && {
+            menus: {
+                some: {
+                    id: {
+                        equals: menuId
+                    }
+                }
+            }
+        })
+    }
+
+}
+
+export async function getTherapists({ page = 1, take = 10, prefectureId, genderId, menuId, freeWord }) {
+    const session = await getServerSession(authOptions);
+    const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
+    try {
+        const therapists = await prisma.therapist.findMany({
+            where,
+            skip: (page - 1) * take,
+            take: take,
+            include: {
+                menus: {
+                    include: {
+                        menu: true
+                    }
+                },
+                gender: true,
+                prefecture: true,
+                reservations: true,
+                ...(session ? { favorites: { where: { userId: session.user.id }, } } : {})
+            }
+        });
+        return therapists;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export async function getTherapistsCount({ prefectureId, genderId, menuId, freeWord }) {
+    const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
+    const itemCount = await prisma.therapist.count({ where });
+    return itemCount;
+}
+
 export async function getTherapist(id) {
     const therapist = await prisma.therapist.findFirst({
         where: { id },
