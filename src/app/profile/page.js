@@ -1,5 +1,6 @@
 "use client"
 
+import { getGenders, getPrefectures } from "@/app/actions";
 import { AppBar, BottomBar, Profile } from "@/app/components";
 import { Container } from "@mui/material";
 import { useRouter } from "next/navigation";
@@ -63,40 +64,43 @@ export default function ProfilePage() {
         // eslint-disable-next-line
     }
     useEffect(() => {
-        fetch("/api/genders")
-            .then(res => res.json())
-            .then(data => {
-                setGenders(data.genders)
-            })
-        fetch("/api/prefectures")
-            .then(res => res.json())
-            .then(data => {
-                setPrefectures(data.prefectures)
+        const fetchData = async () => {
+            setGenders(await getGenders())
+            setPrefectures(await getPrefectures())
+        }
+        fetchData().then(() => {
+            fetch("/api/users/me")
+                .then(res => res.json())
+                .then(data => {
+                    setUser(data.user);
+                    reset({
+                        name: data.user.name || "",
+                        mail: data.user.mail || "",
+                        tel: data.user.tel || "",
+                        genderId: data.user.genderId || "",
+                        imageFileName: data.user.imageFileName || "",
+                        zipcode: data.user.zipcode || "",
+                        prefectureId: data.user.prefectureId || "",
+                        city: data.user.city || "",
+                        address: data.user.address || ""
+                    });
+                })
+        })
 
-                fetch("/api/users/me")
-                    .then(res => res.json())
-                    .then(data => {
-                        setUser(data.user);
-                        reset({
-                            name: data.user.name || "",
-                            mail: data.user.mail || "",
-                            tel: data.user.tel || "",
-                            genderId: data.user.genderId || "",
-                            imageFileName: data.user.imageFileName || "",
-                            zipcode: data.user.zipcode || "",
-                            prefectureId: data.user.prefectureId || "",
-                            city: data.user.city || "",
-                            address: data.user.address || ""
-                        });
-                    })
-            })
         // eslint-disable-next-line
     }, [])
     return (
         <>
             <AppBar />
             <Container maxWidth="sm">
-                <Profile changeZipCode={changeZipCode} prefectures={prefectures} genders={genders} control={control} user={user} handleSubmit={handleSubmit} onSubmit={onSubmit} register={register} />
+                <Profile changeZipCode={changeZipCode}
+                    prefectures={prefectures}
+                    genders={genders}
+                    control={control}
+                    user={user}
+                    handleSubmit={handleSubmit}
+                    onSubmit={onSubmit}
+                    register={register} />
             </Container>
             <BottomBar />
         </>

@@ -5,6 +5,32 @@ import prisma from '@/lib/prisma';
 import { subWeeks } from "date-fns";
 import { getServerSession } from "next-auth/next";
 
+export async function getPrefectures() {
+    const prefectures = await prisma.prefecture.findMany({ orderBy: { id: "asc" } });
+    return prefectures;
+}
+
+export async function getGenders() {
+    const genders = await prisma.gender.findMany({ orderBy: { id: "asc" } });
+    return genders;
+}
+
+export async function getMenus() {
+    const menus = await prisma.menu.findMany({ orderBy: { id: "asc" } });
+    return menus;
+}
+
+export async function getRegions() {
+    const regions = await prisma.region.findMany({
+        include: {
+            prefectures: {
+                orderBy: { id: "asc" }
+            }
+        },
+        orderBy: { id: "asc" }
+    });
+    return regions;
+}
 const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
     return {
         ...(prefectureId && { prefectureId }),
