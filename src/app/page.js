@@ -1,9 +1,11 @@
 "use client"
 
+import { getTherapists, getTherapistsCount } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+
 
 export default function Home() {
   const pageSize = 10;
@@ -37,30 +39,18 @@ export default function Home() {
 
 
   useEffect(() => {
-    const searchParams = new URLSearchParams();
-    searchParams.set("page", page);
-    searchParams.set("pageSize", pageSize);
-    if (prefectureId) {
-      searchParams.set("prefectureId", prefectureId);
+    const fetchTherapist = async () => {
+      const therapists = await getTherapists({ page, prefectureId, genderId, menuId, freeWord })
+      setTherapists(therapists);
     }
-    if (genderId) {
-      searchParams.set("genderId", genderId);
-    }
-    if (menuId) {
-      searchParams.set("menuId", menuId);
-    }
-    if (freeWord) {
-      searchParams.set("freeWord", freeWord)
-    }
+    fetchTherapist()
 
-    const url = ['/api/therapists', searchParams.toString()].join("?");
-    fetch(url)
-      .then((res) => res.json())
-      .then((data) => {
-        setTherapists(data.therapists);
-        setItemCount(data.itemCount);
-        setCount(Math.ceil(data.itemCount / pageSize))
-      })
+    const fetchTherapistCount = async () => {
+      const itemCount = await getTherapistsCount({ page, prefectureId, genderId, menuId, freeWord })
+      setItemCount(itemCount);
+      setCount(Math.ceil(itemCount / pageSize))
+    }
+    fetchTherapistCount()
   }, [page, prefectureId, genderId, menuId, freeWord])
 
   const onPageChange = (_, page) => {

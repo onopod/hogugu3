@@ -39,8 +39,6 @@
     ".next/types/**/*.ts",
     "src/app/components/AppBar.js",
     "src/app/page.js",
-    "src/app/api/therapists/[id]/route.js",
-    "src/app/api/therapists/route.js",
     "prisma/seed.js",
     "src/app/api/users/route.js",
     "src/app/login/page.js",
