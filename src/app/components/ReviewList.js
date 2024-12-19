@@ -1,8 +1,12 @@
+import { Card } from "@mui/material";
+
 export default function ReviewList({ reviews }) {
     return (
         <div>
             {reviews?.map(review => (
-                <div key={review.id}>{review.id}</div>
+                <Card key={review.id}>
+                    {review.id}
+                </Card>
             )
             )}
         </div>
