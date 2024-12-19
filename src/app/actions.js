@@ -1,12 +1,19 @@
 "use server"
 
+import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from '@/lib/prisma';
+import { subWeeks } from "date-fns";
+import { getServerSession } from "next-auth/next";
 
-async function getTherapist(id) {
+export async function getTherapist(id) {
     const therapist = await prisma.therapist.findFirst({
         where: { id },
         include: {
-            reservations: true,
+            reservations: {
+                include: {
+                    review: true
+                }
+            },
             prefecture: true,
             gender: true,
             menus: {
@@ -21,13 +28,41 @@ async function getTherapist(id) {
             },
         }
     })
-    return therapist
+    therapist.imageFilePath = therapist.imageFileName ? `/therapistImg/${therapist.id}/${therapist.imageFileName}` : ""
+
+    therapist.name0 = therapist?.name && therapist.name.length > 0 ? therapist.name[0].toUpperCase() : ""
+
+    therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city || "-"}`;
+
+    therapist.rateAverage = therapist.reservations?.filter(reservation => reservation?.review)
+        .map(reservation => reservation.review.rate)
+        .reduce((acc, curr, _, arr) => acc + curr / arr.length, 0);
+
+    therapist.fixedRateAverage = therapist.rateAverage?.toFixed(1) || "-";
+
+    therapist.reviewCount = therapist.reservations?.filter(reservation => reservation?.review)?.length;
+
+    therapist.isNew = new Date(therapist.created) > subWeeks(new Date(), 4)
+
+    therapist.replyCount = therapist.reservations?.filter(reservation => reservation.replyDt != null)?.length || 0;
+
+    therapist.reservationCount = therapist.reservations?.length || 0;
+
+    therapist.replyRate = therapist.reservationCount > 0 && therapist.reviewCount / therapist.reservationCount
+
+    therapist.fixedReplyRate = therapist.replyRate ? (therapist.replyRate * 100).toFixed(1) : "-";
+
+    therapist.replyTime = (therapist.reservations?.filter(reservation => reservation.replyDt != null)?.map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) || 0) / (1000 * 60)
+
+    therapist.fixedReplyTime = therapist.replyTime > 0 ? therapist.replyTime : "-"
+    console.log(therapist)
+    return therapist;
 }
-async function getReviews(therapistId) {
+export async function getReviews(id) {
     const reviews = await prisma.review.findMany({
         where: {
             reservation: {
-                therapistId: therapistId
+                therapistId: id
             }
         },
         select: {
@@ -53,4 +88,18 @@ async function getReviews(therapistId) {
     })
     return reviews
 }
-export { getTherapist, getReviews }
+export async function setHistory(id) {
+    const session = await getServerSession(authOptions);
+    if (!session) return;
+
+    const therapistId_userId = {
+        therapistId: id,
+        userId: session.user.id
+    }
+    const historyCount = await prisma.history.count({ where: therapistId_userId });
+    if (historyCount) {
+        await prisma.history.update({ where: { therapistId_userId }, data: { created: new Date() } })
+    } else {
+        await prisma.history.create({ data: therapistId_userId })
+    }
+}

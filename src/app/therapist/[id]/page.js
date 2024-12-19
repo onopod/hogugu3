@@ -1,46 +1,32 @@
 "use client"
 
-import { AppBar, BookingForm, BottomBar, Review } from "@/app/components";
-import { Box, Button, Container, FormControl, Rating, Tab, Tabs, Typography } from '@mui/material';
-import { subWeeks } from "date-fns";
+import { getReviews, getTherapist, setHistory } from "@/app/actions";
+import { AppBar, BookingForm, BottomBar, Reviews, Therapist } from "@/app/components";
+import { Box, Button, Container, FormControl, Tab, Tabs, Typography } from '@mui/material';
 import { useSession } from "next-auth/react";
-import Image from "next/image";
 import { useParams, useRouter } from 'next/navigation';
 import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
 export default function TherapistPage() {
-    const router = useRouter();
     const { data: session } = useSession();
+    const router = useRouter();
     const params = useParams();
+
     const [therapist, setTherapist] = useState({})
     const [reviews, setReviews] = useState([])
+
     useEffect(() => {
-        fetch(`/api/therapists/${params.id}`)
-            .then((res) => res.json())
-            .then((data) => {
-                setTherapist(data.therapist)
-                const reviews = data.therapist.menus?.map(
-                    menu => menu.reservations
-                ).map(
-                    reservations => reservations.filter(
-                        reservation => reservation?.review
-                    ).map(
-                        reservation => reservation?.review
-                    )
-                ).filter(review => review?.length > 0).flat();
-                setReviews(reviews)
-            })
-            .then(() => {
-                // 閲覧履歴
-                if (session) {
-                    fetch(`/api/histories/${params.id}`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" }
-                    })
-                }
-            });
+        const actions = async () => {
+            const id = Number(params.id);
+            setTherapist(await getTherapist(id));
+            setReviews(await getReviews(id))
+            if (session) {
+                await setHistory(id)
+            }
+        }
+        actions();
     }, [params.id, session])
 
     const [value, setValue] = useState(0);
@@ -59,36 +45,8 @@ export default function TherapistPage() {
         <>
             <AppBar />
             <Container maxWidth="sm">
+                <Therapist therapist={therapist} />
                 <Box sx={{ mb: 1, mt: 1 }}>
-                    <Image sx={{ height: "auto" }}
-                        src="/paella.jpg"
-                        width={500}
-                        height={300}
-                        priority={false}
-                        alt="" />
-                    <h1>{therapist.name}</h1>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                        {therapist.comment}
-                    </Typography>
-                    <Rating name="half-rating"
-                        precision={0.5}
-                        size="small" value={4.5} />
-                    <div sx={{ ml: 2 }}>(4.5)</div>
-                    <span>性別 {therapist?.gender?.name}</span>
-                    {therapist.reservations ?
-                        <Box>
-                            {new Date(therapist.created) > subWeeks(new Date(), 4) ? "NEW" : ""}
-                            <span>返答率 {therapist.reservations.length == 0 ?
-                                "-" :
-                                `${(therapist.reservations.filter(reservation => reservation.replyDt != null).length / therapist.reservations.length * 100).toFixed(0)}%`
-                            }</span><span>返答時間 {therapist.reservations.length == 0 ?
-                                "-" :
-                                `${(therapist.reservations.filter(reservation => reservation.replyDt != null).map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) / (1000 * 60))}分`
-                            }</span>
-                            <span>出発地 {therapist.prefecture ? therapist.prefecture.name : "-"}／{therapist.city || "-"}</span>
-                            <span>施術歴 {therapist.workYear ? therapist.workYear : "-"}年</span>
-                        </Box>
-                        : ""}
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
                             variant="fullWidth"
@@ -108,7 +66,6 @@ export default function TherapistPage() {
                             />
                         </Tabs>
                     </Box>
-
                     <Swiper
                         onSlideChange={(swiper) => setValue(swiper.activeIndex)}
                         onSwiper={onSwiper}
@@ -123,9 +80,7 @@ export default function TherapistPage() {
                             ))}
                         </SwiperSlide>
                         <SwiperSlide>
-                            {reviews.map((review) => (
-                                <Review key={review.id} review={review} />
-                            ))}
+                            <Reviews reviews={reviews} />
                             <FormControl fullWidth>
                                 <Button onClick={() => router.push(`/review/${therapist.id}`)}>
                                     もっと見る
