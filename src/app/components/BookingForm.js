@@ -1,9 +1,9 @@
-import { postReservation, postMessage } from "@/app/actions";
-import { Button, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
+import { postMessage, postReservation } from "@/app/actions";
+import { Button, FormControl, FormHelperText, FormLabel, ListSubheader, MenuItem, Select } from '@mui/material';
 import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
 import { Controller, useForm } from "react-hook-form";
-export default function BookingForm({ therapist }) {
+export default function BookingForm({ therapist, therapistMenus }) {
     const router = useRouter();
     const { control, handleSubmit, reset, setValue, register, formState: { errors } } = useForm({
         defaultValues: {
@@ -52,11 +52,14 @@ export default function BookingForm({ therapist }) {
                             }}
                             label="therapistMenuId"
                         >
-                            {therapist.menus?.map((menu, idx) => (
-                                <MenuItem key={idx} value={menu.id}>
-                                    {menu.menu.name}:{menu.treatmentTime}分 {menu.price}円
-                                </MenuItem>
-                            ))}
+                            {therapistMenus?.length > 0 ? therapistMenus.flatMap((menu) => [
+                                <ListSubheader key={menu.id}>{menu.name}</ListSubheader>,
+                                ...menu.therapistMenus.map((m) => (
+                                    <MenuItem key={`_${m.id}`} value={m.id}>
+                                        {m.treatmentTime}分 {m.price}円
+                                    </MenuItem>
+                                ))
+                            ]) : ""}
                         </Select>
                     )}
                 />
