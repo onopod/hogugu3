@@ -1,4 +1,6 @@
 "use client"
+
+import { getMessages, postMessage } from "@/app/actions";
 import { AppBar, BottomBar, Messages } from "@/app/components";
 import { Container } from "@mui/material";
 import { useParams } from 'next/navigation';
@@ -9,34 +11,26 @@ export default function MessageSenderPage() {
     const [messages, setMessages] = useState([]);
     const params = useParams();
 
-    const fetchMessages = async () => {
-        fetch(`/api/messages/senders/${params.id}`)
-            .then(res => res.json())
-            .then(data => {
-                setMessages(data.messages);
-            })
+    const fetchData = async (id) => {
+        setMessages(await getMessages(id));
     }
     useEffect(() => {
-        fetchMessages();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        fetchData(Number(params.id));
     }, [params.id])
 
     const { register, handleSubmit, reset } = useForm();
     const onSubmit = data => {
-        fetch(`/api/messages/senders/${params.id}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
+        const send = async () => {
+            const message = {
+                therapistId: Number(params.id),
                 message: data.message,
                 messageStatusId: 1
-            })
-        })
-            .then(() => {
-                reset();
-                fetchMessages();
-            })
+            }
+            await postMessage(message)
+        }
+        send();
+        reset();
+        fetchData(Number(params.id));
     }
 
     return (

@@ -1,4 +1,5 @@
 "use client";
+import { getStatuses, getReservations } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
 import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
@@ -14,6 +15,18 @@ function a11yProps(index) {
 }
 
 export default function ReservationPage() {
+
+    const [statuses, setStatuses] = useState([]);
+    const [reservations, setReservations] = useState([]);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            setStatuses(await getStatuses());
+            setReservations(await getReservations());
+        }
+        fetchData();
+    }, []);
+
     const [value, setValue] = useState(0);
     const [swiper, setSwiper] = useState(null);
 
@@ -26,25 +39,6 @@ export default function ReservationPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
-
-    const [statuses, setStatuses] = useState([]);
-    const [reservations, setReservations] = useState([]);
-
-    useEffect(() => {
-        fetch("/api/statuses")
-            .then((req) => req.json())
-            .then((data) => {
-                setStatuses(data.statuses);
-            });
-    }, []);
-
-    useEffect(() => {
-        fetch("/api/reservations")
-            .then((req) => req.json())
-            .then((data) => {
-                setReservations(data.reservations);
-            });
-    }, []);
 
     return (
         <>

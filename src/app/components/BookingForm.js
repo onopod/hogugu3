@@ -1,3 +1,4 @@
+import { postReservation, postMessage } from "@/app/actions";
 import { Button, FormControl, FormHelperText, FormLabel, MenuItem, Select } from '@mui/material';
 import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
@@ -13,28 +14,23 @@ export default function BookingForm({ therapist }) {
 
     const onSubmit = data => {
         // 予約を登録
-        fetch('/api/reservations', {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(data)
-        })
-            .then(() => {
-                // メッセージを送信
-                fetch(`/api/messages/senders/${therapist.id}`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        message: `セラピストへ予約リクエストを送信しました。
+        const save = async (data) => {
+            await postReservation({
+                ...data,
+                therapistId: therapist.id
+            });
+            const message = {
+                therapistId: therapist.id,
+                message: `セラピストへ予約リクエストを送信しました。
 予約日時：${format(data.startDt, "yyyy/MM/dd kk:mm")}
 メニュー：${therapist.menus.filter(menu => menu.id == data.therapistMenuId)[0].menu.name}
-                        `,
-                        messageStatusId: 3
-                    })
-                })
-                    .then(() => router.push("/reservation"))
-            });
+                `,
+                messageStatusId: 3
+            }
+            await postMessage(message);
+            router.push("/reservation")
+        }
+        save(data);
     };
 
     return (
@@ -57,7 +53,7 @@ export default function BookingForm({ therapist }) {
                             label="therapistMenuId"
                         >
                             {therapist.menus?.map((menu, idx) => (
-                                <MenuItem key={idx} value={menu.menu.id}>
+                                <MenuItem key={idx} value={menu.id}>
                                     {menu.menu.name}:{menu.treatmentTime}分 {menu.price}円
                                 </MenuItem>
                             ))}

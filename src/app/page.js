@@ -1,5 +1,6 @@
 "use client"
 
+import { getPrefectures, getGenders, getMenus, getRegions, toggleFavorite } from "@/app/actions";
 import { getTherapists, getTherapistsCount } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
@@ -23,18 +24,13 @@ export default function Home() {
   const [regions, setRegions] = useState([])
 
   useEffect(() => {
-    fetch("/api/prefectures")
-      .then(res => res.json())
-      .then(data => setPrefectures(data.prefectures))
-    fetch("/api/genders")
-      .then(res => res.json())
-      .then(data => setGenders(data.genders))
-    fetch("/api/menus")
-      .then(res => res.json())
-      .then(data => setMenus(data.menus))
-    fetch("/api/regions")
-      .then(res => res.json())
-      .then(data => setRegions(data.regions))
+    const fetchData = async () => {
+      setPrefectures(await getPrefectures())
+      setGenders(await getGenders())
+      setMenus(await getMenus())
+      setRegions(await getRegions())
+    }
+    fetchData();
   }, [])
 
 
@@ -81,7 +77,10 @@ export default function Home() {
     setFreeWord(data.freeWord)
   }
   const handleFavoriteClick = (therapistId) => {
-    fetch(`/api/favorites/toggle/${therapistId}`)
+    const toggleData = async (therapistId) => {
+      await toggleFavorite(therapistId)
+    }
+    toggleData(therapistId)
   }
 
   return (
