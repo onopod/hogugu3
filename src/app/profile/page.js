@@ -1,14 +1,13 @@
 "use client"
 
+import { getUser, putUser } from "@/app/actions";
 import { getGenders, getPrefectures } from "@/app/actions";
 import { AppBar, BottomBar, Profile } from "@/app/components";
 import { Container } from "@mui/material";
-import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 export default function ProfilePage() {
-    const router = useRouter();
     const [prefectures, setPrefectures] = useState([])
     const [genders, setGenders] = useState([])
     const [user, setUser] = useState({})
@@ -26,28 +25,25 @@ export default function ProfilePage() {
         }
     });
     const onSubmit = data => {
-        // FormDataを作成
-        const formData = new FormData();
-        formData.append("name", data.name);
-        formData.append("mail", data.mail);
-        formData.append("tel", data.tel);
-        formData.append("genderId", data.genderId);
-        formData.append("imageFileName", data.imageFileName[0]);
-        formData.append("prefectureId", data.prefectureId)
-        formData.append("zipcode", data.zipcode)
-        formData.append("city", data.city)
-        formData.append("address", data.address)
+        const saveUser = async (data) => {
 
-        fetch('/api/users/me', {
-            method: "PUT",
-            body: formData
-        }).then(() => {
-            window.location.reload()
-        })
+            const formData = new FormData();
+            formData.append("name", data.name);
+            formData.append("mail", data.mail);
+            formData.append("tel", data.tel);
+            formData.append("genderId", data.genderId);
+            formData.append("imageFileName", data.imageFileName[0]);
+            formData.append("prefectureId", data.prefectureId)
+            formData.append("zipcode", data.zipcode)
+            formData.append("city", data.city)
+            formData.append("address", data.address)
+            await putUser(formData)
+        }
+        saveUser(data)
+            .then(() => { window.location.reload() })
     }
     const zipcode = watch("zipcode")
     const changeZipCode = () => {
-        console.log("zipcode is", zipcode)
         if (zipcode && zipcode.length == 7) {
             fetch("https://zipcloud.ibsnet.co.jp/api/search?" + new URLSearchParams({
                 zipcode: zipcode
@@ -69,22 +65,22 @@ export default function ProfilePage() {
             setPrefectures(await getPrefectures())
         }
         fetchData().then(() => {
-            fetch("/api/users/me")
-                .then(res => res.json())
-                .then(data => {
-                    setUser(data.user);
-                    reset({
-                        name: data.user.name || "",
-                        mail: data.user.mail || "",
-                        tel: data.user.tel || "",
-                        genderId: data.user.genderId || "",
-                        imageFileName: data.user.imageFileName || "",
-                        zipcode: data.user.zipcode || "",
-                        prefectureId: data.user.prefectureId || "",
-                        city: data.user.city || "",
-                        address: data.user.address || ""
-                    });
-                })
+            const fetchData = async function () {
+                const user = await getUser()
+                setUser(user);
+                reset({
+                    name: user.name || "",
+                    mail: user.mail || "",
+                    tel: user.tel || "",
+                    genderId: user.genderId || "",
+                    imageFileName: user.imageFileName || "",
+                    zipcode: user.zipcode || "",
+                    prefectureId: user.prefectureId || "",
+                    city: user.city || "",
+                    address: user.address || ""
+                });
+            }
+            fetchData()
         })
 
         // eslint-disable-next-line
