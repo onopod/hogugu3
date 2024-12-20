@@ -1,6 +1,6 @@
 "use client"
 
-import { getReviews, getTherapist, setHistory } from "@/app/actions";
+import { getReviews, getTherapist, getTherapistMenus, setHistory } from "@/app/actions";
 import { AppBar, BookingForm, BottomBar, Menus, Reviews, Therapist } from "@/app/components";
 import { Box, Button, Container, FormControl, Tab, Tabs } from '@mui/material';
 import { useSession } from "next-auth/react";
@@ -16,10 +16,12 @@ export default function TherapistPage() {
 
     const [therapist, setTherapist] = useState({})
     const [reviews, setReviews] = useState([])
+    const [therapistMenus, setTherapistMenus] = useState([])
 
     useEffect(() => {
         const actions = async () => {
             const id = Number(params.id);
+            setTherapistMenus(await getTherapistMenus(id))
             setTherapist(await getTherapist(id));
             setReviews(await getReviews(id))
             if (session) {
@@ -73,7 +75,7 @@ export default function TherapistPage() {
                         slidesPerView={1}
                     >
                         <SwiperSlide>
-                            <Menus therapist={therapist} />
+                            <Menus therapistMenus={therapistMenus} />
                         </SwiperSlide>
                         <SwiperSlide>
                             <Reviews reviews={reviews} more={true} />
@@ -84,7 +86,7 @@ export default function TherapistPage() {
                             </FormControl>
                         </SwiperSlide>
                     </Swiper>
-                    {session ? <BookingForm therapist={therapist} /> : ""}
+                    {session ? <BookingForm therapist={therapist} therapistMenus={therapistMenus} /> : ""}
                 </Box>
             </Container >
             <BottomBar />

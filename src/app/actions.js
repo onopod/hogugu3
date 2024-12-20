@@ -3,9 +3,9 @@
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from '@/lib/prisma';
 import { subWeeks } from "date-fns";
+import { promises as fs } from "fs";
 import { getServerSession } from "next-auth/next";
 import { join } from "path";
-import { promises as fs } from "fs";
 const bcrypt = require('bcrypt');
 
 export async function postUser(data) {
@@ -257,6 +257,44 @@ export async function getTherapist(id) {
     therapist.fixedReplyTime = therapist.replyTime > 0 ? therapist.replyTime : "-"
     return therapist;
 }
+
+export async function getTherapistMenus(id) {
+    console.log("id is", id);
+    const therapistMenus = await prisma.menu.findMany({
+        where: {
+            therapistMenus: {
+                some: {
+                    therapistId: id // therapistIdが一致するものだけ取得
+                }
+            }
+        },
+        select: {
+            id: true,
+            name: true,
+            therapistMenus: {
+                select: {
+                    id: true,
+                    therapistId: true,
+                    price: true,
+                    treatmentTime: true
+                },
+                where: {
+                    therapistId: id
+                },
+                orderBy: {
+                    treatmentTime: "asc"
+                }
+            }
+        },
+        orderBy: {
+            id: "asc"
+        }
+    })
+    console.log("therapistMenus is")
+    console.dir(therapistMenus);
+    return therapistMenus;
+}
+
 export async function getReviews(id) {
     const reviews = await prisma.review.findMany({
         where: {

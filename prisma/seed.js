@@ -122,114 +122,144 @@ async function main() {
         ]
     })
     // therapist
-    await prisma.therapist.createMany({
+    const therapists = await prisma.therapist.createManyAndReturn({
         data: [
             {
-                id: 1, name: 'sato hikaru', comment: 'よろしくお願いします。',
+                name: 'sato hikaru', comment: 'よろしくお願いします。',
                 imageFileName: "tavatar.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3,
                 genderId: 2
             },
-            { id: 2, name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg", prefectureId: 27 },
-            { id: 3, name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg', prefectureId: 26 },
-            { id: 4, name: '競', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 5, name: '中川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 6, name: '梁', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 7, name: '村松', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 8, name: '野田', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 9, name: '西田', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 10, name: '針', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 11, name: '河村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 12, name: '亨夏', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 13, name: '倉増', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 14, name: '奥村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 15, name: '大沢', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 16, name: '早川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 17, name: '大西', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 18, name: '中西', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 19, name: '小酒', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 20, name: '田中', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 21, name: '下関', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 22, name: '安部', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 23, name: '道渕', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 24, name: '小倉', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 25, name: '押樋', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 26, name: '岡村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
-            { id: 27, name: '苔田', comment: 'がんばります', imageFileName: 'tavatar.jpg' }
+            { name: 'みく', comment: 'がんばります', imageFileName: "tavatar.jpg", prefectureId: 27 },
+            { name: '水野', comment: 'がんばります', imageFileName: 'tavatar.jpg', prefectureId: 26 },
+            { name: '競', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '中川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '梁', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '村松', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '野田', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '西田', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '針', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '河村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '亨夏', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '倉増', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '奥村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '大沢', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '早川', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '大西', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '中西', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '小酒', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '田中', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '下関', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '安部', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '道渕', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '小倉', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '押樋', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '岡村', comment: 'がんばります', imageFileName: 'tavatar.jpg' },
+            { name: '苔田', comment: 'がんばります', imageFileName: 'tavatar.jpg' }
         ]
     })
     // therapistsOnMenus
-    await prisma.therapistsOnMenus.createMany({
+    const firstTherapistId = therapists[0].id;
+    const secondTherapistId = therapists[1].id;
+
+    const therapistsOnMenus = await prisma.therapistsOnMenus.createManyAndReturn({
         data: [
-            { id: 1, therapistId: 1, menuId: 1, treatmentTime: 60, price: 6000 },
-            { id: 2, therapistId: 1, menuId: 2, treatmentTime: 60, price: 6001 },
-            { id: 3, therapistId: 1, menuId: 3, treatmentTime: 60, price: 6002 },
-            { id: 4, therapistId: 1, menuId: 4, treatmentTime: 60, price: 6003 },
-            { id: 5, therapistId: 1, menuId: 5, treatmentTime: 60, price: 6004 },
-            { id: 6, therapistId: 2, menuId: 1, treatmentTime: 90, price: 7200 },
+            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 60, price: 6000 },
+            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 90, price: 9000 },
+            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 120, price: 12000 },
+            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 150, price: 15000 },
+            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 180, price: 18000 },
+            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 60, price: 6000 },
+            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 90, price: 9000 },
+            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 120, price: 12000 },
+            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 150, price: 15000 },
+            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 180, price: 18000 },
+            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 60, price: 6000 },
+            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 90, price: 9000 },
+            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 120, price: 12000 },
+            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 150, price: 15000 },
+            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 180, price: 18000 },
+            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 60, price: 6000 },
+            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 90, price: 9000 },
+            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 120, price: 12000 },
+            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 150, price: 15000 },
+            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 180, price: 18000 },
+            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 60, price: 6000 },
+            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 90, price: 9000 },
+            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 120, price: 12000 },
+            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 150, price: 15000 },
+            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 180, price: 18000 },
+            { therapistId: secondTherapistId, menuId: 1, treatmentTime: 90, price: 7200 },
         ]
     })
 
+    const firstTherapistsOnMenusId = therapistsOnMenus[0].id;
+    const secondTherapistsOnMenusId = therapistsOnMenus[1].id;
     // user
     await bcrypt.hash("password", 10, async (_, hashedPassword) => {
-        await prisma.user.createMany({
+        const users = await prisma.user.createManyAndReturn({
             data: [
                 {
-                    id: 1, name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678",
+                    name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678",
                     password: hashedPassword, imageFileName: "avatar.jpg",
                     prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西",
                     genderId: 1
                 },
-                { id: 2, name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 },
-                { id: 3, name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 26 }
+                { name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 },
+                { name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 26 }
             ]
         })
+
+        const firstUserId = users[0].id;
+        const secondUserId = users[1].id;
+
         // reservation
-        await prisma.reservation.createMany({
+        const reservations = await prisma.reservation.createManyAndReturn({
             data: [
-                { id: 1, userId: 1, therapistId: 1, therapistMenuId: 1, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00", replyDt: "2024-12-06T21:10:00.000+09:00", created: "2024-12-06T21:00:00.000+09:00" },
-                { id: 2, userId: 1, therapistId: 1, therapistMenuId: 1, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00", replyDt: "2024-12-08T22:50:00.000+09:00", created: "2024-12-08T22:20:00.000+09:00" },
-                { id: 3, userId: 1, therapistId: 1, therapistMenuId: 2, startDt: "2024-12-10T22:30:00.000+09:00" },
-                { id: 4, userId: 1, therapistId: 1, therapistMenuId: 3, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
-                { id: 5, userId: 2, therapistId: 1, therapistMenuId: 2, startDt: "2024-12-02T21:00:00.000+09:00" }
+                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: firstTherapistsOnMenusId, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00", replyDt: "2024-12-06T21:10:00.000+09:00", created: "2024-12-06T21:00:00.000+09:00" },
+                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: firstTherapistsOnMenusId, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00", replyDt: "2024-12-08T22:50:00.000+09:00", created: "2024-12-08T22:20:00.000+09:00" },
+                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, startDt: "2024-12-10T22:30:00.000+09:00" },
+                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
+                { userId: secondUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, startDt: "2024-12-02T21:00:00.000+09:00" }
             ]
         })
+        const firstReservationId = reservations[0].id;
+        const secondReservationId = reservations[1].id;
 
         // message 
         await prisma.message.createMany({
             data: [
-                { userId: 1, therapistId: 1, message: "こんにちは", messageStatusId: 1, created: "2024-12-08T21:00:00.000+09:00" },
-                { userId: 1, therapistId: 1, message: "どうかされましたか？", messageStatusId: 2, created: "2024-12-08T21:01:00.000+09:00" },
-                { userId: 1, therapistId: 1, message: "予約についてのお問い合わせです。", messageStatusId: 1, created: "2024-12-08T21:02:00.000+09:00" },
-                { userId: 2, therapistId: 1, message: "初めて問い合わせします", messageStatusId: 1, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
+                { userId: firstUserId, therapistId: firstTherapistId, message: "こんにちは", messageStatusId: 1, created: "2024-12-08T21:00:00.000+09:00" },
+                { userId: firstUserId, therapistId: firstTherapistId, message: "どうかされましたか？", messageStatusId: 2, created: "2024-12-08T21:01:00.000+09:00" },
+                { userId: firstUserId, therapistId: firstTherapistId, message: "予約についてのお問い合わせです。", messageStatusId: 1, created: "2024-12-08T21:02:00.000+09:00" },
+                { userId: secondUserId, therapistId: firstTherapistId, message: "初めて問い合わせします", messageStatusId: 1, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
             ]
         })
 
         // favorite
         await prisma.favorite.createMany({
             data: [
-                { userId: 1, therapistId: 1 },
-                { userId: 1, therapistId: 2 },
-                { userId: 2, therapistId: 2 }
+                { userId: firstUserId, therapistId: firstTherapistId },
+                { userId: firstUserId, therapistId: secondTherapistId },
+                { userId: secondUserId, therapistId: secondTherapistId }
             ]
         })
 
         // review
         await prisma.review.createMany({
             data: [
-                { reservationId: 1, comment: "とても良かったです" },
-                { reservationId: 2, rate: 4, comment: "まあまあでした" }
+                { reservationId: firstReservationId, comment: "とても良かったです" },
+                { reservationId: secondReservationId, rate: 4, comment: "まあまあでした" }
             ]
         })
 
         // history
         await prisma.history.createMany({
             data: [
-                { userId: 1, therapistId: 1 },
-                { userId: 1, therapistId: 2 },
-                { userId: 2, therapistId: 2 }
+                { userId: firstUserId, therapistId: firstTherapistId },
+                { userId: firstUserId, therapistId: secondTherapistId },
+                { userId: secondUserId, therapistId: secondTherapistId }
             ]
         })
-
     })
 }
 

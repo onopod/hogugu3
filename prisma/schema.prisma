@@ -79,7 +79,7 @@ model Therapist {
   reservations  Reservation[]
   messages      Message[]
   favorites     Favorite[]
-  History       History[]
+  Histories     History[]
 }
 
 model Favorite {
@@ -118,9 +118,9 @@ model Message {
 }
 
 model Menu {
-  id         Int                 @id @default(autoincrement())
-  name       String
-  therapists TherapistsOnMenus[]
+  id             Int                 @id @default(autoincrement())
+  name           String
+  therapistMenus TherapistsOnMenus[]
 }
 
 model TherapistsOnMenus {
@@ -133,7 +133,7 @@ model TherapistsOnMenus {
   price         Int?
   reservations  Reservation[]
 
-  @@unique([therapistId, menuId])
+  @@unique([therapistId, menuId, treatmentTime])
 }
 
 model Reservation {
