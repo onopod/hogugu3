@@ -1,6 +1,6 @@
 "use client"
 
-import { getPrefectures, getGenders, getMenus, getRegions } from "@/app/actions";
+import { getPrefectures, getGenders, getMenus, getRegions, toggleFavorite } from "@/app/actions";
 import { getTherapists, getTherapistsCount } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
@@ -77,7 +77,10 @@ export default function Home() {
     setFreeWord(data.freeWord)
   }
   const handleFavoriteClick = (therapistId) => {
-    fetch(`/api/favorites/toggle/${therapistId}`)
+    const toggleData = async (therapistId) => {
+      await toggleFavorite(therapistId)
+    }
+    toggleData(therapistId)
   }
 
   return (

@@ -1,5 +1,6 @@
 "use client"
 
+import { getFavorites, getHistories } from "@/app/actions";
 import { AppBar, BottomBar, Favorites, Histories } from "@/app/components";
 import { Box, Container, Tab, Tabs } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -11,16 +12,11 @@ export default function ProfilePage() {
     const [histories, setHistories] = useState([]);
 
     useEffect(() => {
-        fetch("/api/favorites")
-            .then(res => res.json())
-            .then(data => {
-                setFavorites(data.favorites)
-            })
-        fetch("/api/histories")
-            .then(res => res.json())
-            .then(data => {
-                setHistories(data.histories)
-            })
+        const fetchData = async () => {
+            setFavorites(await getFavorites())
+            setHistories(await getHistories())
+        }
+        fetchData();
     }, [])
 
     const [swiper, setSwiper] = useState(null);
