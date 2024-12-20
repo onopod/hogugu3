@@ -9,13 +9,8 @@ import { useForm } from "react-hook-form";
 
 
 export default function Home() {
-  const pageSize = 10;
   const [itemCount, setItemCount] = useState(0);
   const [page, setPage] = useState(1);
-  const [prefectureId, setPrefectureId] = useState(null);
-  const [genderId, setGenderId] = useState(null);
-  const [menuId, setMenuId] = useState(null);
-  const [freeWord, setFreeWord] = useState(null)
   const [therapists, setTherapists] = useState([]);
   const [count, setCount] = useState(0);
   const [prefectures, setPrefectures] = useState([])
@@ -23,46 +18,7 @@ export default function Home() {
   const [menus, setMenus] = useState([])
   const [regions, setRegions] = useState([])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setPrefectures(await getPrefectures())
-      setGenders(await getGenders())
-      setMenus(await getMenus())
-      setRegions(await getRegions())
-    }
-    fetchData();
-  }, [])
-
-
-  useEffect(() => {
-    const fetchTherapist = async () => {
-      const therapists = await getTherapists({ page, prefectureId, genderId, menuId, freeWord })
-      setTherapists(therapists);
-    }
-    fetchTherapist()
-
-    const fetchTherapistCount = async () => {
-      const itemCount = await getTherapistsCount({ page, prefectureId, genderId, menuId, freeWord })
-      setItemCount(itemCount);
-      setCount(Math.ceil(itemCount / pageSize))
-    }
-    fetchTherapistCount()
-  }, [page, prefectureId, genderId, menuId, freeWord])
-
-  const onPageChange = (_, page) => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setPage(page)
-  }
-
-  const onPrefectureClick = (prefectureId) => {
-    reset()
-    setPage(1)
-    setPrefectureId(prefectureId)
-    setMenuId(null)
-    setFreeWord("")
-  }
-
-  const { register, handleSubmit, setValue, reset, watch } = useForm({
+  const { register, handleSubmit, setValue, reset, watch, getValues } = useForm({
     defaultValues: {
       prefectureId: "",
       genderId: "",
@@ -70,12 +26,52 @@ export default function Home() {
       freeWord: "",
     },
   });
-  const onSubmit = data => {
-    setPrefectureId(data.prefectureId)
-    setGenderId(data.genderId)
-    setMenuId(data.menuId)
-    setFreeWord(data.freeWord)
+
+  const fetchMasterData = async () => {
+    setPrefectures(await getPrefectures())
+    setGenders(await getGenders())
+    setMenus(await getMenus())
+    setRegions(await getRegions())
   }
+
+  const fetchData = async () => {
+    const pageSize = 10;
+    const values = getValues();
+    const where = {
+      page,
+      ...(values.prefectureId ? { prefectureId: Number(values.prefectureId) } : {}),
+      ...(values.genderId ? { genderId: Number(values.genderId) } : {}),
+      ...(values.menuId ? { menuId: Number(values.menuId) } : {}),
+      ...(values.freeWord ? { freeWord: values.freeWord } : {})
+    }
+    const currentItemCount = await getTherapistsCount(where);
+    const currentTherapists = await getTherapists(where)
+    setTherapists(currentTherapists)
+    setItemCount(currentItemCount);
+    setCount(Math.ceil(currentItemCount / pageSize))
+  }
+
+  useEffect(() => {
+    fetchMasterData();
+    fetchData()
+    // eslint-disable-next-line
+  }, [])
+
+  const onPageChange = (_, page) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    setPage(page + 1)
+    fetchData()
+  }
+
+  const onPrefectureClick = (prefectureId) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+    reset()
+    setValue("prefectureId", String(prefectureId));
+    fetchData()
+  }
+
+  const onSubmit = () => fetchData()
+
   const handleFavoriteClick = (therapistId) => {
     const toggleData = async (therapistId) => {
       await toggleFavorite(therapistId)
@@ -93,7 +89,8 @@ export default function Home() {
           menus={menus}
           handleSubmit={handleSubmit}
           onSubmit={onSubmit}
-          register={register} setValue={setValue}
+          register={register}
+          setValue={setValue}
           watch={watch}
           reset={reset} />
         {itemCount}件
