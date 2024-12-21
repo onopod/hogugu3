@@ -228,33 +228,35 @@ export async function getTherapist(id) {
             },
         }
     })
-    therapist.imageFilePath = therapist.imageFileName ? `/therapistImg/${therapist.id}/${therapist.imageFileName}` : ""
+    if (therapist) {
+        therapist.imageFilePath = therapist?.imageFileName ? `/therapistImg/${therapist.id}/${therapist.imageFileName}` : ""
 
-    therapist.name0 = therapist?.name && therapist.name.length > 0 ? therapist.name[0].toUpperCase() : ""
+        therapist.name0 = therapist?.name && therapist.name.length > 0 ? therapist.name[0].toUpperCase() : ""
 
-    therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city || "-"}`;
+        therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city || "-"}`;
 
-    therapist.rateAverage = therapist.reservations?.filter(reservation => reservation?.review)
-        .map(reservation => reservation.review.rate)
-        .reduce((acc, curr, _, arr) => acc + curr / arr.length, 0);
+        therapist.rateAverage = therapist?.reservations?.filter(reservation => reservation?.review)
+            .map(reservation => reservation.review.rate)
+            .reduce((acc, curr, _, arr) => acc + curr / arr.length, 0);
 
-    therapist.fixedRateAverage = therapist.rateAverage?.toFixed(1) || "-";
+        therapist.fixedRateAverage = therapist?.rateAverage?.toFixed(1) || "-";
 
-    therapist.reviewCount = therapist.reservations?.filter(reservation => reservation?.review)?.length;
+        therapist.reviewCount = therapist?.reservations?.filter(reservation => reservation?.review)?.length;
 
-    therapist.isNew = new Date(therapist.created) > subWeeks(new Date(), 4)
+        therapist.isNew = new Date(therapist.created) > subWeeks(new Date(), 4)
 
-    therapist.replyCount = therapist.reservations?.filter(reservation => reservation.replyDt != null)?.length || 0;
+        therapist.replyCount = therapist?.reservations?.filter(reservation => reservation.replyDt != null)?.length || 0;
 
-    therapist.reservationCount = therapist.reservations?.length || 0;
+        therapist.reservationCount = therapist?.reservations?.length || 0;
 
-    therapist.replyRate = therapist.reservationCount > 0 && therapist.reviewCount / therapist.reservationCount
+        therapist.replyRate = therapist?.reservationCount > 0 && therapist.reviewCount / therapist.reservationCount
 
-    therapist.fixedReplyRate = therapist.replyRate ? (therapist.replyRate * 100).toFixed(1) : "-";
+        therapist.fixedReplyRate = therapist?.replyRate ? (therapist.replyRate * 100).toFixed(1) : "-";
 
-    therapist.replyTime = (therapist.reservations?.filter(reservation => reservation.replyDt != null)?.map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) || 0) / (1000 * 60)
+        therapist.replyTime = (therapist?.reservations?.filter(reservation => reservation.replyDt != null)?.map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) || 0) / (1000 * 60)
 
-    therapist.fixedReplyTime = therapist.replyTime > 0 ? therapist.replyTime : "-"
+        therapist.fixedReplyTime = therapist.replyTime > 0 ? therapist.replyTime : "-"
+    }
     return therapist;
 }
 
