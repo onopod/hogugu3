@@ -8,6 +8,24 @@ import { getServerSession } from "next-auth/next";
 import { join } from "path";
 const bcrypt = require('bcrypt');
 
+
+export async function postTherapist(data) {
+    try {
+        const hashedPassword = await bcrypt.hash(data.password, 10);
+        const therapist = await prisma.therapist.create({
+            data: {
+                name: data.name,
+                mail: data.mail,
+                tel: data.tel,
+                password: hashedPassword
+            }
+        });
+        return therapist;
+    } catch (err) {
+        console.dir(err)
+    }
+}
+
 export async function postUser(data) {
     try {
         const hashedPassword = await bcrypt.hash(data.password, 10);
@@ -26,7 +44,7 @@ export async function postUser(data) {
 }
 export async function putUser(formData) {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const name = formData.get("name");
         const genderId = parseInt(formData.get("genderId"));
@@ -74,7 +92,7 @@ export async function putUser(formData) {
 
 export async function getUser() {
     const session = await getServerSession(authOptions);
-    if (!session) {
+    if (!(session?.user?.role == "user")) {
         return;
     }
     try {
@@ -145,7 +163,7 @@ const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
 
 export async function getSenders() {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const senders = await prisma.therapist.findMany({
             where: {
@@ -190,7 +208,7 @@ export async function getTherapists({ page = 1, take = 10, prefectureId, genderI
                 gender: true,
                 prefecture: true,
                 reservations: true,
-                ...(session ? { favorites: { where: { userId: session.user.id }, } } : {})
+                ...((session?.user?.role == "user") ? { favorites: { where: { userId: session.user.id }, } } : {})
             }
         });
         return therapists;
@@ -261,7 +279,6 @@ export async function getTherapist(id) {
 }
 
 export async function getTherapistMenus(id) {
-    console.log("id is", id);
     const therapistMenus = await prisma.menu.findMany({
         where: {
             therapistMenus: {
@@ -292,8 +309,6 @@ export async function getTherapistMenus(id) {
             id: "asc"
         }
     })
-    console.log("therapistMenus is")
-    console.dir(therapistMenus);
     return therapistMenus;
 }
 
@@ -329,7 +344,7 @@ export async function getReviews(id) {
 }
 export async function setHistory(id) {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
 
     const therapistId_userId = {
         therapistId: id,
@@ -345,7 +360,7 @@ export async function setHistory(id) {
 
 export async function getReservations() {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const reservations = await prisma.reservation.findMany({
             where: {
@@ -390,7 +405,7 @@ export async function toggleFavorite(id) {
 }
 export async function getFavorites() {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const favorites = await prisma.favorite.findMany({
             where: { userId: session.user.id },
@@ -405,7 +420,7 @@ export async function getFavorites() {
 
 export async function getHistories() {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const histories = await prisma.history.findMany({
             where: { userId: session.user.id },
@@ -420,7 +435,7 @@ export async function getHistories() {
 
 export async function postReservation(data) {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const { therapistId, therapistMenuId, startDt } = data;
         const reservation = await prisma.reservation.create({
@@ -465,7 +480,7 @@ export async function postReservation(data) {
 
 export async function getMessages(id) {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
     try {
         const messages = await prisma.message.findMany({
             where: {
@@ -488,7 +503,7 @@ export async function getMessages(id) {
 
 export async function postMessage(data) {
     const session = await getServerSession(authOptions);
-    if (!session) return;
+    if (!(session?.user?.role == "user")) return;
 
     try {
         const { therapistId, message, messageStatusId } = data;

@@ -1,7 +1,7 @@
 "use client"
 
-import { postUser } from "@/app/actions";
-import { AppBar } from "@/app/components";
+import { postTherapist } from "@/app/actions";
+import { AppBar } from "@/app/components/t";
 import { Button, Container, FormControl, FormHelperText, Stack, TextField } from "@mui/material";
 import { signIn } from "next-auth/react";
 import { useRouter } from 'next/navigation';
@@ -12,18 +12,20 @@ export default function Register() {
 
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = async data => {
-        const saveUser = async (data) => {
-            const user = await postUser(data);
-            if (user) {
-                await signIn("user", {
+        const saveTherapist = async (data) => {
+            console.log("therapist is")
+            console.dir(data)
+            const therapist = await postTherapist(data);
+            if (therapist) {
+                await signIn("therapist", {
                     redirect: false,
                     mail: data.mail,
                     password: data.password,
                 })
-                router.push("/")
+                router.push("/t")
             }
         }
-        saveUser(data)
+        saveTherapist(data)
     }
 
     return (

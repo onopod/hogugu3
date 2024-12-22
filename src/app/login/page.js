@@ -10,7 +10,7 @@ export default function Login() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = async data => {
         try {
-            await signIn("credentials", {
+            await signIn("user", {
                 redirect: false,
                 mail: data.mail,
                 password: data.password,

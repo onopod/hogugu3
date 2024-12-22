@@ -52,7 +52,7 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
           src={therapist.imageFileName ? `/therapistImg/${therapist.id}/${therapist.imageFileName}` : ""}
           sx={{ width: 64, height: 64 }}>{therapist.name[0].toUpperCase()}</Avatar>}
         action={
-          session ?
+          session?.user?.role == "user" ?
             <IconButton size="large" >
               <FavoriteIcon sx={favorite ? { color: pink[300] } : {}} onClick={() => {
                 setFavorite(favorite ? 0 : 1)

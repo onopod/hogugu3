@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const authOptions = {
     providers: [
         CredentialsProvider({
+            id: "user",
             name: 'Hogugu',
             credentials: {
                 mail: {
@@ -20,12 +21,43 @@ const authOptions = {
                         mail: credentials.mail,
                     }
                 });
+
                 const matched = credentials?.password && await bcrypt.compare(credentials.password, user.password);
                 if (matched) {
                     return {
                         ...user,
                         email: user.mail,
-                        image: user.imageFileName
+                        image: user.imageFileName,
+                        role: "user"
+                    };
+                } else {
+                    return null
+                }
+            },
+        }),
+        CredentialsProvider({
+            id: "therapist",
+            name: 'Hogugu Therapist',
+            credentials: {
+                mail: {
+                    label: 'mail',
+                    type: 'text',
+                },
+                password: { label: 'Password', type: 'password' },
+            },
+            async authorize(credentials) {
+                const therapist = await prisma.therapist.findFirstOrThrow({
+                    where: {
+                        mail: credentials.mail,
+                    }
+                });
+                const matched = credentials?.password && await bcrypt.compare(credentials.password, therapist.password);
+                if (matched) {
+                    return {
+                        ...therapist,
+                        email: therapist.mail,
+                        image: therapist.imageFileName,
+                        role: "therapist"
                     };
                 } else {
                     return null
@@ -37,6 +69,8 @@ const authOptions = {
         async jwt({ token, user }) {
             if (user) {
                 token.id = user.id;
+                token.role = user.role;
+
             }
             return token;
         },
@@ -46,6 +80,8 @@ const authOptions = {
                     ...session.user,
                     image: token.picture,
                     id: token.id,
+                    role: token.role
+
                 };
             }
             return session;
