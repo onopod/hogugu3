@@ -42,7 +42,8 @@
     "prisma/seed.js",
     "src/app/login/page.js",
     "src/app/register/page.js",
-    "src/app/api/auth/[...nextauth]/route.js"
+    "src/app/api/auth/[...nextauth]/route.js",
+    "src/app/t/page.js"
   ],
   "exclude": [
     "node_modules"
