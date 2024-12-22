@@ -4,8 +4,8 @@ import { Providers } from "./providers";
 export const metadata: Metadata = {
   title: "Hogugu",
   description: "Hogugu 出張リラクゼーション予約アプリ",
-  viewport: "initial-scale=1, width=device-width"
 };
+export const viewport = "initial-scale=1, width=device-width"
 
 export default function RootLayout({
   children,

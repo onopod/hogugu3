@@ -1,12 +1,13 @@
 import { MenuIcon, SpaIcon } from '@/app/icons';
 import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
-import { signIn, signOut, useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
 
 function MyAppBar() {
   const router = useRouter();
   const { data: session } = useSession();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -43,7 +44,7 @@ function MyAppBar() {
               textDecoration: 'none',
               cursor: "pointer",
             }}
-          >Hogugu</Typography>
+          >Hogugu Therapist</Typography>
           <Box sx={{ flexGrow: 0 }}>
             <IconButton sx={{ p: 0 }}
               id="basic-button"
@@ -52,9 +53,9 @@ function MyAppBar() {
               aria-expanded={open ? 'true' : undefined}
               onClick={handleClick}
             >
-              {session?.user?.role == "user" ? (
+              {session?.user?.role == "therapist" ? (
                 <Avatar alt={session.user.name[0]}
-                  src={session.user.image ? `/userImg/${session.user.id}/${session.user.image}` : ""}>
+                  src={session.user.image ? `/therapistImg/${session.user.id}/${session.user.image}` : ""}>
                   {session.user.name[0].toUpperCase()}
                 </Avatar>
               )
@@ -71,16 +72,16 @@ function MyAppBar() {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              {session?.user?.role == "user" ? (
+              {session?.user?.role == "therapist" ? (
                 <div key={1}>
-                  <MenuItem onClick={() => router.push("/profile")}>プロフィール</MenuItem>
-                  <MenuItem onClick={() => signOut("user")}>ログアウト</MenuItem>
+                  <MenuItem onClick={() => router.push("/t/profile")}>プロフィール</MenuItem>
+                  <MenuItem onClick={() => signOut("therapist")}>ログアウト</MenuItem>
                 </div>
               )
                 :
                 <div key={2}>
-                  <MenuItem onClick={() => router.push("/register")}>新規登録</MenuItem>
-                  <MenuItem onClick={() => signIn("user")}>ログイン</MenuItem>
+                  <MenuItem onClick={() => router.push("/t/register")}>新規登録</MenuItem>
+                  <MenuItem onClick={() => router.push("/t/login")}>ログイン</MenuItem>
                 </div>
               }
             </Menu>

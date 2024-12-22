@@ -24,7 +24,7 @@ export default function TherapistPage() {
             setTherapistMenus(await getTherapistMenus(id))
             setTherapist(await getTherapist(id));
             setReviews(await getReviews(id))
-            if (session) {
+            if (session?.user?.role == "user") {
                 await setHistory(id)
             }
         }
@@ -86,7 +86,7 @@ export default function TherapistPage() {
                             </FormControl>
                         </SwiperSlide>
                     </Swiper>
-                    {session ? <BookingForm therapist={therapist} therapistMenus={therapistMenus} /> : ""}
+                    {session?.user?.role == "user" ? <BookingForm therapist={therapist} therapistMenus={therapistMenus} /> : ""}
                 </Box>
             </Container >
             <BottomBar />
