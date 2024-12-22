@@ -7,11 +7,11 @@ import { SessionProvider } from "next-auth/react";
 export function Providers({ children }: { children: React.ReactNode }) {
     const apptheme = createTheme({
         palette: {
-            mode: 'light',
             primary: {
                 main: '#d87274',
-                light: '#ffa2a3',
-                dark: '#a34449'
+            },
+            secondary: {
+                main: "#dc004e"
             }
         },
         typography: {
@@ -27,7 +27,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
     return (
         <ThemeProvider theme={apptheme}>
             <CssBaseline />
-            <AppRouterCacheProvider options={{ enableCssLayer: false }}>
+            <AppRouterCacheProvider options={{ enableCssLayer: true }}>
                 <SessionProvider>{children}</SessionProvider>
             </AppRouterCacheProvider>
         </ThemeProvider>

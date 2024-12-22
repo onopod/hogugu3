@@ -1,4 +1,7 @@
+"use client"
+
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 export default function RootLayout({
     children,
@@ -7,25 +10,17 @@ export default function RootLayout({
 }>) {
     const therapistapptheme = createTheme({
         palette: {
-            mode: 'light',
             primary: {
-                main: '#FF0000',
-                light: '#FF0000',
-                dark: '#FF0000'
+                main: '#dc004e',
+            },
+            secondary: {
+                main: '#1976d2',
             }
-        },
-        typography: {
-            fontFamily: [
-                'Roboto',
-                '"Noto Sans JP"',
-                '"Helvetica"',
-                'Arial',
-                'sans-serif',
-            ].join(','),
         }
     })
     return (
         <ThemeProvider theme={therapistapptheme}>
+            <CssBaseline />
             {children}
         </ThemeProvider>
     );
