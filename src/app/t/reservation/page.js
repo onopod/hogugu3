@@ -99,15 +99,9 @@ export default function ReservationPage() {
                                                                     "yyyy/MM/dd kk:mm"
                                                                 )}
                                                                 から
-                                                                {
-                                                                    reservation?.therapistMenu ?
-                                                                        .treatmentTime
-                                                                }
+                                                                {reservation?.therapistMenu?.treatmentTime}
                                                                 分{" "}
-                                                                {
-                                                                    reservation?.therapistMenu?.menu
-                                                                        .name
-                                                                }
+                                                                {reservation?.therapistMenu?.menu.name}
                                                             </Typography>
                                                         </Box>
                                                     </Stack>
