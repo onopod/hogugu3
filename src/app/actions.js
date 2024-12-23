@@ -139,6 +139,7 @@ export async function getRegions() {
     return regions;
 }
 const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
+    console.log("menuId is", menuId);
     return {
         ...(prefectureId && { prefectureId }),
         ...(genderId && { genderId }),
@@ -151,9 +152,7 @@ const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
         ...(menuId && {
             menus: {
                 some: {
-                    id: {
-                        equals: menuId
-                    }
+                    menuId: menuId
                 }
             }
         })
@@ -161,36 +160,6 @@ const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
 
 }
 
-export async function getSenders() {
-    const session = await getServerSession(authOptions);
-    if (!(session?.user?.role == "user")) return;
-    try {
-        const senders = await prisma.therapist.findMany({
-            where: {
-                messages: {
-                    some: {}
-                }
-            },
-            include: {
-                messages: {
-                    where: {
-                        userId: session.user.id,
-                        NOT: {
-                            messageStatusId: 4
-                        }
-                    },
-                    take: 1,
-                    orderBy: [
-                        { created: "desc" }
-                    ]
-                }
-            }
-        });
-        return senders;
-    } catch (err) {
-        console.dir(err);
-    }
-}
 export async function getTherapists({ page = 1, take = 10, prefectureId, genderId, menuId, freeWord }) {
     const session = await getServerSession(authOptions);
     const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
@@ -221,6 +190,38 @@ export async function getTherapistsCount({ prefectureId, genderId, menuId, freeW
     const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
     const itemCount = await prisma.therapist.count({ where });
     return itemCount;
+}
+
+
+export async function getSenders() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) return;
+    try {
+        const senders = await prisma.therapist.findMany({
+            where: {
+                messages: {
+                    some: {}
+                }
+            },
+            include: {
+                messages: {
+                    where: {
+                        userId: session.user.id,
+                        NOT: {
+                            messageStatusId: 4
+                        }
+                    },
+                    take: 1,
+                    orderBy: [
+                        { created: "desc" }
+                    ]
+                }
+            }
+        });
+        return senders;
+    } catch (err) {
+        console.dir(err);
+    }
 }
 
 export async function getTherapist(id) {
