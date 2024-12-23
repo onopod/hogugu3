@@ -33,7 +33,7 @@ function MyAppBar() {
           <Typography
             variant="h5"
             noWrap
-            onClick={() => router.push("/")}
+            onClick={() => router.push("/t")}
             sx={{
               display: "flex",
               flexGrow: 1,
