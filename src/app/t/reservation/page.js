@@ -1,6 +1,6 @@
 "use client";
 import { getReservations, getStatuses } from "@/app/actions";
-import { AppBar, BottomBar } from "@/app/components";
+import { AppBar, BottomBar } from "@/app/components/t";
 import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
@@ -85,21 +85,23 @@ export default function ReservationPage() {
                                                     >
                                                         <Box>
                                                             <Avatar
-                                                                alt={reservation?.therapist?.name}
-                                                                src={reservation?.therapist?.imageFileName ? `/therapistImg/${reservation.therapist.id}/${reservation.therapist.imageFileName}` : ""}
-                                                            />
+                                                                alt={
+                                                                    reservation?.user?.name
+                                                                }
+                                                                src={reservation?.user?.imageFileName ? `/userImg/${reservation.user.id}/${reservation.user.imageFileName}` : ""}>
+                                                                {reservation?.user?.name ? reservation.user.name[0].toUpperCase() : ""}</Avatar>
                                                         </Box>
                                                         <Box>
-                                                            <Typography>{reservation.therapist.name}</Typography>
+                                                            <Typography>{reservation?.user?.name}</Typography>
                                                             <Typography>
                                                                 {format(
-                                                                    new Date(reservation.startDt),
+                                                                    new Date(reservation?.startDt),
                                                                     "yyyy/MM/dd kk:mm"
                                                                 )}
                                                                 から
-                                                                {reservation.therapistMenu.treatmentTime}
+                                                                {reservation?.therapistMenu?.treatmentTime}
                                                                 分{" "}
-                                                                {reservation.therapist.name}
+                                                                {reservation?.therapistMenu?.menu.name}
                                                             </Typography>
                                                         </Box>
                                                     </Stack>

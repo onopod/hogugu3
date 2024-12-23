@@ -360,17 +360,38 @@ export async function setHistory(id) {
 
 export async function getReservations() {
     const session = await getServerSession(authOptions);
-    if (!(session?.user?.role == "user")) return;
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
+
     try {
         const reservations = await prisma.reservation.findMany({
             where: {
-                userId: session.user.id
+                ...(session.user.role == "user" ? { userId: session.user.id } : { therapistId: session.user.id }),
             },
-            include: {
+            select: {
+                id: true,
+                userId: true,
+                therapistId: true,
+                therapistMenuId: true,
+                startDt: true,
+                created: true,
+                statusId: true,
                 therapistMenu: {
-                    include: {
-                        therapist: true,
+                    select: {
                         menu: true
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                therapist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
                     }
                 },
                 status: true

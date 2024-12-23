@@ -6,6 +6,11 @@ export const config = {
         "/message(.*)",
         "/profile(.*)",
         "/logout(.*)",
-        "/favorites(.*)"
+        "/favorites(.*)",
+        "/t/reservation(.*)",
+        "/t/message(.*)",
+        "/t/profile(.*)",
+        "/t/logout(.*)",
+        "/t/favorites(.*)"
     ]
 };
