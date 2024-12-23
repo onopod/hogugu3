@@ -1,6 +1,8 @@
 const { PrismaClient } = require('@prisma/client')
 
 const bcrypt = require("bcrypt");
+const fs = require("fs");
+
 const prisma = new PrismaClient();
 
 async function main() {
@@ -194,6 +196,13 @@ async function main() {
                 { therapistId: secondTherapistId, menuId: 1, treatmentTime: 90, price: 7200 },
             ]
         })
+        const filePath = "./public/avatar.jpg";
+        therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach(therapist => {
+            const distDir = `./public/therapistImg/${therapist.id}`
+            fs.mkdir(distDir, { recursive: true }, () => {
+                fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
+            })
+        })
 
         const firstTherapistsOnMenusId = therapistsOnMenus[0].id;
         const secondTherapistsOnMenusId = therapistsOnMenus[1].id;
@@ -211,6 +220,15 @@ async function main() {
                     { name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 26 }
                 ]
             })
+
+            const filePath = "./public/avatar.jpg";
+            users.filter(user => user.imageFileName?.length > 0).forEach(user => {
+                const distDir = `./public/userImg/${user.id}`
+                fs.mkdir(distDir, { recursive: true }, () => {
+                    fs.copyFile(filePath, `${distDir}/${user.imageFileName}`, () => { })
+                })
+            })
+
 
             const firstUserId = users[0].id;
             const secondUserId = users[1].id;
