@@ -131,7 +131,7 @@ async function main() {
                 {
                     name: 'sato hikaru', comment: 'よろしくお願いします。',
                     imageFileName: "tavatar.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3,
-                    genderId: 2, password: hashedPassword, mail: "onopod2@gmail.com", tel: "07012345678"
+                    genderId: 2, password: hashedPassword, mail: "onopod@gmail.com", tel: "07012345678"
                 },
                 { name: 'みく', comment: 'がんばります', password: hashedPassword, imageFileName: "tavatar.jpg", prefectureId: 27, mail: "onopod2@gmail.com", tel: "07012345678" },
                 { name: '水野', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', prefectureId: 26, mail: "onopod3@gmail.com", tel: "07012345678" },

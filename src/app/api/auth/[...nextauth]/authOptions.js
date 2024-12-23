@@ -16,6 +16,7 @@ const authOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
+
                 const user = await prisma.user.findFirstOrThrow({
                     where: {
                         mail: credentials.mail,
@@ -46,21 +47,26 @@ const authOptions = {
                 password: { label: 'Password', type: 'password' },
             },
             async authorize(credentials) {
-                const therapist = await prisma.therapist.findFirstOrThrow({
-                    where: {
-                        mail: credentials.mail,
+                try {
+                    const therapist = await prisma.therapist.findFirstOrThrow({
+                        where: {
+                            mail: credentials.mail,
+                        }
+                    });
+                    const matched = credentials?.password && await bcrypt.compare(credentials.password, therapist.password);
+                    if (matched) {
+                        return {
+                            ...therapist,
+                            email: therapist.mail,
+                            image: therapist.imageFileName,
+                            role: "therapist"
+                        };
+                    } else {
+                        return null
                     }
-                });
-                const matched = credentials?.password && await bcrypt.compare(credentials.password, therapist.password);
-                if (matched) {
-                    return {
-                        ...therapist,
-                        email: therapist.mail,
-                        image: therapist.imageFileName,
-                        role: "therapist"
-                    };
-                } else {
-                    return null
+
+                } catch (err) {
+                    console.dir(err)
                 }
             },
         }),
