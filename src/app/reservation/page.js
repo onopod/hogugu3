@@ -55,8 +55,10 @@ export default function ReservationPage() {
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
-                            variant="fullWidth"
                             value={value}
+                            variant="scrollable"
+                            scrollButtons
+                            allowScrollButtonsMobile
                             onChange={handleChange}
                             aria-label="statusId"
                         >
