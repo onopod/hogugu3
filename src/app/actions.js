@@ -254,6 +254,80 @@ export async function getSenderUsers() {
         console.dir(err);
     }
 }
+export async function getTherapistProfile() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const therapist = prisma.therapist.findFirst({
+            where: { id: session.user.id },
+            select: {
+                id: true,
+                name: true,
+                comment: true,
+                mail: true,
+                tel: true,
+                genderId: true,
+                gender: true,
+                imageFileName: true,
+                prefectureId: true,
+                prefecture: true,
+                city: true,
+                workYear: true
+            }
+        })
+        return therapist;
+    } catch (err) {
+        console.log(err);
+    }
+}
+
+export async function putTherapist(formData) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const name = formData.get("name");
+        const genderId = parseInt(formData.get("genderId"));
+        const mail = formData.get("mail");
+        const tel = formData.get("tel");
+        const imageFile = formData.get("imageFileName");
+        const prefectureId = parseInt(formData.get("prefectureId"))
+        const city = formData.get("city")
+        const workYear = parseInt(formData.get("workYear"))
+        const comment = formData.get("comment")
+
+        if (imageFile?.arrayBuffer) {
+            const fileName = imageFile.name;
+            const arrayBuffer = await imageFile.arrayBuffer();
+            const buffer = Buffer.from(arrayBuffer);
+
+            // 保存先のパスを指定
+            const uploadDir = join(process.cwd(), "public", "therapistImg", session.user.id.toString());
+            await fs.mkdir(uploadDir, { recursive: true });
+            const filePath = join(uploadDir, fileName);
+            // ファイルをサーバー上に保存
+            await fs.writeFile(filePath, buffer);
+
+        }
+
+        const therapist = await prisma.therapist.update({
+            where: { id: session.user.id },
+            data: {
+                name,
+                genderId,
+                mail,
+                tel,
+                imageFileName: imageFile.name,
+                prefectureId,
+                city,
+                workYear,
+                comment
+            }
+        });
+        return therapist;
+    } catch (err) {
+        console.dir(err)
+    }
+}
 
 export async function getTherapist(id) {
     const therapist = await prisma.therapist.findFirst({

@@ -16,6 +16,12 @@ function MyAppBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const onSignOut = () => {
+    signOut("therapist", {
+      redirect: false
+    })
+    router.push("/t")
+  }
   return (
     <AppBar position="static">
       <Container maxWidth="sm">
@@ -75,7 +81,7 @@ function MyAppBar() {
               {session?.user?.role == "therapist" ? (
                 <div key={1}>
                   <MenuItem onClick={() => router.push("/t/profile")}>プロフィール</MenuItem>
-                  <MenuItem onClick={() => signOut("therapist")}>ログアウト</MenuItem>
+                  <MenuItem onClick={() => onSignOut()}>ログアウト</MenuItem>
                 </div>
               )
                 :
