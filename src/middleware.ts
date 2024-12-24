@@ -11,6 +11,7 @@ export const config = {
         "/t/message(.*)",
         "/t/profile(.*)",
         "/t/logout(.*)",
-        "/t/favorites(.*)"
+        "/t/favorites(.*)",
+        "/t/menu(.*)"
     ]
 };

@@ -1,4 +1,4 @@
-import { BookmarksIcon, HotelIcon, MessageIcon } from '@/app/icons';
+import { MenuBookIcon, HotelIcon, MessageIcon } from '@/app/icons';
 import { BottomNavigation, BottomNavigationAction, Box, Paper } from '@mui/material';
 import { useRouter } from "next/navigation";
 import { useRef, useState } from 'react';
@@ -17,7 +17,7 @@ export default function FixedBottomNavigation() {
                 >
                     <BottomNavigationAction onClick={() => router.push("/t/message")} label="Message" icon={<MessageIcon />} />
                     <BottomNavigationAction onClick={() => router.push("/t/reservation")} label="Reservation" icon={<HotelIcon />} />
-                    <BottomNavigationAction onClick={() => router.push("/t/favorites")} label="Favorites" icon={<BookmarksIcon />} />
+                    <BottomNavigationAction onClick={() => router.push("/t/menu")} label="Menu" icon={<MenuBookIcon />} />
                 </BottomNavigation>
             </Paper>
         </Box>
