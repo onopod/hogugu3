@@ -383,7 +383,39 @@ export async function getTherapist(id) {
     }
     return therapist;
 }
+export async function postTherapistMenu(postData) {
 
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        if (postData?.id) {
+            const therapistMenu = await prisma.TherapistsOnMenus.update({
+                where: {
+                    id: postData.id,
+                    therapistId: session.user.id,
+                    menuId: postData.menuId,
+                },
+                data: {
+                    treatmentTime: postData.treatmentTime,
+                    price: postData.price
+                }
+            })
+            return therapistMenu;
+        } else {
+            const therapistMenu = await prisma.TherapistsOnMenus.create({
+                data: {
+                    menuId: postData.menuId,
+                    therapistId: session.user.id,
+                    treatmentTime: postData.treatmentTime,
+                    price: postData.price
+                }
+            })
+            return therapistMenu;
+        }
+    } catch (err) {
+        console.dir(err)
+    }
+}
 export async function getTherapistMenus(id) {
     const therapistMenus = await prisma.menu.findMany({
         where: {
@@ -417,6 +449,20 @@ export async function getTherapistMenus(id) {
     })
     return therapistMenus;
 }
+export async function deleteTherapistMenu(id) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        await prisma.TherapistsOnMenus.delete({
+            where: {
+                id,
+                therapistId: session.user.id
+            }
+        })
+    } catch (err) {
+        console.dir(err)
+    }
+}
 
 export async function getTherapistProfileMenus() {
     const session = await getServerSession(authOptions);
@@ -429,6 +475,7 @@ export async function getTherapistProfileMenus() {
             therapistMenus: {
                 select: {
                     id: true,
+                    menuId: true,
                     therapistId: true,
                     price: true,
                     treatmentTime: true
