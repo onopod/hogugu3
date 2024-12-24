@@ -8,6 +8,7 @@ import CreateIcon from '@mui/icons-material/Create';
 import CurrencyYenIcon from '@mui/icons-material/CurrencyYen';
 import DeleteIcon from '@mui/icons-material/Delete';
 import DirectionsWalkIcon from '@mui/icons-material/DirectionsWalk';
+import EditCalendarIcon from '@mui/icons-material/EditCalendar';
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { default as Favorite, default as FavoriteIcon } from "@mui/icons-material/Favorite";
 import HotelIcon from '@mui/icons-material/Hotel';
@@ -21,7 +22,5 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import SpaIcon from '@mui/icons-material/Spa';
 import StarIcon from '@mui/icons-material/Star';
 
-export {
-    AccessTimeIcon, AddIcon, BookmarksIcon, BusinessCenterIcon, CloseIcon, CommentIcon, CreateIcon, CurrencyYenIcon, DeleteIcon, DirectionsWalkIcon, ExpandMoreIcon, Favorite, FavoriteIcon, HotelIcon, MenuBookIcon, MenuIcon, MessageIcon, QuestionAnswerIcon, SearchIcon, SendRoundedIcon, SettingsIcon, SpaIcon, StarIcon
-};
+export { AccessTimeIcon, AddIcon, BookmarksIcon, BusinessCenterIcon, CloseIcon, CommentIcon, CreateIcon, CurrencyYenIcon, DeleteIcon, DirectionsWalkIcon, EditCalendarIcon, ExpandMoreIcon, Favorite, FavoriteIcon, HotelIcon, MenuBookIcon, MenuIcon, MessageIcon, QuestionAnswerIcon, SearchIcon, SendRoundedIcon, SettingsIcon, SpaIcon, StarIcon };
 
