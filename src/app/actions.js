@@ -459,7 +459,67 @@ export async function changeReservationStatusToAccept(id) {
         console.log(err)
     }
 }
+export async function payment(id) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) return;
+    if (!is_paid()) return;
+    await changeReservationStatusToPaid(id)
+}
+function is_paid() {
+    // 支払い部分は後で実装
+    return true;
+}
 
+export async function changeReservationStatusToCancel(id) {
+    const session = await getServerSession(authOptions);
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
+    const where = {
+        id,
+        // 自分宛ての予約
+        ...(session.user.role == "user" ? {
+            userId: session.user.id
+        } : {
+            therapistId: session.user.id
+        }),
+        statusId: {  // ステータスが「予約リクエスト」「予約確定」の状態のみキャンセル可能
+            in: [1, 2]
+        }
+    }
+    try {
+        const reservation = prisma.reservation.update({
+            where,
+            data: {
+                statusId: 4,
+                ...(session.user.role == "therapist" ? { replyDt: new Date() } : {})
+            }
+        })
+        console.dir(reservation)
+        return reservation;
+    } catch (err) {
+        console.log(err)
+    }
+}
+export async function changeReservationStatusToPaid(id) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) return;
+    const where = {
+        id,
+        userId: session.user.id,
+        statusId: 2 // ステータスが「予約確定」の状態のみ
+    }
+    try {
+        const reservation = prisma.reservation.update({
+            where,
+            data: {
+                statusId: 3
+            }
+        })
+        console.dir(reservation)
+        return reservation;
+    } catch (err) {
+        console.log(err)
+    }
+}
 
 export async function toggleFavorite(id) {
     const session = await getServerSession(authOptions);
