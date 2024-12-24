@@ -1,9 +1,8 @@
 "use client";
-import { getReservations, getStatuses, changeReservationStatusToAccept } from "@/app/actions";
+import { getReservations, getStatuses, changeReservationStatusToAccept, changeReservationStatusToCancel } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components/t";
 import { Avatar, Box, Button, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { fetchData } from "next-auth/client/_utils";
 import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -41,6 +40,10 @@ export default function ReservationPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
+    const cancelReservation = (reservationId) => {
+        changeReservationStatusToCancel(reservationId)
+        fetchData()
+    }
     const acceptReservation = (reservationId) => {
         changeReservationStatusToAccept(reservationId)
         fetchData()
@@ -114,6 +117,13 @@ export default function ReservationPage() {
                                                             <Box>
                                                                 <Button onClick={() => acceptReservation(reservation.id)}>
                                                                     予約承諾
+                                                                </Button>
+                                                            </Box>
+                                                        }
+                                                        {[1, 2].includes(reservation?.statusId) &&
+                                                            <Box>
+                                                                <Button onClick={() => cancelReservation(reservation.id)}>
+                                                                    キャンセル
                                                                 </Button>
                                                             </Box>
                                                         }

@@ -44,7 +44,7 @@ async function main() {
         data: [
             { id: 1, name: "予約リクエスト中" },
             { id: 2, name: "予約確定" },
-            { id: 3, name: "完了" },
+            { id: 3, name: "支払完了" },
             { id: 4, name: "キャンセル" }
         ]
     });

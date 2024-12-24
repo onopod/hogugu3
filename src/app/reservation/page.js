@@ -1,7 +1,7 @@
 "use client";
-import { getReservations, getStatuses } from "@/app/actions";
+import { getReservations, getStatuses, changeReservationStatusToCancel, payment } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
-import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Button, Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
 import "swiper/css";
@@ -19,11 +19,12 @@ export default function ReservationPage() {
     const [statuses, setStatuses] = useState([]);
     const [reservations, setReservations] = useState([]);
 
+    const fetchData = async () => {
+        setStatuses(await getStatuses());
+        setReservations(await getReservations());
+    }
+
     useEffect(() => {
-        const fetchData = async () => {
-            setStatuses(await getStatuses());
-            setReservations(await getReservations());
-        }
         fetchData();
     }, []);
 
@@ -39,7 +40,14 @@ export default function ReservationPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
-
+    const payReservation = (reservationId) => {
+        payment(reservationId)
+        fetchData();
+    }
+    const cancelReservation = (reservationId) => {
+        changeReservationStatusToCancel(reservationId)
+        fetchData()
+    }
     return (
         <>
             <AppBar />
@@ -102,6 +110,20 @@ export default function ReservationPage() {
                                                                 {reservation.therapist.name}
                                                             </Typography>
                                                         </Box>
+                                                        {reservation?.statusId == 2 &&
+                                                            <Box>
+                                                                <Button onClick={() => payReservation(reservation.id)}>
+                                                                    支払い
+                                                                </Button>
+                                                            </Box>
+                                                        }
+                                                        {[1, 2].includes(reservation?.statusId) &&
+                                                            <Box>
+                                                                <Button onClick={() => cancelReservation(reservation.id)}>
+                                                                    キャンセル
+                                                                </Button>
+                                                            </Box>
+                                                        }
                                                     </Stack>
                                                 ))}
                                     </Stack>
