@@ -418,6 +418,36 @@ export async function getTherapistMenus(id) {
     return therapistMenus;
 }
 
+export async function getTherapistProfileMenus() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+
+    const therapistMenus = await prisma.menu.findMany({
+        select: {
+            id: true,
+            name: true,
+            therapistMenus: {
+                select: {
+                    id: true,
+                    therapistId: true,
+                    price: true,
+                    treatmentTime: true
+                },
+                where: {
+                    therapistId: session.user.id
+                },
+                orderBy: {
+                    treatmentTime: "asc"
+                }
+            }
+        },
+        orderBy: {
+            id: "asc"
+        }
+    })
+    return therapistMenus;
+}
+
 export async function getReviews(id) {
     const reviews = await prisma.review.findMany({
         where: {

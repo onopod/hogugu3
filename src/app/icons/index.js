@@ -1,4 +1,5 @@
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
+import CreateIcon from '@mui/icons-material/Create';
 import BookmarksIcon from '@mui/icons-material/Bookmarks';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import CloseIcon from '@mui/icons-material/Close';
@@ -15,10 +16,11 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import SearchIcon from '@mui/icons-material/Search';
 import SendRoundedIcon from "@mui/icons-material/SendRounded";
 import SettingsIcon from '@mui/icons-material/Settings';
+import AddIcon from '@mui/icons-material/Add';
 import SpaIcon from '@mui/icons-material/Spa';
 import StarIcon from '@mui/icons-material/Star';
+
 export {
-    AccessTimeIcon, BookmarksIcon, BusinessCenterIcon, CloseIcon, CommentIcon, CurrencyYenIcon, DirectionsWalkIcon, ExpandMoreIcon, Favorite, FavoriteIcon, HotelIcon, MenuBookIcon, MenuIcon, MessageIcon, QuestionAnswerIcon, SearchIcon, SendRoundedIcon,
-    SettingsIcon, SpaIcon, StarIcon
+    AddIcon, BookmarksIcon, BusinessCenterIcon, CloseIcon, CreateIcon, CommentIcon, CurrencyYenIcon, DirectionsWalkIcon, ExpandMoreIcon, Favorite, FavoriteIcon, HotelIcon, MenuBookIcon, MenuIcon, MessageIcon, QuestionAnswerIcon, SearchIcon, SendRoundedIcon, SettingsIcon, SpaIcon, StarIcon
 };
 
