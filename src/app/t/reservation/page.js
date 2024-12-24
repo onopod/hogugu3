@@ -1,8 +1,9 @@
 "use client";
-import { getReservations, getStatuses } from "@/app/actions";
+import { getReservations, getStatuses, changeReservationStatusToAccept } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components/t";
-import { Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
+import { fetchData } from "next-auth/client/_utils";
 import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -19,11 +20,12 @@ export default function ReservationPage() {
     const [statuses, setStatuses] = useState([]);
     const [reservations, setReservations] = useState([]);
 
+    const fetchData = async () => {
+        setStatuses(await getStatuses());
+        setReservations(await getReservations());
+    }
     useEffect(() => {
-        const fetchData = async () => {
-            setStatuses(await getStatuses());
-            setReservations(await getReservations());
-        }
+
         fetchData();
     }, []);
 
@@ -39,7 +41,11 @@ export default function ReservationPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
+    const acceptReservation = (reservationId) => {
+        changeReservationStatusToAccept(reservationId)
+        fetchData()
 
+    }
     return (
         <>
             <AppBar />
@@ -104,6 +110,13 @@ export default function ReservationPage() {
                                                                 {reservation?.therapistMenu?.menu.name}
                                                             </Typography>
                                                         </Box>
+                                                        {reservation?.statusId == 1 &&
+                                                            <Box>
+                                                                <Button onClick={() => acceptReservation(reservation.id)}>
+                                                                    予約承諾
+                                                                </Button>
+                                                            </Box>
+                                                        }
                                                     </Stack>
                                                 ))}
                                     </Stack>

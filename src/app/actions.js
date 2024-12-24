@@ -437,6 +437,29 @@ export async function getReservations() {
         console.dir(err);
     }
 }
+export async function changeReservationStatusToAccept(id) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    const where = {
+        id,
+        therapistId: session.user.id, // 自分宛ての予約
+        statusId: 1 // 予約リクエスト状態の予約
+    }
+    try {
+        const reservation = prisma.reservation.update({
+            where,
+            data: {
+                statusId: 2,
+                replyDt: new Date()
+            }
+        })
+        console.dir(reservation)
+        return reservation;
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 
 export async function toggleFavorite(id) {
     const session = await getServerSession(authOptions);
