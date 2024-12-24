@@ -42,10 +42,11 @@ async function main() {
     // status
     await prisma.status.createMany({
         data: [
-            { id: 1, name: "予約リクエスト中" },
+            { id: 1, name: "リクエスト中" },
             { id: 2, name: "予約確定" },
             { id: 3, name: "支払完了" },
-            { id: 4, name: "キャンセル" }
+            { id: 4, name: "施術完了" },
+            { id: 9, name: "キャンセル" }
         ]
     });
 

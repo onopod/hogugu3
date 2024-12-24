@@ -1,5 +1,5 @@
 "use client";
-import { getReservations, getStatuses, changeReservationStatusToAccept, changeReservationStatusToCancel } from "@/app/actions";
+import { getReservations, getStatuses, changeReservationStatusToAccept, changeReservationStatusToComplete, changeReservationStatusToCancel } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components/t";
 import { Avatar, Box, Button, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
@@ -49,6 +49,10 @@ export default function ReservationPage() {
         fetchData()
 
     }
+    const completeReservation = (reservationId) => {
+        changeReservationStatusToComplete(reservationId)
+        fetchData()
+    }
     return (
         <>
             <AppBar />
@@ -56,8 +60,10 @@ export default function ReservationPage() {
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
-                            variant="fullWidth"
                             value={value}
+                            variant="scrollable"
+                            scrollButtons
+                            allowScrollButtonsMobile
                             onChange={handleChange}
                             aria-label="statusId"
                         >
@@ -117,6 +123,13 @@ export default function ReservationPage() {
                                                             <Box>
                                                                 <Button onClick={() => acceptReservation(reservation.id)}>
                                                                     予約承諾
+                                                                </Button>
+                                                            </Box>
+                                                        }
+                                                        {reservation?.statusId == 3 &&
+                                                            <Box>
+                                                                <Button onClick={() => completeReservation(reservation.id)}>
+                                                                    完了
                                                                 </Button>
                                                             </Box>
                                                         }
