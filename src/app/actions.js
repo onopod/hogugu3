@@ -224,6 +224,37 @@ export async function getSenders() {
     }
 }
 
+export async function getSenderUsers() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const senders = await prisma.user.findMany({
+            where: {
+                messages: {
+                    some: {}
+                }
+            },
+            include: {
+                messages: {
+                    where: {
+                        therapistId: session.user.id,
+                        NOT: {
+                            messageStatusId: 3
+                        }
+                    },
+                    take: 1,
+                    orderBy: [
+                        { created: "desc" }
+                    ]
+                }
+            }
+        });
+        return senders;
+    } catch (err) {
+        console.dir(err);
+    }
+}
+
 export async function getTherapist(id) {
     const therapist = await prisma.therapist.findFirst({
         where: { id },
@@ -502,16 +533,41 @@ export async function postReservation(data) {
 
 export async function getMessages(id) {
     const session = await getServerSession(authOptions);
-    if (!(session?.user?.role == "user")) return;
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
     try {
         const messages = await prisma.message.findMany({
             where: {
-                userId: session.user.id,
-                therapistId: id
+                ...(session.user.role == "user" ? {
+                    userId: session.user.id,
+                    therapistId: id
+                } : {
+                    userId: id,
+                    therapistId: session.user.id
+                }),
             },
-            include: {
-                therapist: true,
-                user: true
+            select: {
+                id: true,
+                therapistId: true,
+                userId: true,
+                message: true,
+                messageStatusId: true,
+                isRead: true,
+                created: true,
+                messageStatus: true,
+                therapist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                }
             },
             orderBy: {
                 created: "desc"
@@ -525,17 +581,27 @@ export async function getMessages(id) {
 
 export async function postMessage(data) {
     const session = await getServerSession(authOptions);
-    if (!(session?.user?.role == "user")) return;
+    console.log("session is")
+    console.dir(session)
+    console.log("data is")
+    console.dir(data)
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
 
     try {
-        const { therapistId, message, messageStatusId } = data;
+        const { id, message } = data;
 
         const msg = await prisma.message.create({
             data: {
-                userId: session.user.id,
-                therapistId,
-                message,
-                messageStatusId
+                ...(session.user.role == "user" ? {
+                    userId: session.user.id,
+                    therapistId: id,
+                    messageStatusId: 1
+                } : {
+                    userId: id,
+                    therapistId: session.user.id,
+                    messageStatusId: 2
+                }),
+                message
             }
         });
     } catch (err) {
