@@ -1,7 +1,7 @@
 "use client"
 
 import { getMessages, postMessage } from "@/app/actions";
-import { AppBar, BottomBar, Messages } from "@/app/components";
+import { AppBar, BottomBar, Messages } from "@/app/components/t";
 import { Container } from "@mui/material";
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from "react";

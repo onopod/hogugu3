@@ -9,10 +9,10 @@ export default function Messages({ messages, register, handleSubmit, onSubmit })
         <>
             <Box className="message-area" sx={{ m: 2 }}>
                 <Stack spacing={1} direction="column-reverse">
-                    {messages ? messages.filter(message => message.messageStatusId != 4).map(message => (
+                    {messages ? messages.filter(message => message.messageStatusId != 3).map(message => (
                         <Box key={message.id}>
                             <Stack spacing={1}
-                                direction={message.messageStatusId == 1 ? "row-reverse" : "row"}>
+                                direction={message.messageStatusId == 2 ? "row-reverse" : "row"}>
                                 {message.messageStatusId == 1 ?
                                     <Avatar src={message.user.imageFileName ? `/userImg/${message.user.id}/${message.user.imageFileName}` : ""}>
                                         {message.user.name ? message.user.name[0].toUpperCase() : ""}
@@ -29,7 +29,7 @@ export default function Messages({ messages, register, handleSubmit, onSubmit })
                                     {message.message.split(/\n/).map((m, idx) => <Typography key={idx}>{m}</Typography>)}
                                 </Stack>
                             </Stack>
-                            <Stack direction={message.messageStatusId == 1 ? "row-reverse" : "row"}>
+                            <Stack direction={message.messageStatusId == 2 ? "row-reverse" : "row"}>
                                 <Typography>{format(message.created, (format(new Date(), "yyyy/MM/dd") == format(message.created, "yyyy/MM/dd") ? "" : "yyyy/MM/dd ") + "kk:mm")}</Typography>
                             </Stack>
                         </Box>
