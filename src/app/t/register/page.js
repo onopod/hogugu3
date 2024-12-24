@@ -13,8 +13,6 @@ export default function Register() {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = async data => {
         const saveTherapist = async (data) => {
-            console.log("therapist is")
-            console.dir(data)
             const therapist = await postTherapist(data);
             if (therapist) {
                 await signIn("therapist", {

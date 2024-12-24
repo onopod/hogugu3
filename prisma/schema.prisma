@@ -83,6 +83,7 @@ model Therapist {
   messages      Message[]
   favorites     Favorite[]
   Histories     History[]
+  Schedules     Schedule[]
 }
 
 model Favorite {
@@ -137,6 +138,14 @@ model TherapistsOnMenus {
   reservations  Reservation[]
 
   @@unique([therapistId, menuId, treatmentTime])
+}
+
+model Schedule {
+  id          Int       @id @default(autoincrement())
+  therapistId Int
+  therapist   Therapist @relation(fields: [therapistId], references: [id])
+  startDt     DateTime
+  endDt       DateTime
 }
 
 model Reservation {

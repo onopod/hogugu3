@@ -139,7 +139,6 @@ export async function getRegions() {
     return regions;
 }
 const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
-    console.log("menuId is", menuId);
     return {
         ...(prefectureId && { prefectureId }),
         ...(genderId && { genderId }),
@@ -604,7 +603,6 @@ export async function changeReservationStatusToAccept(id) {
                 replyDt: new Date()
             }
         })
-        console.dir(reservation)
         return reservation;
     } catch (err) {
         console.log(err)
@@ -636,7 +634,6 @@ export async function changeReservationStatusToPaid(id) {
                 statusId: 3
             }
         })
-        console.dir(reservation)
         return reservation;
     } catch (err) {
         console.log(err)
@@ -658,7 +655,6 @@ export async function changeReservationStatusToComplete(id) {
                 statusId: 4
             }
         })
-        console.dir(reservation)
         return reservation;
     } catch (err) {
         console.log(err)
@@ -687,7 +683,6 @@ export async function changeReservationStatusToCancel(id) {
                 ...(session.user.role == "therapist" ? { replyDt: new Date() } : {})
             }
         })
-        console.dir(reservation)
         return reservation;
     } catch (err) {
         console.log(err)
@@ -836,10 +831,6 @@ export async function getMessages(id) {
 
 export async function postMessage(data) {
     const session = await getServerSession(authOptions);
-    console.log("session is")
-    console.dir(session)
-    console.log("data is")
-    console.dir(data)
     if (!(["user", "therapist"].includes(session?.user?.role))) return;
 
     try {
@@ -861,5 +852,65 @@ export async function postMessage(data) {
         });
     } catch (err) {
         console.dir(err);
+    }
+}
+
+export async function deleteSchedule(id) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        await prisma.schedule.delete({
+            where: {
+                id,
+                therapistId: session.user.id
+            }
+        })
+    } catch (err) {
+        console.dir(err)
+    }
+}
+
+export async function getSchedules() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const schedules = prisma.schedule.findMany({
+            where: {
+                therapistId: session.user.id
+            }
+        })
+        return schedules
+    } catch (err) {
+        console.dir(err)
+    }
+}
+export async function postSchedule(data) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        if (data?.id) {
+            const schedule = await prisma.schedule.update({
+                where: {
+                    id: data.id,
+                    therapistId: session.user.id,
+                },
+                data: {
+                    startDt: data.startDt + ":00.000+09:00",
+                    endDt: data.endDt + ":00.000+09:00"
+                }
+            })
+            return schedule;
+        } else {
+            const schedule = await prisma.schedule.create({
+                data: {
+                    therapistId: session.user.id,
+                    startDt: data.startDt + ":00.000+09:00",
+                    endDt: data.endDt + ":00.000+09:00"
+                }
+            })
+            return schedule;
+        }
+    } catch (err) {
+        console.dir(err)
     }
 }
