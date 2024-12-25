@@ -138,8 +138,9 @@ export async function getRegions() {
     });
     return regions;
 }
-const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
-    return {
+const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWord }) => {
+    console.log("dt is", treatmentDt);
+    const where = {
         ...(prefectureId && { prefectureId }),
         ...(genderId && { genderId }),
         ...(freeWord && {
@@ -153,15 +154,27 @@ const getTherapistWhere = ({ prefectureId, genderId, menuId, freeWord }) => {
                 some: {
                     menuId: menuId
                 }
+            },
+        }),
+        ...(treatmentDt && {
+            schedules: {
+                some: {
+                    AND: [
+                        { startDt: { lte: treatmentDt + ":00.000+09:00" } },
+                        { endDt: { gte: treatmentDt + ":00.000+09:00" } }
+                    ]
+                }
             }
         })
     }
-
+    console.log("where is")
+    console.log(JSON.stringify(where))
+    return where;
 }
 
-export async function getTherapists({ page = 1, take = 10, prefectureId, genderId, menuId, freeWord }) {
+export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectureId, genderId, menuId, freeWord }) {
     const session = await getServerSession(authOptions);
-    const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
+    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord })
     try {
         const therapists = await prisma.therapist.findMany({
             select: {
@@ -230,8 +243,8 @@ export async function getTherapists({ page = 1, take = 10, prefectureId, genderI
     }
 }
 
-export async function getTherapistsCount({ prefectureId, genderId, menuId, freeWord }) {
-    const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
+export async function getTherapistsCount({ treatmentDt, prefectureId, genderId, menuId, freeWord }) {
+    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord })
     const itemCount = await prisma.therapist.count({ where });
     return itemCount;
 }
