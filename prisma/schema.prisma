@@ -88,12 +88,6 @@ model Therapist {
   therapistView TherapistView?
 }
 
-view TherapistView {
-  id           Int        @unique
-  rate_average Float?
-  therapist    Therapist? @relation(fields: [id], references: [id])
-}
-
 model Favorite {
   id          Int       @id @default(autoincrement())
   therapistId Int
@@ -179,4 +173,19 @@ model Review {
   rate          Int         @default(5)
   comment       String?
   created       DateTime    @default(now())
+}
+
+view TherapistView {
+  id                Int        @unique
+  imageFilePath     String?
+  name0             String?
+  prefectureAndCity String
+  reservationCount  Int?
+  replyCount        Int?
+  replyRate         Float?
+  replyTime         Int?
+  reviewRate        Float?
+  reviewCount       Int?
+  isNew             Boolean
+  therapist         Therapist? @relation(fields: [id], references: [id])
 }
