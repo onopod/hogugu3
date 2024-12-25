@@ -19,6 +19,7 @@ export default function Home() {
 
   const { register, handleSubmit, setValue, reset, watch, getValues } = useForm({
     defaultValues: {
+      treatmentDt: "",
       prefectureId: "",
       genderId: "",
       menuId: "",
@@ -38,6 +39,7 @@ export default function Home() {
     const values = getValues();
     const where = {
       page,
+      ...(values.treatmentDt ? { treatmentDt: values.treatmentDt } : {}),
       ...(values.prefectureId ? { prefectureId: Number(values.prefectureId) } : {}),
       ...(values.genderId ? { genderId: Number(values.genderId) } : {}),
       ...(values.menuId ? { menuId: Number(values.menuId) } : {}),
