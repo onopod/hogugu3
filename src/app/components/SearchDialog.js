@@ -12,9 +12,8 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
 
                     }}>
                         <FormControl variant="standard" fullWidth>
-                            <InputLabel id="treatmentDt">　</InputLabel>
-                            <Input labelId="treatmentDt"
-                                style={{ paddingTop: "9px" }}
+                            <Input
+                                style={{ paddingTop: "22px", paddingBottom: "3px" }}
                                 sx={{ display: "flex" }}
                                 type="datetime-local"
                                 {...register("treatmentDt")}
@@ -66,6 +65,7 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                                 id="menuId"
                                 value={selectedMenuId}
                                 onChange={(e) => {
+                                    setValue("menuId", e.target.value)
                                     onSubmit()
                                 }}
                                 displayEmpty>
