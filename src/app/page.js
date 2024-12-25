@@ -1,7 +1,6 @@
 "use client"
 
-import { getPrefectures, getGenders, getMenus, getRegions, toggleFavorite } from "@/app/actions";
-import { getTherapists, getTherapistsCount } from "@/app/actions";
+import { getGenders, getMenus, getPrefectures, getRegions, getTherapists, getTherapistsCount, toggleFavorite } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -46,6 +45,8 @@ export default function Home() {
     }
     const currentItemCount = await getTherapistsCount(where);
     const currentTherapists = await getTherapists(where)
+    console.log("therapist is")
+    console.dir(currentTherapists)
     setTherapists(currentTherapists)
     setItemCount(currentItemCount);
     setCount(Math.ceil(currentItemCount / pageSize))

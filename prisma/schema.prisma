@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["views"]
 }
 
 datasource db {
@@ -82,8 +83,15 @@ model Therapist {
   reservations  Reservation[]
   messages      Message[]
   favorites     Favorite[]
-  Histories     History[]
-  Schedules     Schedule[]
+  histories     History[]
+  schedules     Schedule[]
+  therapistView TherapistView?
+}
+
+view TherapistView {
+  id           Int        @unique
+  rate_average Float?
+  therapist    Therapist? @relation(fields: [id], references: [id])
 }
 
 model Favorite {
