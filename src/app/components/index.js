@@ -14,6 +14,7 @@ import SearchDialog from "./SearchDialog";
 import SenderList from './SenderList';
 import SnackBar from "./SnackBar";
 import Therapist from "./Therapist";
+import DrawerListContainer from './DrawerListContainer';
 
-export { AppBar, BookingConfirmDialog, BookingForm, BottomBar, Card, Favorites, Histories, Menus, Messages, Profile, Review, Reviews, SearchDialog, SenderList, SnackBar, Therapist };
+export { DrawerListContainer, AppBar, BookingConfirmDialog, BookingForm, BottomBar, Card, Favorites, Histories, Menus, Messages, Profile, Review, Reviews, SearchDialog, SenderList, SnackBar, Therapist };
 

@@ -3,6 +3,8 @@ import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Ty
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from 'next/navigation';
 import { useState } from "react";
+import { DrawerListContainer } from '@/app/components';
+
 
 function MyAppBar() {
   const router = useRouter();
@@ -28,12 +30,7 @@ function MyAppBar() {
         <Toolbar disableGutters>
 
           <Box sx={{ flexGrow: 1, display: "flex" }}>
-            <IconButton
-              size="large"
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
+            <DrawerListContainer />
           </Box>
           <SpaIcon sx={{ display: "flex", mr: 1 }} />
           <Typography

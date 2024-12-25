@@ -1,12 +1,15 @@
-import { MenuIcon, SpaIcon } from '@/app/icons';
+import { SpaIcon } from '@/app/icons';
 import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useRouter } from 'next/navigation';
 import { useState } from "react";
+import { DrawerListContainer } from '@/app/components';
+import { useRouter } from 'next/navigation';
+
 
 function MyAppBar() {
   const router = useRouter();
   const { data: session } = useSession();
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -21,12 +24,7 @@ function MyAppBar() {
         <Toolbar disableGutters>
 
           <Box sx={{ flexGrow: 1, display: "flex" }}>
-            <IconButton
-              size="large"
-              color="inherit"
-            >
-              <MenuIcon />
-            </IconButton>
+            <DrawerListContainer />
           </Box>
           <SpaIcon sx={{ display: "flex", mr: 1 }} />
           <Typography
