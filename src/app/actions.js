@@ -243,8 +243,8 @@ export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectu
     }
 }
 
-export async function getTherapistsCount({ prefectureId, genderId, menuId, freeWord }) {
-    const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
+export async function getTherapistsCount({ treatmentDt, prefectureId, genderId, menuId, freeWord }) {
+    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord })
     const itemCount = await prisma.therapist.count({ where });
     return itemCount;
 }
