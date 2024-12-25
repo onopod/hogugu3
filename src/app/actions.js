@@ -213,7 +213,15 @@ export async function getTherapists({ page = 1, take = 10, prefectureId, genderI
                     select: {
                         startDt: true,
                         endDt: true
-                    }
+                    },
+                    where: {
+                        endDt: {
+                            gte: new Date()
+                        }
+                    },
+                    orderBy: [
+                        { startDt: "asc" }
+                    ]
                 },
                 ...((session?.user?.role == "user") ? { favorites: { where: { userId: session.user.id }, } } : {})
             },
