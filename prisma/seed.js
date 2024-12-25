@@ -1,12 +1,15 @@
 const { PrismaClient } = require('@prisma/client')
 
 const bcrypt = require("bcrypt");
+const { addHours, addDays } = require('date-fns');
 const fs = require("fs");
+
 
 const prisma = new PrismaClient();
 
 async function main() {
     // truncate
+    await prisma.schedule.deleteMany({})
     await prisma.history.deleteMany({})
     await prisma.review.deleteMany({})
     await prisma.favorite.deleteMany({})
@@ -164,6 +167,14 @@ async function main() {
                 { name: '下関', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod27@gmail.com", tel: "07012345678" }
             ]
         })
+        const filePath = "./public/avatar.jpg";
+        therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach(therapist => {
+            const distDir = `./public/therapistImg/${therapist.id}`
+            fs.mkdir(distDir, { recursive: true }, () => {
+                fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
+            })
+        })
+
         // therapistsOnMenus
         const firstTherapistId = therapists[0].id;
         const secondTherapistId = therapists[1].id;
@@ -197,16 +208,19 @@ async function main() {
                 { therapistId: secondTherapistId, menuId: 1, treatmentTime: 90, price: 7200 },
             ]
         })
-        const filePath = "./public/avatar.jpg";
-        therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach(therapist => {
-            const distDir = `./public/therapistImg/${therapist.id}`
-            fs.mkdir(distDir, { recursive: true }, () => {
-                fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
-            })
-        })
 
         const firstTherapistsOnMenusId = therapistsOnMenus[0].id;
         const secondTherapistsOnMenusId = therapistsOnMenus[1].id;
+
+        // schedule
+        await prisma.schedule.createMany({
+            data: [
+                { therapistId: firstTherapistId, startDt: new Date(), endDt: addHours(new Date(), 8) },
+                { therapistId: firstTherapistId, startDt: addDays(new Date(), 1), endDt: addHours(addDays(new Date(), 1), 8) },
+                { therapistId: firstTherapistId, startDt: addDays(new Date(), 2), endDt: addHours(addDays(new Date(), 2), 8) }
+            ]
+        })
+
         // user
         await bcrypt.hash("password", 10, async (_, hashedPassword) => {
             const users = await prisma.user.createManyAndReturn({

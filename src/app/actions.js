@@ -164,20 +164,70 @@ export async function getTherapists({ page = 1, take = 10, prefectureId, genderI
     const where = getTherapistWhere({ prefectureId, genderId, menuId, freeWord })
     try {
         const therapists = await prisma.therapist.findMany({
-            where,
-            skip: (page - 1) * take,
-            take: take,
-            include: {
+            select: {
+                therapistView: true,
+                _count: {
+                    select: {
+                        favorites: true,
+                    }
+                },
+                id: true,
+                name: true,
+                genderId: true,
+                gender: true,
+                comment: true,
+                imageFileName: true,
+                prefectureId: true,
+                prefecture: true,
+                city: true,
+                workYear: true,
+                created: true,
                 menus: {
-                    include: {
+                    select: {
                         menu: true
                     }
                 },
-                gender: true,
-                prefecture: true,
-                reservations: true,
+                reservations: {
+                    select: {
+                        id: true,
+                        startDt: true,
+                        therapistMenu: {
+                            select: {
+                                id: true,
+                                treatmentTime: true
+                            }
+                        },
+                        review: {
+                            select: {
+                                rate: true
+                            }
+                        }
+                    }
+                },
+                favorites: {
+                    select: {
+                        id: true
+                    }
+                },
+                schedules: {
+                    select: {
+                        startDt: true,
+                        endDt: true
+                    },
+                    where: {
+                        endDt: {
+                            gte: new Date()
+                        }
+                    },
+                    orderBy: [
+                        { startDt: "asc" }
+                    ]
+                },
                 ...((session?.user?.role == "user") ? { favorites: { where: { userId: session.user.id }, } } : {})
-            }
+            },
+            where,
+            skip: (page - 1) * take,
+            take: take
         });
         return therapists;
     } catch (err) {

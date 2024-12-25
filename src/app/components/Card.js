@@ -4,7 +4,7 @@ import { ExpandMoreIcon, FavoriteIcon } from "@/app/icons";
 import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Collapse, IconButton, Typography } from "@mui/material";
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { subWeeks } from "date-fns";
+import { format, subWeeks } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -87,6 +87,9 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
           }</span>
           <span>出発地 {therapist.prefecture ? therapist.prefecture.name : "-"}／{therapist.city || "-"}</span>
           <span>施術歴 {therapist.workYear ? therapist.workYear : "-"}年</span>
+          <Typography>受付時間：
+            {therapist?.schedules?.length > 0 ? therapist.schedules.map(s => `${s.startDt > new Date() ? format(s.startDt, "yyyy/MM/dd kk:mm") : "現在受付中"} - ${format(s.endDt, "kk:mm")}`).join(" ") : ""}
+          </Typography>
         </Box>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>{therapist.comment}</Typography>
       </CardContent>
