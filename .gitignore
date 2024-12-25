@@ -42,3 +42,5 @@ next-env.d.ts
 # static files
 public/userImg
 public/therapistImg
+public/female
+public/male

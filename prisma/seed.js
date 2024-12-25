@@ -136,43 +136,46 @@ async function main() {
             data: [
                 {
                     name: 'sato hikaru', comment: 'よろしくお願いします。',
-                    imageFileName: "tavatar.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3,
+                    imageFileName: "1.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3,
                     genderId: 2, password: hashedPassword, mail: "onopod@gmail.com", tel: "07012345678"
                 },
-                { name: 'みく', comment: 'がんばります', password: hashedPassword, imageFileName: "tavatar.jpg", prefectureId: 27, mail: "onopod2@gmail.com", tel: "07012345678" },
-                { name: '水野', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', prefectureId: 26, mail: "onopod3@gmail.com", tel: "07012345678" },
-                { name: '二競', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod4@gmail.com", tel: "07012345678" },
-                { name: '中川', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod5@gmail.com", tel: "07012345678" },
-                { name: '二梁', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod6@gmail.com", tel: "07012345678" },
-                { name: '村松', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod7@gmail.com", tel: "07012345678" },
-                { name: '野田', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod8@gmail.com", tel: "07012345678" },
-                { name: '西田', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod9@gmail.com", tel: "07012345678" },
-                { name: '二針', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod10@gmail.com", tel: "07012345678" },
-                { name: '河村', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod11@gmail.com", tel: "07012345678" },
-                { name: '亨夏', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod12@gmail.com", tel: "07012345678" },
-                { name: '倉増', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod13@gmail.com", tel: "07012345678" },
-                { name: '奥村', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod14@gmail.com", tel: "07012345678" },
-                { name: '大沢', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod15@gmail.com", tel: "07012345678" },
-                { name: '早川', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod16@gmail.com", tel: "07012345678" },
-                { name: '大西', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod17@gmail.com", tel: "07012345678" },
-                { name: '中西', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod18@gmail.com", tel: "07012345678" },
-                { name: '小酒', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod19@gmail.com", tel: "07012345678" },
-                { name: '田中', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod20@gmail.com", tel: "07012345678" },
-                { name: '安部', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod21@gmail.com", tel: "07012345678" },
-                { name: '道渕', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod22@gmail.com", tel: "07012345678" },
-                { name: '小倉', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod23@gmail.com", tel: "07012345678" },
-                { name: '押樋', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod24@gmail.com", tel: "07012345678" },
-                { name: '岡村', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod25@gmail.com", tel: "07012345678" },
-                { name: '苔田', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod26@gmail.com", tel: "07012345678" },
-                { name: '下関', comment: 'がんばります', password: hashedPassword, imageFileName: 'tavatar.jpg', mail: "onopod27@gmail.com", tel: "07012345678" }
+                { name: 'みく', comment: 'がんばります', password: hashedPassword, imageFileName: "2.jpg", prefectureId: 27, mail: "onopod2@gmail.com", tel: "07012345678" },
+                { name: '水野', comment: 'がんばります', password: hashedPassword, imageFileName: '3.jpg', prefectureId: 26, mail: "onopod3@gmail.com", tel: "07012345678" },
+                { name: '二競', comment: 'がんばります', password: hashedPassword, imageFileName: '4.jpg', mail: "onopod4@gmail.com", tel: "07012345678" },
+                { name: '中川', comment: 'がんばります', password: hashedPassword, imageFileName: '5.jpg', mail: "onopod5@gmail.com", tel: "07012345678" },
+                { name: '二梁', comment: 'がんばります', password: hashedPassword, imageFileName: '6.jpg', mail: "onopod6@gmail.com", tel: "07012345678" },
+                { name: '村松', comment: 'がんばります', password: hashedPassword, imageFileName: '7.jpg', mail: "onopod7@gmail.com", tel: "07012345678" },
+                { name: '野田', comment: 'がんばります', password: hashedPassword, imageFileName: '8.jpg', mail: "onopod8@gmail.com", tel: "07012345678" },
+                { name: '西田', comment: 'がんばります', password: hashedPassword, imageFileName: '9.jpg', mail: "onopod9@gmail.com", tel: "07012345678" },
+                { name: '二針', comment: 'がんばります', password: hashedPassword, imageFileName: '10.jpg', mail: "onopod10@gmail.com", tel: "07012345678" },
+                { name: '河村', comment: 'がんばります', password: hashedPassword, imageFileName: '11.jpg', mail: "onopod11@gmail.com", tel: "07012345678" },
+                { name: '亨夏', comment: 'がんばります', password: hashedPassword, imageFileName: '12.jpg', mail: "onopod12@gmail.com", tel: "07012345678" },
+                { name: '倉増', comment: 'がんばります', password: hashedPassword, imageFileName: '13.jpg', mail: "onopod13@gmail.com", tel: "07012345678" },
+                { name: '奥村', comment: 'がんばります', password: hashedPassword, imageFileName: '14.jpg', mail: "onopod14@gmail.com", tel: "07012345678" },
+                { name: '大沢', comment: 'がんばります', password: hashedPassword, imageFileName: '15.jpg', mail: "onopod15@gmail.com", tel: "07012345678" },
+                { name: '中西', comment: 'がんばります', password: hashedPassword, imageFileName: '16.jpg', mail: "onopod18@gmail.com", tel: "07012345678" },
+                { name: '早川', comment: 'がんばります', password: hashedPassword, imageFileName: '17.jpg', mail: "onopod16@gmail.com", tel: "07012345678" },
+                { name: '大西', comment: 'がんばります', password: hashedPassword, imageFileName: '18.jpg', mail: "onopod17@gmail.com", tel: "07012345678" },
+                { name: '小酒', comment: 'がんばります', password: hashedPassword, imageFileName: '19.jpg', mail: "onopod19@gmail.com", tel: "07012345678" },
+                { name: '田中', comment: 'がんばります', password: hashedPassword, imageFileName: '20.jpg', mail: "onopod20@gmail.com", tel: "07012345678" },
+                { name: '安部', comment: 'がんばります', password: hashedPassword, imageFileName: '21.jpg', mail: "onopod21@gmail.com", tel: "07012345678" },
+                { name: '道渕', comment: 'がんばります', password: hashedPassword, imageFileName: '22.jpg', mail: "onopod22@gmail.com", tel: "07012345678" },
+                { name: '小倉', comment: 'がんばります', password: hashedPassword, imageFileName: '23.jpg', mail: "onopod23@gmail.com", tel: "07012345678" },
+                { name: '押樋', comment: 'がんばります', password: hashedPassword, imageFileName: '24.jpg', mail: "onopod24@gmail.com", tel: "07012345678" },
+                { name: '岡村', comment: 'がんばります', password: hashedPassword, imageFileName: '25.jpg', mail: "onopod25@gmail.com", tel: "07012345678" },
+                { name: '苔田', comment: 'がんばります', password: hashedPassword, imageFileName: '26.jpg', mail: "onopod26@gmail.com", tel: "07012345678" },
+                { name: '下関', comment: 'がんばります', password: hashedPassword, imageFileName: '27.jpg', mail: "onopod27@gmail.com", tel: "07012345678" }
             ]
         })
-        const filePath = "./public/avatar.jpg";
-        therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach(therapist => {
-            const distDir = `./public/therapistImg/${therapist.id}`
-            fs.mkdir(distDir, { recursive: true }, () => {
-                fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
+        fs.rm("./public/therapistImg", { recursive: true, force: true }, () => {
+            therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach((therapist, idx) => {
+                const filePath = `./public/female/${idx + 1}.jpg`;
+                const distDir = `./public/therapistImg/${therapist.id}`
+                fs.mkdir(distDir, { recursive: true }, () => {
+                    fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
+                })
             })
+
         })
 
         // therapistsOnMenus
@@ -227,20 +230,22 @@ async function main() {
                 data: [
                     {
                         name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678",
-                        password: hashedPassword, imageFileName: "avatar.jpg",
+                        password: hashedPassword, imageFileName: "1.jpg",
                         prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西",
                         genderId: 1
                     },
-                    { name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 27 },
-                    { name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "avatar2.jpg", prefectureId: 26 }
+                    { name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "2.jpg", prefectureId: 27 },
+                    { name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "3.jpg", prefectureId: 26 }
                 ]
             })
 
-            const filePath = "./public/avatar.jpg";
-            users.filter(user => user.imageFileName?.length > 0).forEach(user => {
-                const distDir = `./public/userImg/${user.id}`
-                fs.mkdir(distDir, { recursive: true }, () => {
-                    fs.copyFile(filePath, `${distDir}/${user.imageFileName}`, () => { })
+            fs.rm("./public/userImg", { recursive: true, force: true }, () => {
+                users.filter(user => user.imageFileName?.length > 0).forEach((user, idx) => {
+                    const filePath = `./public/male/${idx + 1}.jpg`;
+                    const distDir = `./public/userImg/${user.id}`
+                    fs.mkdir(distDir, { recursive: true }, () => {
+                        fs.copyFile(filePath, `${distDir}/${user.imageFileName}`, () => { })
+                    })
                 })
             })
 
