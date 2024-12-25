@@ -166,11 +166,6 @@ export async function getTherapists({ page = 1, take = 10, prefectureId, genderI
         const therapists = await prisma.therapist.findMany({
             select: {
                 therapistView: true,
-                _count: {
-                    select: {
-                        favorites: true,
-                    }
-                },
                 id: true,
                 name: true,
                 genderId: true,

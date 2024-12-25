@@ -1,7 +1,7 @@
 "use client"
 
-import { ExpandMoreIcon, FavoriteIcon } from "@/app/icons";
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Chip, Collapse, IconButton, Typography } from "@mui/material";
+import { AccessTimeIcon, ExpandMoreIcon, FavoriteIcon, QuestionAnswerIcon, StarIcon } from "@/app/icons";
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from "@mui/material";
 import { pink } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { format, subWeeks } from "date-fns";
@@ -45,7 +45,8 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
   };
 
   return (
-    <Card key={therapist.id}>
+    <Card key={therapist.id} variant="outlined"
+      sx={{ my: 2, width: "100%", overflow: 'auto' }}>
 
       <CardHeader
         avatar={<Avatar alt={therapist.name}
@@ -61,19 +62,20 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
             </IconButton>
             : ""
         }
-        title={therapist.name}
+        title={<Typography variant="h5">{therapist.name}</Typography>}
         subheader={
-          <>
-            <Chip label="もみほぐし" size="small" color="success" />
-            <Chip label="オイル" size="small" />
-          </>
+          <Stack>
+            <Stack direction="row" spacing={1}>
+              <Box><StarIcon />{therapist.therapistView.reviewRate} ({therapist.therapistView.reviewCount})</Box>
+              <Box><span sx={{ ml: 1 }} >{therapist.therapistView.prefectureAndCity}</span></Box>
+            </Stack>
+            <Stack direction="row" spacing={1}>
+              <Box><QuestionAnswerIcon />{therapist.therapistView.replyRate}%</Box>
+              <Box><AccessTimeIcon />{therapist.therapistView.replyTime}分</Box>
+              <Box>{therapist.gender?.name}</Box>
+            </Stack>
+          </Stack>
         }
-      />
-      <CardMedia
-        component="img"
-        height="194"
-        image="/paella.jpg"
-        alt="施術イメージ"
       />
       <CardContent>
         <Box>
