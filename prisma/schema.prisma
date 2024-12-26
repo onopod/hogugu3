@@ -28,8 +28,9 @@ model Gender {
 }
 
 model City {
-  id           String  @id
+  id           String     @id
   prefectureId Int
+  prefecture   Prefecture @relation(fields: [prefectureId], references: [id])
   country      String?
   countryKana  String?
   city         String?
@@ -46,6 +47,7 @@ model Prefecture {
   kana      String
   user      User[]
   therapist Therapist[]
+  City      City[]
 }
 
 model Region {
