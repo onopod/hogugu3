@@ -1,5 +1,5 @@
 "use client";
-import { getReservations, getStatuses, changeReservationStatusToCancel, payment } from "@/app/actions";
+import { getReservations, getStatuses, changeReservationStatusToCancel, checkoutStripe } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
 import { Button, Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
@@ -40,9 +40,10 @@ export default function ReservationPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
-    const payReservation = (reservationId) => {
-        payment(reservationId)
-        fetchData();
+    const payReservation = async (reservationId) => {
+
+        const stripeURL = await checkoutStripe(reservationId)
+        window.location = stripeURL
     }
     const cancelReservation = (reservationId) => {
         changeReservationStatusToCancel(reservationId)

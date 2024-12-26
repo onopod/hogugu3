@@ -5,8 +5,39 @@ import prisma from '@/lib/prisma';
 import { subWeeks } from "date-fns";
 import { promises as fs } from "fs";
 import { getServerSession } from "next-auth/next";
+import Stripe from 'stripe';
+
 import { join } from "path";
 const bcrypt = require('bcrypt');
+
+export async function checkSuccessStripe({ reservation_id, stripe_session_id }) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const stripeSession = await stripe.checkout.sessions.retrieve(stripe_session_id);
+    if (stripeSession?.payment_status == "paid") {
+        // 予約ステータスを決済後に変更
+        await changeReservationStatusToPaid(reservation_id)
+    }
+}
+
+export async function checkoutStripe(reservationId) {
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+    const stripeSession = await stripe.checkout.sessions.create({
+        line_items: [
+            {
+                price: 'price_1Qa7DSCjiodSo9Y9S72OE3X2',
+                quantity: 1,
+            },
+        ],
+        mode: 'payment',
+        success_url: `http://localhost:3000/checkout/success/${reservationId}/{CHECKOUT_SESSION_ID}`,
+        cancel_url: "http://localhost:3000/checkout/cancel",
+    });
+    if (stripeSession) {
+        return stripeSession.url
+    }
+    console.dir(reservationId)
+    console.dir(stripeSession)
+}
 
 
 export async function postTherapist(data) {
@@ -687,7 +718,7 @@ function is_paid() {
     return true;
 }
 
-export async function changeReservationStatusToPaid(id) {
+async function changeReservationStatusToPaid(id) {
     const session = await getServerSession(authOptions);
     if (!(session?.user?.role == "user")) return;
     const where = {
