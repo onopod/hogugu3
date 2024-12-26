@@ -1,13 +1,16 @@
 "use client"
 
-import { AccessTimeIcon, ExpandMoreIcon, FavoriteIcon, QuestionAnswerIcon, StarIcon } from "@/app/icons";
-import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from "@mui/material";
-import { pink } from '@mui/material/colors';
+import { AccessTimeIcon, ExpandMoreIcon, FavoriteIcon, MenuBookIcon, QuestionAnswerIcon, StarIcon } from "@/app/icons";
+import WorkIcon from '@mui/icons-material/Work';
+import { Avatar, Box, Badge, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from "@mui/material";
+import { pink, yellow } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
-import { format, subWeeks } from "date-fns";
+import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import MapIcon from '@mui/icons-material/Map';
+import CommentIcon from '@mui/icons-material/Comment';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -44,14 +47,24 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
     setExpanded(!expanded);
   };
 
+  const avatar = (
+    <Avatar alt={therapist.name}
+      src={therapist.therapistView.imageFilePath}
+      sx={{ width: 64, height: 64 }}>
+      {therapist.therapistView.name0}
+    </Avatar>
+  )
+  const badgedAvatar = therapist.therapistView.isNew ? (
+    <Badge badgeContent="new" color="secondary" sx={{ mr: 1 }}>
+      {avatar}
+    </Badge>
+  ) : avatar;
+
   return (
     <Card key={therapist.id} variant="outlined"
       sx={{ my: 2, width: "100%", overflow: 'auto' }}>
-
       <CardHeader
-        avatar={<Avatar alt={therapist.name}
-          src={therapist.imageFileName ? `/therapistImg/${therapist.id}/${therapist.imageFileName}` : ""}
-          sx={{ width: 64, height: 64 }}>{therapist.name[0].toUpperCase()}</Avatar>}
+        avatar={badgedAvatar}
         action={
           session?.user?.role == "user" ?
             <IconButton size="large" >
@@ -64,36 +77,63 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
         }
         title={<Typography variant="h5">{therapist.name}</Typography>}
         subheader={
-          <Stack>
+          <Stack spacing={0.5}>
             <Stack direction="row" spacing={1}>
-              <Box><StarIcon />{therapist.therapistView.reviewRate} ({therapist.therapistView.reviewCount})</Box>
-              <Box><span sx={{ ml: 1 }} >{therapist.therapistView.prefectureAndCity}</span></Box>
+              <Box sx={{ display: "flex", verticalAlign: "center" }}>
+                <StarIcon sx={{ color: yellow[700] }} />
+                <Typography>
+                  {therapist.therapistView.reviewRate} ({therapist.therapistView.reviewCount})
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", verticalAlign: "center" }}>
+                <MapIcon />
+                <Typography>
+                  {therapist.therapistView.prefectureAndCity}
+                </Typography>
+              </Box>
             </Stack>
             <Stack direction="row" spacing={1}>
-              <Box><QuestionAnswerIcon />{therapist.therapistView.replyRate}%</Box>
-              <Box><AccessTimeIcon />{therapist.therapistView.replyTime}分</Box>
-              <Box>{therapist.gender?.name}</Box>
+              <Box sx={{ display: "flex", verticalAlign: "center" }}>
+                <Typography>{therapist.gender?.name}</Typography>
+              </Box>
+              <QuestionAnswerIcon />
+              <Box sx={{ display: "flex", verticalAlign: "center" }}>
+                <Typography>{therapist.therapistView.replyRateFixed}%</Typography>
+              </Box>
+              <Box sx={{ display: "flex", verticalAlign: "center" }}>
+                <Typography>{therapist.therapistView.replyTime}分</Typography>
+              </Box>
+              <WorkIcon />
+              <Box sx={{ display: "flex", verticalAlign: "center" }}>
+                <Typography>{therapist.workYear || "- "}年</Typography>
+              </Box>
             </Stack>
           </Stack>
         }
       />
       <CardContent>
-        <Box>
-          {new Date(therapist.created) > subWeeks(new Date(), 4) ? "NEW" : ""}
-          <span>返答率 {therapist.reservations.length == 0 ?
-            "-" :
-            `${(therapist.reservations.filter(reservation => reservation.replyDt != null).length / therapist.reservations.length * 100).toFixed(0)}%`
-          }</span><span>返答時間 {therapist.reservations.length == 0 ?
-            "-" :
-            `${(therapist.reservations.filter(reservation => reservation.replyDt != null).map(reservation => new Date(reservation.replyDt) - new Date(reservation.created)).reduce((acc, curr, _, arr) => acc + curr / arr.length, 0) / (1000 * 60))}分`
-          }</span>
-          <span>出発地 {therapist.prefecture ? therapist.prefecture.name : "-"}／{therapist.city || "-"}</span>
-          <span>施術歴 {therapist.workYear ? therapist.workYear : "-"}年</span>
-          <Typography>受付時間：
-            {therapist?.schedules?.length > 0 ? therapist.schedules.map(s => `${s.startDt > new Date() ? format(s.startDt, "yyyy/MM/dd kk:mm") : "現在受付中"} - ${format(s.endDt, "kk:mm")}`).join(" ") : ""}
-          </Typography>
-        </Box>
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>{therapist.comment}</Typography>
+        <Stack spacing={1}>
+          <Stack direction="row" spacing={1}>
+            <AccessTimeIcon />
+            <Box sx={{ display: "flex", verticalAlign: "center" }}>
+              <Typography>
+                {therapist?.schedules?.length > 0 ? therapist.schedules.map(s => `${s.startDt > new Date() ? format(s.startDt, "yyyy/MM/dd kk:mm") : "本日受付中"} - ${format(s.endDt, "kk:mm")}`).join(" ") : ""}
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <CommentIcon />
+            <Box sx={{ display: "flex", verticalAlign: "center" }}>
+              <Typography>{therapist.comment}</Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1}>
+            <MenuBookIcon />
+            <Box sx={{ display: "flex", verticalAlign: "center" }}>
+              <Typography>メニュー一覧</Typography>
+            </Box>
+          </Stack>
+        </Stack>
       </CardContent>
       <CardActions disableSpacing>
         <Button onClick={() => router.push(`/therapist/${therapist.id}`)}> 詳細 </Button>

@@ -183,6 +183,7 @@ view TherapistView {
   reservationCount  Int?
   replyCount        Int?
   replyRate         Float?
+  replyRateFixed    Int?
   replyTime         Int?
   reviewRate        Float?
   reviewCount       Int?
