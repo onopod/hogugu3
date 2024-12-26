@@ -149,7 +149,7 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWo
                 { comment: { contains: freeWord } }
             ]
         }),
-        ...((menuId || prices) && {
+        ...((menuId || priceRange) && {
             menus: {
                 some: {
                     ...(menuId ? { menuId: menuId } : {}),
