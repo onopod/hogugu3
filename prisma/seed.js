@@ -1,6 +1,7 @@
 const { PrismaClient } = require('@prisma/client')
 
 const bcrypt = require("bcrypt");
+const { error } = require('console');
 const { addHours, addDays } = require('date-fns');
 const fs = require("fs");
 
@@ -24,6 +25,17 @@ async function main() {
     await prisma.status.deleteMany({})
     await prisma.messageStatus.deleteMany({})
     await prisma.gender.deleteMany({})
+
+    // create TherapistView
+    fs.readFile(process.cwd() + "/prisma/sql/createView.pgsql", "utf8", (error, sqlText) => {
+        sqlText.split(";")
+            .map(stmt => stmt.trim())
+            .filter(stmt => stmt.length > 0)
+            .forEach(stmt => {
+                prisma.$executeRawUnsafe(stmt);
+            })
+    });
+
 
     // gender 
     await prisma.gender.createMany({
