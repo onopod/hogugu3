@@ -3,7 +3,7 @@ CREATE VIEW public."TherapistView" AS
 
 select t.id, 
     case
-        when t."imageFileName" != '' then concat('/therapistImg/', t.id::text, t."imageFileName")
+        when t."imageFileName" != '' then concat('/therapistImg/', t.id::text, '/', t."imageFileName")
         else ''
     end as "imageFilePath",
     case when t.name !='' then substring(t.name, 1, 1) else '' end as name0,
@@ -11,6 +11,7 @@ select t.id,
     r."reservationCount",
     r."replyCount",
     r."replyRate",
+    case when r."replyRate" is not null then cast(r."replyRate" * 100 as int) else null end as "replyRateFixed",
     r."replyTime",
     r."reviewRate",
     r."reviewCount",
