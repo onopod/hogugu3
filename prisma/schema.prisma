@@ -27,6 +27,17 @@ model Gender {
   therapists Therapist[]
 }
 
+model City {
+  id           String  @id
+  prefectureId Int
+  country      String?
+  countryKana  String?
+  city         String?
+  cityKana     String?
+  ward         String?
+  wardKana     String?
+}
+
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -188,6 +199,6 @@ view TherapistView {
   reviewRate        Float?
   reviewCount       Int?
   isNew             Boolean
-  minMenuPrice Int?
+  minMenuPrice      Int?
   therapist         Therapist? @relation(fields: [id], references: [id])
 }

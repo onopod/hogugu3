@@ -1,10 +1,9 @@
 const { PrismaClient } = require('@prisma/client')
 
 const bcrypt = require("bcrypt");
-const { error } = require('console');
 const { addHours, addDays } = require('date-fns');
 const fs = require("fs");
-
+const Papa = require("papaparse");
 
 const prisma = new PrismaClient();
 
@@ -20,11 +19,44 @@ async function main() {
     await prisma.therapist.deleteMany({})
     await prisma.menu.deleteMany({})
     await prisma.user.deleteMany({})
+    await prisma.city.deleteMany({})
     await prisma.prefecture.deleteMany({})
     await prisma.region.deleteMany({})
     await prisma.status.deleteMany({})
     await prisma.messageStatus.deleteMany({})
     await prisma.gender.deleteMany({})
+
+    // import city csv
+    fs.readFile(process.cwd() + "/prisma/sql/mt_city_all.csv", "utf8", (err, data) => {
+        if (err) {
+            console.error("CSVファイルの読み込みエラー:", err);
+            return;
+        }
+        Papa.parse(data, {
+            header: true,
+            skipEmptyLines: true,
+            complete: async (result) => {
+                const cities = result.data.map(c => {
+                    return {
+                        id: c.lg_code,
+                        prefectureId: parseInt(c.lg_code.substring(0, 2)),
+                        country: c.county,
+                        countryKana: c.county_kana,
+                        city: c.city,
+                        cityKana: c.city_kana,
+                        ward: c.ward,
+                        wardKana: c.ward_kana
+                    }
+                })
+                await prisma.city.createMany({
+                    data: cities
+                })
+            },
+            error: (error) => {
+                console.error("CSV読み込みエラー:", error);
+            },
+        })
+    })
 
     // create TherapistView
     fs.readFile(process.cwd() + "/prisma/sql/createView.pgsql", "utf8", (error, sqlText) => {
