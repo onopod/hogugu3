@@ -4,7 +4,7 @@ let prisma;
 
 if (!global.prisma) {
     prisma = new PrismaClient({
-        log: ['query'],
+        // log: ['query'],
     });
     if (process.env.NODE_ENV !== 'production') {
         global.prisma = prisma;
