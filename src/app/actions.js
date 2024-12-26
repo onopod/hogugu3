@@ -138,8 +138,8 @@ export async function getRegions() {
     });
     return regions;
 }
-const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWord }) => {
-    console.log("dt is", treatmentDt);
+const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) => {
+    const prices = priceRange ? priceRange.split("-").map(s => parseInt(s)) : []
     const where = {
         ...(prefectureId && { prefectureId }),
         ...(genderId && { genderId }),
@@ -149,10 +149,12 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWo
                 { comment: { contains: freeWord } }
             ]
         }),
-        ...(menuId && {
+        ...((menuId || prices) && {
             menus: {
                 some: {
-                    menuId: menuId
+                    ...(menuId ? { menuId: menuId } : {}),
+                    ...(prices?.[0] ? { price: { gte: prices[0] } } : {}),
+                    ...(prices?.[1] ? { price: { lte: prices[1] } } : {}),
                 }
             },
         }),
@@ -172,9 +174,9 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWo
     return where;
 }
 
-export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectureId, genderId, menuId, freeWord }) {
+export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
     const session = await getServerSession(authOptions);
-    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord })
+    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
     try {
         const therapists = await prisma.therapist.findMany({
             select: {
@@ -243,8 +245,8 @@ export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectu
     }
 }
 
-export async function getTherapistsCount({ treatmentDt, prefectureId, genderId, menuId, freeWord }) {
-    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord })
+export async function getTherapistsCount({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
+    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
     const itemCount = await prisma.therapist.count({ where });
     return itemCount;
 }

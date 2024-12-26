@@ -24,6 +24,7 @@ export default function Home() {
       genderId: "",
       menuId: "",
       freeWord: "",
+      priceRange: ""
     },
   });
 
@@ -43,7 +44,8 @@ export default function Home() {
       ...(values.prefectureId ? { prefectureId: Number(values.prefectureId) } : {}),
       ...(values.genderId ? { genderId: Number(values.genderId) } : {}),
       ...(values.menuId ? { menuId: Number(values.menuId) } : {}),
-      ...(values.freeWord ? { freeWord: values.freeWord } : {})
+      ...(values.freeWord ? { freeWord: values.freeWord } : {}),
+      ...(values.priceRange ? { priceRange: values.priceRange } : {}),
     }
     const currentItemCount = await getTherapistsCount(where);
     const currentTherapists = await getTherapists(where)
