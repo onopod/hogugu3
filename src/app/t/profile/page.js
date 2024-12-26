@@ -1,6 +1,6 @@
 "use client"
 
-import { getTherapistProfile, putTherapist, getGenders, getPrefectures } from "@/app/actions";
+import { getGenders, getPrefectures, getTherapistProfile, putTherapist } from "@/app/actions";
 import { AppBar, BottomBar, Profile } from "@/app/components/t";
 import { Container } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -19,7 +19,7 @@ export default function ProfilePage() {
             imageFileName: "",
             zipcode: "",
             prefectureId: "",
-            city: "",
+            cityId: "",
             workYear: "",
             comment: ""
         }
@@ -35,7 +35,7 @@ export default function ProfilePage() {
             formData.append("imageFileName", data.imageFileName[0]);
             formData.append("prefectureId", data.prefectureId)
             formData.append("zipcode", data.zipcode)
-            formData.append("city", data.city)
+            formData.append("cityId", data.cityId)
             formData.append("workYear", data.workYear)
             formData.append("comment", data.comment)
             await putTherapist(formData)
@@ -53,7 +53,7 @@ export default function ProfilePage() {
                 .then((data) => {
                     if (data.results.length == 1) {
                         setValue("prefectureId", parseInt(data.results[0].prefcode))
-                        setValue("city", data.results[0].address2)
+                        //setValue("city", data.results[0].address2)
                     }
                 })
         }
@@ -76,7 +76,7 @@ export default function ProfilePage() {
                     imageFileName: therapist.imageFileName || "",
                     zipcode: therapist.zipcode || "",
                     prefectureId: therapist.prefectureId || "",
-                    city: therapist.city || "",
+                    cityId: therapist.cityId || "",
                     workYear: therapist.workYear || "",
                     comment: therapist.comment || ""
                 });

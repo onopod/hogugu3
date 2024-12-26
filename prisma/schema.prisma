@@ -28,15 +28,16 @@ model Gender {
 }
 
 model City {
-  id           String     @id
+  id           String      @id
   prefectureId Int
-  prefecture   Prefecture @relation(fields: [prefectureId], references: [id])
+  prefecture   Prefecture  @relation(fields: [prefectureId], references: [id])
   country      String?
   countryKana  String?
   city         String?
   cityKana     String?
   ward         String?
   wardKana     String?
+  Therapist    Therapist[]
 }
 
 model Prefecture {
@@ -89,7 +90,8 @@ model Therapist {
   imageFileName String?
   prefectureId  Int?
   prefecture    Prefecture?         @relation(fields: [prefectureId], references: [id])
-  city          String?
+  cityId        String?
+  city          City?               @relation(fields: [cityId], references: [id])
   workYear      Int?
   created       DateTime            @default(now())
   menus         TherapistsOnMenus[]

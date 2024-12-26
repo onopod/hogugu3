@@ -7,7 +7,7 @@ select t.id,
         else ''
     end as "imageFilePath",
     case when t.name !='' then substring(t.name, 1, 1) else '' end as name0,
-    concat(coalesce(p.name, '-'), ' / ', coalesce(t.city, '-')) as "prefectureAndCity",
+    concat(coalesce(p.name, '-'), ' / ', coalesce(concat(c.country, c.city, c.ward), '-')) as "prefectureAndCity",
     r."reservationCount",
     r."replyCount",
     r."replyRate",
@@ -38,6 +38,8 @@ left join (
     select "therapistId", min(price) as "minMenuPrice" from public."TherapistsOnMenus"
     group by "therapistId"
  ) as m
-on t.id = m."therapistId";
+on t.id = m."therapistId"
+left join public."City" as c
+on t."cityId" = c.id;
 
 select * from public."TherapistView";
