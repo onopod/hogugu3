@@ -1,4 +1,4 @@
-drop view public."TherapistView";
+drop view if exists public."TherapistView";
 CREATE VIEW public."TherapistView" AS
 
 select t.id, 
