@@ -24,7 +24,8 @@ export default function Home() {
       genderId: "",
       menuId: "",
       freeWord: "",
-      priceRange: ""
+      priceRange: "",
+      sort: "createdDesc"
     },
   });
 
@@ -46,6 +47,7 @@ export default function Home() {
       ...(values.menuId ? { menuId: Number(values.menuId) } : {}),
       ...(values.freeWord ? { freeWord: values.freeWord } : {}),
       ...(values.priceRange ? { priceRange: values.priceRange } : {}),
+      ...(values.sort ? { sort: values.sort } : {})
     }
     const currentItemCount = await getTherapistsCount(where);
     const currentTherapists = await getTherapists(where)

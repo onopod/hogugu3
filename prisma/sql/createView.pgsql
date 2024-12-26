@@ -14,13 +14,14 @@ select t.id,
     r."replyTime",
     r."reviewRate",
     r."reviewCount",
-    case when t.created > now() - interval '30 days' then True else False end as "isNew"
+    case when t.created > now() - interval '30 days' then True else False end as "isNew",
+    m."minMenuPrice"
 from public."Therapist" as t
 left join (
     select rs."therapistId", 
         count(rs.id) as "reservationCount", 
         count(rs."replyDt") as "replyCount",
-        cast(case when count(rs.id) > 0 then count(rs."replyDt") / count(rs.id)else 0.0 end as real) as "replyRate",
+        cast(case when count(rs.id) > 0 then count(rs."replyDt") / cast(count(rs.id) as real) else 0.0 end as real) as "replyRate",
         cast(avg(case when rs."replyDt" is not null then EXTRACT(MINUTE FROM (rs."replyDt" - rs.created)) else null end) as int) as "replyTime",
         cast(avg(rv.rate) as real) as "reviewRate",
         count(rv.id) as "reviewCount"
@@ -32,3 +33,10 @@ left join (
 on t.id = r."therapistId"
 left join public."Prefecture" as p
 on t."prefectureId" = p."id"
+left join (
+    select "therapistId", min(price) as "minMenuPrice" from public."TherapistsOnMenus"
+    group by "therapistId"
+ ) as m
+on t.id = m."therapistId";
+
+select * from public."TherapistView";

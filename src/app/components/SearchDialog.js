@@ -6,13 +6,21 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
     const selectedGender = watch("genderId");
     const selectedMenuId = watch("menuId");
     const selectedPriceRange = watch("priceRange")
+    const selectedSort = watch("sort")
 
     const priceRanges = ["-5000", "5000-6000", "6000-7000", "7000-8000", "8000-10000", "10000-13000", "13000-16000", "16000-"]
+    const sorts = [
+        { id: "createdDesc", name: "登録の新しい順" },
+        { id: "priceAsc", name: "価格の安い順" },
+        { id: "replyRateDesc", name: "返答率の高い順" },
+        { id: "reviewRateDesc", name: "レビューの高い順" },
+        { id: "reviewCountDesc", name: "口コミの多い順" }
+    ]
     return (
         <Box sx={{ my: 1, width: "100%" }}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Grid2 container spacing={1}>
-                    <Grid2 size={4} sx={{
+                    <Grid2 size={6} sx={{
 
                     }}>
                         <FormControl variant="standard" fullWidth>
@@ -29,7 +37,7 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                             />
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={8} sx={{ pt: 2, pl: 1 }}>
+                    <Grid2 size={6} sx={{ pt: 2, pl: 1 }}>
                         <Chip variant="outlined" label="1時間後" clickable onClick={() => {
                             setValue("treatmentDt", format(addHours(new Date(), 1), "yyyy-MM-dd kk:mm"))
                             onSubmit()
@@ -39,7 +47,7 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                             onSubmit()
                         }} />
                     </Grid2>
-                    <Grid2 size={2}>
+                    <Grid2 size={3}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="prefectureId">地域</InputLabel>
                             <Select labelId="prefectureId"
@@ -87,7 +95,7 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={4}>
+                    <Grid2 size={3}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="priceRange">価格</InputLabel>
                             <Select labelId="priceRange"
@@ -125,10 +133,26 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                                     genderId: "",
                                     menuId: "",
                                     freeWord: "",
-                                    priceRange: ""
+                                    priceRange: "",
+                                    sort: "createdDesc"
                                 })
                                 onSubmit()
                             }}>リセット</Button>
+                        </FormControl>
+                    </Grid2>
+                    <Grid2 size={4}>
+                        <FormControl variant="standard" fullWidth>
+                            <InputLabel id="sort">並び順</InputLabel>
+                            <Select labelId="sort"
+                                id="sort"
+                                value={selectedSort}
+                                onChange={(e) => {
+                                    setValue("sort", e.target.value)
+                                    onSubmit()
+                                }}
+                                displayEmpty>
+                                {sorts.map(sort => <MenuItem key={sort.id} value={sort.id}>{sort.name}</MenuItem>)}
+                            </Select>
                         </FormControl>
                     </Grid2>
                 </Grid2>

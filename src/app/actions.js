@@ -174,7 +174,7 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWo
     return where;
 }
 
-export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
+export async function getTherapists({ page = 1, take = 10, sort = "createdDesc", treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
     const session = await getServerSession(authOptions);
     const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
     try {
@@ -234,6 +234,14 @@ export async function getTherapists({ page = 1, take = 10, treatmentDt, prefectu
                     ]
                 },
                 ...((session?.user?.role == "user") ? { favorites: { where: { userId: session.user.id }, } } : {})
+            },
+            orderBy: {
+                ...(sort == "createdDesc" ? { created: "desc" }
+                    : sort == "priceAsc" ? { therapistView: { minMenuPrice: "asc" } }
+                        : sort == "replyRateDesc" ? { therapistView: { replyRate: "desc" } }
+                            : sort == "reviewRateDesc" ? { therapistView: { reviewRate: "desc" } }
+                                : sort == "reviewCountDesc" ? { therapistView: { reviewCount: "desc" } }
+                                    : {})
             },
             where,
             skip: (page - 1) * take,
