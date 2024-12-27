@@ -220,6 +220,7 @@ export async function getTherapists({ page = 1, take = 10, sort = "createdDesc",
                 imageFileName: true,
                 prefectureId: true,
                 prefecture: true,
+                cityId: true,
                 city: true,
                 workYear: true,
                 created: true,
@@ -369,6 +370,7 @@ export async function getTherapistProfile() {
                 imageFileName: true,
                 prefectureId: true,
                 prefecture: true,
+                cityId: true,
                 city: true,
                 workYear: true
             }
@@ -389,7 +391,7 @@ export async function putTherapist(formData) {
         const tel = formData.get("tel");
         const imageFile = formData.get("imageFileName");
         const prefectureId = parseInt(formData.get("prefectureId"))
-        const city = formData.get("city")
+        const cityId = formData.get("cityId")
         const workYear = parseInt(formData.get("workYear"))
         const comment = formData.get("comment")
 
@@ -416,7 +418,7 @@ export async function putTherapist(formData) {
                 tel,
                 imageFileName: imageFile.name,
                 prefectureId,
-                city,
+                cityId,
                 workYear,
                 comment
             }
@@ -448,6 +450,7 @@ export async function getTherapist(id) {
                     }
                 }
             },
+            therapistView: true,
         }
     })
     if (therapist) {
@@ -455,7 +458,7 @@ export async function getTherapist(id) {
 
         therapist.name0 = therapist?.name && therapist.name.length > 0 ? therapist.name[0].toUpperCase() : ""
 
-        therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city || "-"}`;
+        therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city?.city || "-"}`;
 
         therapist.rateAverage = therapist?.reservations?.filter(reservation => reservation?.review)
             .map(reservation => reservation.review.rate)
