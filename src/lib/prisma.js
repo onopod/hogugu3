@@ -4,11 +4,11 @@ let prisma;
 
 if (!global.prisma) {
     prisma = new PrismaClient({
-        omit: {
-            user: {
-                password: true
-            }
-        },
+        // omit: {
+        //     user: {
+        //         password: true
+        //     }
+        // },
         // log: ['query'],
     });
     if (process.env.NODE_ENV !== 'production') {
