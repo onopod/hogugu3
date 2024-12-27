@@ -1,6 +1,6 @@
 "use client"
 
-import { getGenders, getMenus, getPrefectures, getCities, getRegions, getTherapists, getTherapistsCount, toggleFavorite, getUser } from "@/app/actions";
+import { getGenders, getMenus, getPrefectures, getCities, getRegions, getTherapists, getTherapistsCount, toggleFavorite, getUserPrefectureAndCity } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -39,7 +39,7 @@ export default function Home() {
     setRegions(await getRegions())
   }
   const fetchUser = async () => {
-    setUser(await getUser());
+    setUser(await getUserPrefectureAndCity());
   }
   const fetchData = async () => {
     const pageSize = 10;

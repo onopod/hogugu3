@@ -123,12 +123,33 @@ export async function putUser(formData) {
 
 export async function getUser() {
     const session = await getServerSession(authOptions);
-    console.log("test")
     if (!(session?.user?.role == "user")) {
         return;
     }
     try {
         const user = await prisma.user.findFirst({
+            where: {
+                id: session.user.id
+            }
+        });
+        return user;
+    } catch (err) {
+        console.dir(err);
+    }
+
+}
+
+export async function getUserPrefectureAndCity() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) {
+        return;
+    }
+    try {
+        const user = await prisma.user.findFirst({
+            select: {
+                id: true,
+                prefectureId: true
+            },
             where: {
                 id: session.user.id
             }
