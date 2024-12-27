@@ -1,7 +1,21 @@
 drop view if exists public."TherapistView";
 CREATE VIEW public."TherapistView" AS
 
+with t as (
+    select * , 
+    EXTRACT(EPOCH FROM (CURRENT_TIMESTAMP AT TIME ZONE 'UTC' - "lastLoginDt")) AS "lastLoginSecond"
+    from public."Therapist"
+)
 select t.id, 
+    t."lastLoginSecond",
+    case when "lastLoginSecond" / (60 * 60 * 24 * 365) >= 1 then concat(cast(floor("lastLoginSecond" / (60 * 60 * 24 * 365)) as varchar), '年前')
+        when "lastLoginSecond" / (60 * 60 * 24 * 31) >= 1 then concat(cast(floor("lastLoginSecond" / (60 * 60 * 24 * 31)) as varchar), 'ヶ月前')
+        when "lastLoginSecond" / (60 * 60 * 24 * 7) >= 1 then concat(cast(floor("lastLoginSecond" / (60 * 60 * 24 * 7)) as varchar), '週間前')
+        when "lastLoginSecond" / (60 * 60 * 24) >= 1 then concat(cast(floor("lastLoginSecond" / (60 * 60 * 24 )) as varchar), '日前')
+        when "lastLoginSecond" / (60 * 60) >= 1 then concat(cast(floor("lastLoginSecond" / (60 * 60 )) as varchar), '時間前')
+        when "lastLoginSecond" / 60 >= 1 then concat(cast(floor("lastLoginSecond" / 60) as varchar), '分前')
+        else '数秒前'
+    end as "lastLogin",
     case
         when t."imageFileName" != '' then concat('/therapistImg/', t.id::text, '/', t."imageFileName")
         else ''
@@ -17,7 +31,7 @@ select t.id,
     r."reviewCount",
     case when t.created > now() - interval '30 days' then True else False end as "isNew",
     m."minMenuPrice"
-from public."Therapist" as t
+from t
 left join (
     select rs."therapistId", 
         count(rs.id) as "reservationCount", 

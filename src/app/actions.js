@@ -319,7 +319,8 @@ export async function getTherapists({ page = 1, take = 10, sort = "createdDesc",
                         : sort == "replyRateDesc" ? { therapistView: { replyRate: "desc" } }
                             : sort == "reviewRateDesc" ? { therapistView: { reviewRate: "desc" } }
                                 : sort == "reviewCountDesc" ? { therapistView: { reviewCount: "desc" } }
-                                    : {})
+                                    : sort == "lastLoginSecondAsc" ? { therapistView: { lastLoginSecond: "asc" } }
+                                        : {})
             },
             where,
             skip: (page - 1) * take,
@@ -399,6 +400,25 @@ export async function getSenderUsers() {
         console.dir(err);
     }
 }
+
+export async function updateTherapistLastLoginDt() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const dt = new Date()
+        const therapist = await prisma.therapist.update({
+            where: {
+                id: session.user.id
+            },
+            data: {
+                lastLoginDt: dt
+            }
+        })
+    } catch (err) {
+        console.dir(err)
+    }
+}
+
 export async function getTherapistProfile() {
     const session = await getServerSession(authOptions);
     if (!(session?.user?.role == "therapist")) return;

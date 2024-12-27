@@ -14,9 +14,6 @@ export default function SearchDialog({ fetchCities, user, prefectures, cities, g
             fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
                 .then(res => res.json())
                 .then(data => {
-                    console.log("data is")
-                    console.dir(data)
-                    console.log("result is")
                     getCityFromReverseGeocoding(data).then(res => {
                         if (res?.prefectureId) {
                             setValue("cityId", "")
@@ -35,6 +32,7 @@ export default function SearchDialog({ fetchCities, user, prefectures, cities, g
 
     const priceRanges = ["-5000", "5000-6000", "6000-7000", "7000-8000", "8000-10000", "10000-13000", "13000-16000", "16000-"]
     const sorts = [
+        { id: "lastLoginSecondAsc", name: "最終ログイン時間順" },
         { id: "createdDesc", name: "登録の新しい順" },
         { id: "priceAsc", name: "価格の安い順" },
         { id: "replyRateDesc", name: "返答率の高い順" },
@@ -194,7 +192,7 @@ export default function SearchDialog({ fetchCities, user, prefectures, cities, g
                                     menuId: "",
                                     freeWord: "",
                                     priceRange: "",
-                                    sort: "createdDesc"
+                                    sort: "lastLoginSecondAsc"
                                 })
                                 onSubmit()
                             }}>リセット</Button>

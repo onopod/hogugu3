@@ -93,6 +93,7 @@ model Therapist {
   cityId        String?
   city          City?               @relation(fields: [cityId], references: [id])
   workYear      Int?
+  lastLoginDt   DateTime            @default(now())
   created       DateTime            @default(now())
   menus         TherapistsOnMenus[]
   reservations  Reservation[]
@@ -192,6 +193,8 @@ model Review {
 
 view TherapistView {
   id                Int        @unique
+  lastLoginSecond   Float
+  lastLogin         String
   imageFilePath     String?
   name0             String?
   prefectureAndCity String
