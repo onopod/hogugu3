@@ -703,16 +703,64 @@ export async function getReservations() {
                     select: {
                         id: true,
                         name: true,
-                        imageFileName: true
+                        imageFileName: true,
+                        therapistView: true
                     }
                 },
-                status: true
+                status: true,
+                review: true
             },
             orderBy: {
                 created: "desc"
             }
         });
         return reservations;
+    } catch (err) {
+        console.dir(err);
+    }
+}
+export async function getReservation(id) {
+    const session = await getServerSession(authOptions);
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
+
+    try {
+        const reservation = await prisma.reservation.findFirst({
+            where: {
+                ...(session.user.role == "user" ? { userId: session.user.id } : { therapistId: session.user.id }),
+                id
+            },
+            select: {
+                id: true,
+                userId: true,
+                therapistId: true,
+                therapistMenuId: true,
+                startDt: true,
+                created: true,
+                statusId: true,
+                therapistMenu: {
+                    select: {
+                        menu: true
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                therapist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                status: true,
+                review: true
+            }
+        });
+        return reservation;
     } catch (err) {
         console.dir(err);
     }
@@ -866,6 +914,45 @@ export async function getHistories() {
     }
 }
 
+
+export async function postReview(data) {
+    console.log("data is")
+    console.dir(data)
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) return;
+
+    try {
+        const reservation = await prisma.reservation.findFirst({
+            where: {
+                id: data.reservationId,
+                userId: session.user.id
+            }
+        })
+        if (!reservation) return;
+
+        if (data.reviewId) {
+            await prisma.review.update({
+                where: {
+                    id: data.reviewId
+                },
+                data: {
+                    rate: data.rate,
+                    comment: data.comment
+                }
+            })
+        } else {
+            await prisma.review.create({
+                data: {
+                    reservationId: data.reservationId,
+                    rate: data.rate,
+                    comment: data.comment
+                }
+            })
+        }
+    } catch (err) {
+        console.dir(err);
+    }
+}
 export async function postReservation(data) {
     const session = await getServerSession(authOptions);
     if (!(session?.user?.role == "user")) return;
