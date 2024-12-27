@@ -1,16 +1,16 @@
 "use client"
 
 import { AccessTimeIcon, ExpandMoreIcon, FavoriteIcon, MenuBookIcon, QuestionAnswerIcon, StarIcon } from "@/app/icons";
+import CommentIcon from '@mui/icons-material/Comment';
+import MapIcon from '@mui/icons-material/Map';
 import WorkIcon from '@mui/icons-material/Work';
-import { Avatar, Box, Badge, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Button, Card, CardActions, CardContent, CardHeader, Collapse, IconButton, Stack, Typography } from "@mui/material";
 import { pink, yellow } from '@mui/material/colors';
 import { styled } from '@mui/material/styles';
 import { format } from "date-fns";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import MapIcon from '@mui/icons-material/Map';
-import CommentIcon from '@mui/icons-material/Comment';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -115,6 +115,13 @@ export default function TherapistCard({ therapist, handleFavoriteClick }) {
         <Stack spacing={1}>
           <Stack direction="row" spacing={1}>
             <AccessTimeIcon />
+            <Box sx={{ display: "flex", verticalAlign: "center" }}>
+              <Typography>
+                {therapist.therapistView.lastLogin}
+              </Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={1}>
             <Box sx={{ display: "flex", verticalAlign: "center" }}>
               <Typography>
                 {therapist?.schedules?.length > 0 ? therapist.schedules.map(s => `${s.startDt > new Date() ? format(s.startDt, "yyyy/MM/dd kk:mm") : "本日受付中"} - ${format(s.endDt, "kk:mm")}`).join(" ") : ""}

@@ -28,7 +28,7 @@ export default function Home() {
       menuId: "",
       freeWord: "",
       priceRange: "",
-      sort: "createdDesc"
+      sort: "lastLoginSecondAsc"
     },
   });
   const selectedPrefectureId = watch("prefectureId")
