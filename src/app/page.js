@@ -1,6 +1,6 @@
 "use client"
 
-import { getGenders, getMenus, getPrefectures, getRegions, getTherapists, getTherapistsCount, toggleFavorite } from "@/app/actions";
+import { getGenders, getMenus, getPrefectures, getCities, getRegions, getTherapists, getTherapistsCount, toggleFavorite, getUserPrefectureAndCity } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -13,14 +13,17 @@ export default function Home() {
   const [therapists, setTherapists] = useState([]);
   const [count, setCount] = useState(0);
   const [prefectures, setPrefectures] = useState([])
+  const [cities, setCities] = useState([])
   const [genders, setGenders] = useState([])
   const [menus, setMenus] = useState([])
   const [regions, setRegions] = useState([])
+  const [user, setUser] = useState({});
 
   const { register, handleSubmit, setValue, reset, watch, getValues } = useForm({
     defaultValues: {
       treatmentDt: "",
       prefectureId: "",
+      cityId: "",
       genderId: "",
       menuId: "",
       freeWord: "",
@@ -28,14 +31,16 @@ export default function Home() {
       sort: "createdDesc"
     },
   });
-
+  const selectedPrefectureId = watch("prefectureId")
   const fetchMasterData = async () => {
     setPrefectures(await getPrefectures())
     setGenders(await getGenders())
     setMenus(await getMenus())
     setRegions(await getRegions())
   }
-
+  const fetchUser = async () => {
+    setUser(await getUserPrefectureAndCity());
+  }
   const fetchData = async () => {
     const pageSize = 10;
     const values = getValues();
@@ -43,6 +48,7 @@ export default function Home() {
       page,
       ...(values.treatmentDt ? { treatmentDt: values.treatmentDt } : {}),
       ...(values.prefectureId ? { prefectureId: Number(values.prefectureId) } : {}),
+      ...(values.cityId ? { cityId: values.cityId } : {}),
       ...(values.genderId ? { genderId: Number(values.genderId) } : {}),
       ...(values.menuId ? { menuId: Number(values.menuId) } : {}),
       ...(values.freeWord ? { freeWord: values.freeWord } : {}),
@@ -59,10 +65,18 @@ export default function Home() {
   }
 
   useEffect(() => {
+    fetchUser();
     fetchMasterData();
     fetchData()
     // eslint-disable-next-line
   }, [])
+
+  useEffect(() => {
+    const fetchCities = async () => {
+      setCities(selectedPrefectureId ? await getCities(Number(selectedPrefectureId)) : [])
+    }
+    fetchCities();
+  }, [selectedPrefectureId])
 
   const onPageChange = (_, page) => {
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -91,7 +105,9 @@ export default function Home() {
       <AppBar />
       <Container maxWidth="sm">
         <SearchDialog
+          user={user}
           prefectures={prefectures}
+          cities={cities}
           genders={genders}
           menus={menus}
           handleSubmit={handleSubmit}

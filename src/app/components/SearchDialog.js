@@ -1,8 +1,9 @@
 import { Box, Button, Chip, FormControl, Grid2, Input, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { addDays, addHours, format } from "date-fns";
 
-export default function SearchDialog({ prefectures, genders, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
-    const selectedPrefecture = watch("prefectureId");
+export default function SearchDialog({ user, prefectures, cities, genders, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
+    const selectedPrefectureId = watch("prefectureId");
+    const selectedCityId = watch("cityId");
     const selectedGender = watch("genderId");
     const selectedMenuId = watch("menuId");
     const selectedPriceRange = watch("priceRange")
@@ -49,11 +50,12 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                     </Grid2>
                     <Grid2 size={3}>
                         <FormControl variant="standard" fullWidth>
-                            <InputLabel id="prefectureId">地域</InputLabel>
+                            <InputLabel id="prefectureId">都道府県</InputLabel>
                             <Select labelId="prefectureId"
                                 id="prefectureId"
-                                value={selectedPrefecture}
+                                value={selectedPrefectureId}
                                 onChange={(e) => {
+                                    setValue("cityId", "")
                                     setValue("prefectureId", e.target.value)
                                     onSubmit()
                                 }}
@@ -62,6 +64,36 @@ export default function SearchDialog({ prefectures, genders, menus, handleSubmit
                                 {prefectures.map(prefecture => <MenuItem key={prefecture.id} value={prefecture.id}>{prefecture.name}</MenuItem>)}
                             </Select>
                         </FormControl>
+                    </Grid2>
+                    <Grid2 size={3}>
+                        <FormControl variant="standard" fullWidth>
+                            <InputLabel id="cityId">市区</InputLabel>
+                            <Select labelId="cityId"
+                                id="cityId"
+                                value={selectedCityId}
+                                onChange={(e) => {
+                                    setValue("cityId", e.target.value)
+                                    onSubmit()
+                                }}
+
+                                displayEmpty>
+                                {cities?.length > 0 && cities.map(city => (
+                                    <MenuItem key={city.id} value={city.id}>
+                                        {city.country || ""}{city.city || ""}{city.ward || ""}
+                                    </MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                    </Grid2>
+                    <Grid2 size={6} sx={{ pt: 2, pl: 1 }}>
+                        {user ?
+                            <Chip variant="outlined" label="登録地域" clickable onClick={() => {
+                                if (user.prefectureId) {
+                                    setValue("prefectureId", user.prefectureId)
+                                }
+                                onSubmit()
+                            }} />
+                            : ""}
                     </Grid2>
                     <Grid2 size={3}>
                         <FormControl variant="standard" fullWidth>
