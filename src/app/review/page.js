@@ -1,10 +1,10 @@
 "use client";
-import { getReservations, getStatuses, changeReservationStatusToCancel, checkoutStripe } from "@/app/actions";
+import { getReservations } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
-import { Button, Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Button, Rating, Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -16,14 +16,12 @@ function a11yProps(index) {
 }
 
 export default function ReservationPage() {
-    const router = useRouter();
-    const [statuses, setStatuses] = useState([]);
+    const router = useRouter()
+    const statuses = ["未レビュー", "レビュー済"];
     const [reservations, setReservations] = useState([]);
 
     const fetchData = async () => {
-        setStatuses(await getStatuses());
         setReservations(await getReservations());
-        console.dir(await getReservations())
     }
 
     useEffect(() => {
@@ -42,15 +40,6 @@ export default function ReservationPage() {
         swiper?.slideTo(newValue)
         setValue(newValue);
     };
-    const payReservation = async (reservationId) => {
-
-        const stripeURL = await checkoutStripe(reservationId)
-        window.location = stripeURL
-    }
-    const cancelReservation = (reservationId) => {
-        changeReservationStatusToCancel(reservationId)
-        fetchData()
-    }
     return (
         <>
             <AppBar />
@@ -59,7 +48,7 @@ export default function ReservationPage() {
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
                             value={value}
-                            variant="scrollable"
+                            variant="fullWidth"
                             scrollButtons
                             allowScrollButtonsMobile
                             onChange={handleChange}
@@ -67,8 +56,8 @@ export default function ReservationPage() {
                         >
                             {statuses.map((status, index) => (
                                 <Tab
-                                    key={status.id}
-                                    label={status.name}
+                                    key={index}
+                                    label={status}
                                     {...a11yProps(index)}
                                 />
                             ))}
@@ -81,64 +70,52 @@ export default function ReservationPage() {
                         slidesPerView={1}
                     >
                         {statuses.map((status, index) => (
-                            <SwiperSlide key={status.id}>
+                            <SwiperSlide key={index}>
                                 <Box role="tabpanel" id={`statusId-${index}`} sx={{ p: 3 }}>
                                     <Stack spacing={2} sx={{ mt: 1 }}>
                                         {reservations &&
                                             reservations
-                                                .filter(
-                                                    (reservation) =>
-                                                        reservation.statusId === status.id
+                                                .filter(reservation =>
+                                                    (reservation?.review ? 1 : 0) == index
                                                 )
-                                                .map((reservation) => (
+                                                .map(r => (
                                                     <Stack
-                                                        key={reservation.id}
+                                                        key={r.id}
                                                         direction="row"
                                                         spacing={2}
                                                     >
                                                         <Box>
                                                             <Avatar
-                                                                alt={reservation?.therapist?.name}
-                                                                src={reservation?.therapist?.imageFileName ? `/therapistImg/${reservation.therapist.id}/${reservation.therapist.imageFileName}` : ""}
+                                                                alt={r?.therapist?.name}
+                                                                src={r?.therapist?.therapistView?.imageFilePath}
                                                             />
                                                         </Box>
                                                         <Box>
-                                                            <Typography>{reservation.therapist.name}</Typography>
+                                                            <Typography>{r.therapist.name}</Typography>
                                                             <Typography>
                                                                 {format(
-                                                                    new Date(reservation.startDt),
+                                                                    new Date(r.startDt),
                                                                     "yyyy/MM/dd kk:mm"
                                                                 )}
                                                                 から
-                                                                {reservation.therapistMenu.treatmentTime}
+                                                                {r.therapistMenu.treatmentTime}
                                                                 分{" "}
-                                                                {reservation.therapist.name}
+                                                                {r.therapist.name}
                                                             </Typography>
                                                         </Box>
-                                                        {reservation?.statusId == 2 &&
+                                                        {r?.review ?
+                                                            <>
+                                                                <Box>
+                                                                    <Typography>{r.review.comment}</Typography>
+                                                                    <Rating value={r.review.rate} readOnly />
+                                                                </Box>
+                                                                <Box>
+                                                                    <Button onClick={() => router.push(`/reservation/${r.id}/review`)}>詳細</Button>
+                                                                </Box>
+                                                            </>
+                                                            :
                                                             <Box>
-                                                                <Button onClick={() => payReservation(reservation.id)}>
-                                                                    支払い
-                                                                </Button>
-                                                            </Box>
-                                                        }
-                                                        {[1, 2].includes(reservation?.statusId) &&
-                                                            <Box>
-                                                                <Button onClick={() => cancelReservation(reservation.id)}>
-                                                                    キャンセル
-                                                                </Button>
-                                                            </Box>
-                                                        }
-                                                        {[4].includes(reservation?.statusId) &&
-                                                            <Box>
-                                                                {reservation?.review ?
-                                                                    <Button onClick={() => router.push(`/reservation/${reservation.id}/review`)}>
-                                                                        レビューを確認
-                                                                    </Button>
-                                                                    : <Button onClick={() => router.push(`/reservation/${reservation.id}/review/create`)}>
-                                                                        レビューを投稿!
-                                                                    </Button>
-                                                                }
+                                                                <Button onClick={() => router.push(`/reservation/${r.id}/review/create`)}>投稿</Button>
                                                             </Box>
                                                         }
                                                     </Stack>

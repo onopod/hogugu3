@@ -21,7 +21,7 @@ export default function Therapist({ therapist }) {
                     <Stack>
                         <Stack direction="row" spacing={1}>
                             <Box><StarIcon />{therapist.fixedRateAverage} ({therapist.reviewCount})</Box>
-                            <Box><span sx={{ ml: 1 }} >{therapist.prefectureAndCity}</span></Box>
+                            <Box><span sx={{ ml: 1 }} >{therapist.therapistView?.prefectureAndCity}</span></Box>
                         </Stack>
                         <Stack direction="row" spacing={1}>
                             <Box><QuestionAnswerIcon />{therapist.fixedReplyRate}%</Box>

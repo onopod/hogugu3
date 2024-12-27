@@ -1,6 +1,6 @@
-import { Select, MenuItem, Button, FormControl, Stack, TextField } from "@mui/material";
-import { Controller } from "react-hook-form";
+import { Button, FormControl, MenuItem, Select, Stack, TextField } from "@mui/material";
 import Image from "next/image";
+import { Controller } from "react-hook-form";
 
 export default function Profile({ changeZipCode, prefectures, genders, therapist, control, handleSubmit,
     onSubmit, register }) {
@@ -105,7 +105,7 @@ export default function Profile({ changeZipCode, prefectures, genders, therapist
 
                     <FormControl>
                         市区
-                        <TextField id="city" {...register("city")} />
+                        <TextField id="cityId" {...register("cityId")} />
                     </FormControl>
                     <Button type="submit">更新</Button>
                 </Stack>

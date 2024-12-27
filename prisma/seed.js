@@ -3,7 +3,7 @@ const { PrismaClient } = require('@prisma/client')
 const bcrypt = require("bcrypt");
 const { addHours, addDays } = require('date-fns');
 const fs = require("fs");
-
+const Papa = require("papaparse");
 
 const prisma = new PrismaClient();
 
@@ -19,11 +19,23 @@ async function main() {
     await prisma.therapist.deleteMany({})
     await prisma.menu.deleteMany({})
     await prisma.user.deleteMany({})
+    await prisma.city.deleteMany({})
     await prisma.prefecture.deleteMany({})
     await prisma.region.deleteMany({})
     await prisma.status.deleteMany({})
     await prisma.messageStatus.deleteMany({})
     await prisma.gender.deleteMany({})
+
+    // create TherapistView
+    fs.readFile(process.cwd() + "/prisma/sql/createView.pgsql", "utf8", (error, sqlText) => {
+        sqlText.split(";")
+            .map(stmt => stmt.trim())
+            .filter(stmt => stmt.length > 0)
+            .forEach(stmt => {
+                prisma.$executeRawUnsafe(stmt);
+            })
+    });
+
 
     // gender 
     await prisma.gender.createMany({
@@ -66,6 +78,8 @@ async function main() {
             { id: 8, name: '九州地方', kana: 'キュウシュウチホウ' }
         ]
     })
+
+    // prefecture
     await prisma.prefecture.createMany({
         data: [
             { id: 1, regionId: 1, name: '北海道', kana: 'ホッカイドウ' },
@@ -117,6 +131,7 @@ async function main() {
             { id: 47, regionId: 8, name: '沖縄県', kana: 'オキナワケン' }
         ]
     })
+
     // menu
     await prisma.menu.createMany({
         data: [
@@ -127,182 +142,219 @@ async function main() {
             { id: 5, name: "オイルトリートメント" }
         ]
     })
-    // therapist
 
-    await bcrypt.hash("password", 10, async (_, hashedPassword) => {
-
-
-        const therapists = await prisma.therapist.createManyAndReturn({
-            data: [
-                {
-                    name: 'sato hikaru', comment: 'よろしくお願いします。',
-                    imageFileName: "1.jpg", prefectureId: 27, city: "大阪市中央区", workYear: 3,
-                    genderId: 2, password: hashedPassword, mail: "onopod@gmail.com", tel: "07012345678"
-                },
-                { name: 'みく', comment: 'がんばります', password: hashedPassword, imageFileName: "2.jpg", prefectureId: 27, mail: "onopod2@gmail.com", tel: "07012345678" },
-                { name: '水野', comment: 'がんばります', password: hashedPassword, imageFileName: '3.jpg', prefectureId: 26, mail: "onopod3@gmail.com", tel: "07012345678" },
-                { name: '二競', comment: 'がんばります', password: hashedPassword, imageFileName: '4.jpg', mail: "onopod4@gmail.com", tel: "07012345678" },
-                { name: '中川', comment: 'がんばります', password: hashedPassword, imageFileName: '5.jpg', mail: "onopod5@gmail.com", tel: "07012345678" },
-                { name: '二梁', comment: 'がんばります', password: hashedPassword, imageFileName: '6.jpg', mail: "onopod6@gmail.com", tel: "07012345678" },
-                { name: '村松', comment: 'がんばります', password: hashedPassword, imageFileName: '7.jpg', mail: "onopod7@gmail.com", tel: "07012345678" },
-                { name: '野田', comment: 'がんばります', password: hashedPassword, imageFileName: '8.jpg', mail: "onopod8@gmail.com", tel: "07012345678" },
-                { name: '西田', comment: 'がんばります', password: hashedPassword, imageFileName: '9.jpg', mail: "onopod9@gmail.com", tel: "07012345678" },
-                { name: '二針', comment: 'がんばります', password: hashedPassword, imageFileName: '10.jpg', mail: "onopod10@gmail.com", tel: "07012345678" },
-                { name: '河村', comment: 'がんばります', password: hashedPassword, imageFileName: '11.jpg', mail: "onopod11@gmail.com", tel: "07012345678" },
-                { name: '亨夏', comment: 'がんばります', password: hashedPassword, imageFileName: '12.jpg', mail: "onopod12@gmail.com", tel: "07012345678" },
-                { name: '倉増', comment: 'がんばります', password: hashedPassword, imageFileName: '13.jpg', mail: "onopod13@gmail.com", tel: "07012345678" },
-                { name: '奥村', comment: 'がんばります', password: hashedPassword, imageFileName: '14.jpg', mail: "onopod14@gmail.com", tel: "07012345678" },
-                { name: '大沢', comment: 'がんばります', password: hashedPassword, imageFileName: '15.jpg', mail: "onopod15@gmail.com", tel: "07012345678" },
-                { name: '中西', comment: 'がんばります', password: hashedPassword, imageFileName: '16.jpg', mail: "onopod18@gmail.com", tel: "07012345678" },
-                { name: '早川', comment: 'がんばります', password: hashedPassword, imageFileName: '17.jpg', mail: "onopod16@gmail.com", tel: "07012345678" },
-                { name: '大西', comment: 'がんばります', password: hashedPassword, imageFileName: '18.jpg', mail: "onopod17@gmail.com", tel: "07012345678" },
-                { name: '小酒', comment: 'がんばります', password: hashedPassword, imageFileName: '19.jpg', mail: "onopod19@gmail.com", tel: "07012345678" },
-                { name: '田中', comment: 'がんばります', password: hashedPassword, imageFileName: '20.jpg', mail: "onopod20@gmail.com", tel: "07012345678" },
-                { name: '安部', comment: 'がんばります', password: hashedPassword, imageFileName: '21.jpg', mail: "onopod21@gmail.com", tel: "07012345678" },
-                { name: '道渕', comment: 'がんばります', password: hashedPassword, imageFileName: '22.jpg', mail: "onopod22@gmail.com", tel: "07012345678" },
-                { name: '小倉', comment: 'がんばります', password: hashedPassword, imageFileName: '23.jpg', mail: "onopod23@gmail.com", tel: "07012345678" },
-                { name: '押樋', comment: 'がんばります', password: hashedPassword, imageFileName: '24.jpg', mail: "onopod24@gmail.com", tel: "07012345678" },
-                { name: '岡村', comment: 'がんばります', password: hashedPassword, imageFileName: '25.jpg', mail: "onopod25@gmail.com", tel: "07012345678" },
-                { name: '苔田', comment: 'がんばります', password: hashedPassword, imageFileName: '26.jpg', mail: "onopod26@gmail.com", tel: "07012345678" },
-                { name: '下関', comment: 'がんばります', password: hashedPassword, imageFileName: '27.jpg', mail: "onopod27@gmail.com", tel: "07012345678" }
-            ]
-        })
-        fs.rm("./public/therapistImg", { recursive: true, force: true }, () => {
-            therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach((therapist, idx) => {
-                const filePath = `./public/female/${idx + 1}.jpg`;
-                const distDir = `./public/therapistImg/${therapist.id}`
-                fs.mkdir(distDir, { recursive: true }, () => {
-                    fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
+    // import city csv
+    fs.readFile(process.cwd() + "/prisma/sql/mt_city_all.csv", "utf8", (err, data) => {
+        if (err) {
+            console.error("CSVファイルの読み込みエラー:", err);
+            return;
+        }
+        Papa.parse(data, {
+            header: true,
+            skipEmptyLines: true,
+            complete: async (result) => {
+                const cities = result.data.map(c => {
+                    return {
+                        id: c.lg_code,
+                        prefectureId: parseInt(c.lg_code.substring(0, 2)),
+                        country: c.county,
+                        countryKana: c.county_kana,
+                        city: c.city,
+                        cityKana: c.city_kana,
+                        ward: c.ward,
+                        wardKana: c.ward_kana
+                    }
                 })
-            })
+                await prisma.city.createMany({
+                    data: cities
+                })
 
-        })
 
-        // therapistsOnMenus
-        const firstTherapistId = therapists[0].id;
-        const secondTherapistId = therapists[1].id;
-        const therapistsOnMenus = await prisma.therapistsOnMenus.createManyAndReturn({
-            data: [
-                { therapistId: firstTherapistId, menuId: 1, treatmentTime: 60, price: 6000 },
-                { therapistId: firstTherapistId, menuId: 1, treatmentTime: 90, price: 9000 },
-                { therapistId: firstTherapistId, menuId: 1, treatmentTime: 120, price: 12000 },
-                { therapistId: firstTherapistId, menuId: 1, treatmentTime: 150, price: 15000 },
-                { therapistId: firstTherapistId, menuId: 1, treatmentTime: 180, price: 18000 },
-                { therapistId: firstTherapistId, menuId: 2, treatmentTime: 60, price: 6000 },
-                { therapistId: firstTherapistId, menuId: 2, treatmentTime: 90, price: 9000 },
-                { therapistId: firstTherapistId, menuId: 2, treatmentTime: 120, price: 12000 },
-                { therapistId: firstTherapistId, menuId: 2, treatmentTime: 150, price: 15000 },
-                { therapistId: firstTherapistId, menuId: 2, treatmentTime: 180, price: 18000 },
-                { therapistId: firstTherapistId, menuId: 3, treatmentTime: 60, price: 6000 },
-                { therapistId: firstTherapistId, menuId: 3, treatmentTime: 90, price: 9000 },
-                { therapistId: firstTherapistId, menuId: 3, treatmentTime: 120, price: 12000 },
-                { therapistId: firstTherapistId, menuId: 3, treatmentTime: 150, price: 15000 },
-                { therapistId: firstTherapistId, menuId: 3, treatmentTime: 180, price: 18000 },
-                { therapistId: firstTherapistId, menuId: 4, treatmentTime: 60, price: 6000 },
-                { therapistId: firstTherapistId, menuId: 4, treatmentTime: 90, price: 9000 },
-                { therapistId: firstTherapistId, menuId: 4, treatmentTime: 120, price: 12000 },
-                { therapistId: firstTherapistId, menuId: 4, treatmentTime: 150, price: 15000 },
-                { therapistId: firstTherapistId, menuId: 4, treatmentTime: 180, price: 18000 },
-                { therapistId: firstTherapistId, menuId: 5, treatmentTime: 60, price: 6000 },
-                { therapistId: firstTherapistId, menuId: 5, treatmentTime: 90, price: 9000 },
-                { therapistId: firstTherapistId, menuId: 5, treatmentTime: 120, price: 12000 },
-                { therapistId: firstTherapistId, menuId: 5, treatmentTime: 150, price: 15000 },
-                { therapistId: firstTherapistId, menuId: 5, treatmentTime: 180, price: 18000 },
-                { therapistId: secondTherapistId, menuId: 1, treatmentTime: 90, price: 7200 },
-            ]
-        })
 
-        const firstTherapistsOnMenusId = therapistsOnMenus[0].id;
-        const secondTherapistsOnMenusId = therapistsOnMenus[1].id;
 
-        // schedule
-        await prisma.schedule.createMany({
-            data: [
-                { therapistId: firstTherapistId, startDt: new Date(), endDt: addHours(new Date(), 8) },
-                { therapistId: firstTherapistId, startDt: addDays(new Date(), 1), endDt: addHours(addDays(new Date(), 1), 8) },
-                { therapistId: firstTherapistId, startDt: addDays(new Date(), 2), endDt: addHours(addDays(new Date(), 2), 8) }
-            ]
-        })
+                // therapist
 
-        // user
-        await bcrypt.hash("password", 10, async (_, hashedPassword) => {
-            const users = await prisma.user.createManyAndReturn({
-                data: [
-                    {
-                        name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678",
-                        password: hashedPassword, imageFileName: "1.jpg",
-                        prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西",
-                        genderId: 1
-                    },
-                    { name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "2.jpg", prefectureId: 27 },
-                    { name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "3.jpg", prefectureId: 26 }
-                ]
-            })
+                await bcrypt.hash("password", 10, async (_, hashedPassword) => {
 
-            fs.rm("./public/userImg", { recursive: true, force: true }, () => {
-                users.filter(user => user.imageFileName?.length > 0).forEach((user, idx) => {
-                    const filePath = `./public/male/${idx + 1}.jpg`;
-                    const distDir = `./public/userImg/${user.id}`
-                    fs.mkdir(distDir, { recursive: true }, () => {
-                        fs.copyFile(filePath, `${distDir}/${user.imageFileName}`, () => { })
+
+                    const therapists = await prisma.therapist.createManyAndReturn({
+                        data: [
+                            {
+                                name: 'sato hikaru', comment: 'よろしくお願いします。',
+                                imageFileName: "1.jpg", prefectureId: 27, workYear: 3, cityId: "271284",
+                                genderId: 2, password: hashedPassword, mail: "onopod@gmail.com", tel: "07012345678"
+                            },
+                            { name: 'みく', comment: 'がんばります', password: hashedPassword, imageFileName: "2.jpg", prefectureId: 27, mail: "onopod2@gmail.com", tel: "07012345678" },
+                            { name: '水野', comment: 'がんばります', password: hashedPassword, imageFileName: '3.jpg', prefectureId: 26, mail: "onopod3@gmail.com", tel: "07012345678" },
+                            { name: '二競', comment: 'がんばります', password: hashedPassword, imageFileName: '4.jpg', mail: "onopod4@gmail.com", tel: "07012345678" },
+                            { name: '中川', comment: 'がんばります', password: hashedPassword, imageFileName: '5.jpg', mail: "onopod5@gmail.com", tel: "07012345678" },
+                            { name: '二梁', comment: 'がんばります', password: hashedPassword, imageFileName: '6.jpg', mail: "onopod6@gmail.com", tel: "07012345678" },
+                            { name: '村松', comment: 'がんばります', password: hashedPassword, imageFileName: '7.jpg', mail: "onopod7@gmail.com", tel: "07012345678" },
+                            { name: '野田', comment: 'がんばります', password: hashedPassword, imageFileName: '8.jpg', mail: "onopod8@gmail.com", tel: "07012345678" },
+                            { name: '西田', comment: 'がんばります', password: hashedPassword, imageFileName: '9.jpg', mail: "onopod9@gmail.com", tel: "07012345678" },
+                            { name: '二針', comment: 'がんばります', password: hashedPassword, imageFileName: '10.jpg', mail: "onopod10@gmail.com", tel: "07012345678" },
+                            { name: '河村', comment: 'がんばります', password: hashedPassword, imageFileName: '11.jpg', mail: "onopod11@gmail.com", tel: "07012345678" },
+                            { name: '亨夏', comment: 'がんばります', password: hashedPassword, imageFileName: '12.jpg', mail: "onopod12@gmail.com", tel: "07012345678" },
+                            { name: '倉増', comment: 'がんばります', password: hashedPassword, imageFileName: '13.jpg', mail: "onopod13@gmail.com", tel: "07012345678" },
+                            { name: '奥村', comment: 'がんばります', password: hashedPassword, imageFileName: '14.jpg', mail: "onopod14@gmail.com", tel: "07012345678" },
+                            { name: '大沢', comment: 'がんばります', password: hashedPassword, imageFileName: '15.jpg', mail: "onopod15@gmail.com", tel: "07012345678" },
+                            { name: '中西', comment: 'がんばります', password: hashedPassword, imageFileName: '16.jpg', mail: "onopod18@gmail.com", tel: "07012345678" },
+                            { name: '早川', comment: 'がんばります', password: hashedPassword, imageFileName: '17.jpg', mail: "onopod16@gmail.com", tel: "07012345678" },
+                            { name: '大西', comment: 'がんばります', password: hashedPassword, imageFileName: '18.jpg', mail: "onopod17@gmail.com", tel: "07012345678" },
+                            { name: '小酒', comment: 'がんばります', password: hashedPassword, imageFileName: '19.jpg', mail: "onopod19@gmail.com", tel: "07012345678" },
+                            { name: '田中', comment: 'がんばります', password: hashedPassword, imageFileName: '20.jpg', mail: "onopod20@gmail.com", tel: "07012345678" },
+                            { name: '安部', comment: 'がんばります', password: hashedPassword, imageFileName: '21.jpg', mail: "onopod21@gmail.com", tel: "07012345678" },
+                            { name: '道渕', comment: 'がんばります', password: hashedPassword, imageFileName: '22.jpg', mail: "onopod22@gmail.com", tel: "07012345678" },
+                            { name: '小倉', comment: 'がんばります', password: hashedPassword, imageFileName: '23.jpg', mail: "onopod23@gmail.com", tel: "07012345678" },
+                            { name: '押樋', comment: 'がんばります', password: hashedPassword, imageFileName: '24.jpg', mail: "onopod24@gmail.com", tel: "07012345678" },
+                            { name: '岡村', comment: 'がんばります', password: hashedPassword, imageFileName: '25.jpg', mail: "onopod25@gmail.com", tel: "07012345678" },
+                            { name: '苔田', comment: 'がんばります', password: hashedPassword, imageFileName: '26.jpg', mail: "onopod26@gmail.com", tel: "07012345678" },
+                            { name: '下関', comment: 'がんばります', password: hashedPassword, imageFileName: '27.jpg', mail: "onopod27@gmail.com", tel: "07012345678" }
+                        ]
+                    })
+                    fs.rm("./public/therapistImg", { recursive: true, force: true }, () => {
+                        therapists.filter(therapist => therapist.imageFileName?.length > 0).forEach((therapist, idx) => {
+                            const filePath = `./public/female/${idx + 1}.jpg`;
+                            const distDir = `./public/therapistImg/${therapist.id}`
+                            fs.mkdir(distDir, { recursive: true }, () => {
+                                fs.copyFile(filePath, `${distDir}/${therapist.imageFileName}`, () => { })
+                            })
+                        })
+
+                    })
+
+                    // therapistsOnMenus
+                    const firstTherapistId = therapists[0].id;
+                    const secondTherapistId = therapists[1].id;
+                    const therapistsOnMenus = await prisma.therapistsOnMenus.createManyAndReturn({
+                        data: [
+                            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 60, price: 6000 },
+                            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 90, price: 9000 },
+                            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 120, price: 12000 },
+                            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 150, price: 15000 },
+                            { therapistId: firstTherapistId, menuId: 1, treatmentTime: 180, price: 18000 },
+                            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 60, price: 6000 },
+                            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 90, price: 9000 },
+                            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 120, price: 12000 },
+                            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 150, price: 15000 },
+                            { therapistId: firstTherapistId, menuId: 2, treatmentTime: 180, price: 18000 },
+                            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 60, price: 6000 },
+                            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 90, price: 9000 },
+                            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 120, price: 12000 },
+                            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 150, price: 15000 },
+                            { therapistId: firstTherapistId, menuId: 3, treatmentTime: 180, price: 18000 },
+                            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 60, price: 6000 },
+                            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 90, price: 9000 },
+                            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 120, price: 12000 },
+                            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 150, price: 15000 },
+                            { therapistId: firstTherapistId, menuId: 4, treatmentTime: 180, price: 18000 },
+                            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 60, price: 6000 },
+                            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 90, price: 9000 },
+                            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 120, price: 12000 },
+                            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 150, price: 15000 },
+                            { therapistId: firstTherapistId, menuId: 5, treatmentTime: 180, price: 18000 },
+                            { therapistId: secondTherapistId, menuId: 1, treatmentTime: 90, price: 7200 },
+                        ]
+                    })
+
+                    const firstTherapistsOnMenusId = therapistsOnMenus[0].id;
+                    const secondTherapistsOnMenusId = therapistsOnMenus[1].id;
+
+                    // schedule
+                    await prisma.schedule.createMany({
+                        data: [
+                            { therapistId: firstTherapistId, startDt: new Date(), endDt: addHours(new Date(), 8) },
+                            { therapistId: firstTherapistId, startDt: addDays(new Date(), 1), endDt: addHours(addDays(new Date(), 1), 8) },
+                            { therapistId: firstTherapistId, startDt: addDays(new Date(), 2), endDt: addHours(addDays(new Date(), 2), 8) }
+                        ]
+                    })
+
+                    // user
+                    await bcrypt.hash("password", 10, async (_, hashedPassword) => {
+                        const users = await prisma.user.createManyAndReturn({
+                            data: [
+                                {
+                                    name: 'ono ryo', mail: 'onopod@gmail.com', tel: "07012345678",
+                                    password: hashedPassword, imageFileName: "1.jpg",
+                                    prefectureId: 27, zipcode: "5420062", city: "大阪市中央区", address: "上本町西",
+                                    genderId: 1
+                                },
+                                { name: 'ono hanako', mail: 'onopod2@gmail.com', password: hashedPassword, imageFileName: "2.jpg", prefectureId: 27 },
+                                { name: '小野 太郎', mail: 'onopod3@gmail.com', password: hashedPassword, imageFileName: "3.jpg", prefectureId: 26 }
+                            ]
+                        })
+
+                        fs.rm("./public/userImg", { recursive: true, force: true }, () => {
+                            users.filter(user => user.imageFileName?.length > 0).forEach((user, idx) => {
+                                const filePath = `./public/male/${idx + 1}.jpg`;
+                                const distDir = `./public/userImg/${user.id}`
+                                fs.mkdir(distDir, { recursive: true }, () => {
+                                    fs.copyFile(filePath, `${distDir}/${user.imageFileName}`, () => { })
+                                })
+                            })
+                        })
+
+
+                        const firstUserId = users[0].id;
+                        const secondUserId = users[1].id;
+
+                        // reservation
+                        const reservations = await prisma.reservation.createManyAndReturn({
+                            data: [
+                                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: firstTherapistsOnMenusId, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00", replyDt: "2024-12-06T21:10:00.000+09:00", created: "2024-12-06T21:00:00.000+09:00" },
+                                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: firstTherapistsOnMenusId, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00", replyDt: "2024-12-08T22:50:00.000+09:00", created: "2024-12-08T22:20:00.000+09:00" },
+                                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, startDt: "2024-12-10T22:30:00.000+09:00" },
+                                { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
+                                { userId: secondUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, startDt: "2024-12-02T21:00:00.000+09:00" }
+                            ]
+                        })
+                        const firstReservationId = reservations[0].id;
+                        const secondReservationId = reservations[1].id;
+
+                        // message 
+                        await prisma.message.createMany({
+                            data: [
+                                { userId: firstUserId, therapistId: firstTherapistId, message: "こんにちは", messageStatusId: 1, created: "2024-12-08T21:00:00.000+09:00" },
+                                { userId: firstUserId, therapistId: firstTherapistId, message: "どうかされましたか？", messageStatusId: 2, created: "2024-12-08T21:01:00.000+09:00" },
+                                { userId: firstUserId, therapistId: firstTherapistId, message: "予約についてのお問い合わせです。", messageStatusId: 1, created: "2024-12-08T21:02:00.000+09:00" },
+                                { userId: secondUserId, therapistId: firstTherapistId, message: "初めて問い合わせします", messageStatusId: 1, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
+                            ]
+                        })
+
+                        // favorite
+                        await prisma.favorite.createMany({
+                            data: [
+                                { userId: firstUserId, therapistId: firstTherapistId },
+                                { userId: firstUserId, therapistId: secondTherapistId },
+                                { userId: secondUserId, therapistId: secondTherapistId }
+                            ]
+                        })
+
+                        // review
+                        await prisma.review.createMany({
+                            data: [
+                                { reservationId: firstReservationId, comment: "とても良かったです" },
+                                { reservationId: secondReservationId, rate: 4, comment: "まあまあでした" }
+                            ]
+                        })
+
+                        // history
+                        await prisma.history.createMany({
+                            data: [
+                                { userId: firstUserId, therapistId: firstTherapistId },
+                                { userId: firstUserId, therapistId: secondTherapistId },
+                                { userId: secondUserId, therapistId: secondTherapistId }
+                            ]
+                        })
                     })
                 })
-            })
-
-
-            const firstUserId = users[0].id;
-            const secondUserId = users[1].id;
-
-            // reservation
-            const reservations = await prisma.reservation.createManyAndReturn({
-                data: [
-                    { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: firstTherapistsOnMenusId, statusId: 3, startDt: "2024-12-08T21:00:00.000+09:00", replyDt: "2024-12-06T21:10:00.000+09:00", created: "2024-12-06T21:00:00.000+09:00" },
-                    { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: firstTherapistsOnMenusId, statusId: 2, startDt: "2024-12-09T22:30:00.000+09:00", replyDt: "2024-12-08T22:50:00.000+09:00", created: "2024-12-08T22:20:00.000+09:00" },
-                    { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, startDt: "2024-12-10T22:30:00.000+09:00" },
-                    { userId: firstUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, statusId: 4, startDt: "2024-12-08T22:30:00.000+09:00" },
-                    { userId: secondUserId, therapistId: firstTherapistId, therapistMenuId: secondTherapistsOnMenusId, startDt: "2024-12-02T21:00:00.000+09:00" }
-                ]
-            })
-            const firstReservationId = reservations[0].id;
-            const secondReservationId = reservations[1].id;
-
-            // message 
-            await prisma.message.createMany({
-                data: [
-                    { userId: firstUserId, therapistId: firstTherapistId, message: "こんにちは", messageStatusId: 1, created: "2024-12-08T21:00:00.000+09:00" },
-                    { userId: firstUserId, therapistId: firstTherapistId, message: "どうかされましたか？", messageStatusId: 2, created: "2024-12-08T21:01:00.000+09:00" },
-                    { userId: firstUserId, therapistId: firstTherapistId, message: "予約についてのお問い合わせです。", messageStatusId: 1, created: "2024-12-08T21:02:00.000+09:00" },
-                    { userId: secondUserId, therapistId: firstTherapistId, message: "初めて問い合わせします", messageStatusId: 1, created: "2024-12-08T22:00:00.000+09:00", isRead: true },
-                ]
-            })
-
-            // favorite
-            await prisma.favorite.createMany({
-                data: [
-                    { userId: firstUserId, therapistId: firstTherapistId },
-                    { userId: firstUserId, therapistId: secondTherapistId },
-                    { userId: secondUserId, therapistId: secondTherapistId }
-                ]
-            })
-
-            // review
-            await prisma.review.createMany({
-                data: [
-                    { reservationId: firstReservationId, comment: "とても良かったです" },
-                    { reservationId: secondReservationId, rate: 4, comment: "まあまあでした" }
-                ]
-            })
-
-            // history
-            await prisma.history.createMany({
-                data: [
-                    { userId: firstUserId, therapistId: firstTherapistId },
-                    { userId: firstUserId, therapistId: secondTherapistId },
-                    { userId: secondUserId, therapistId: secondTherapistId }
-                ]
-            })
+            },
+            error: (error) => {
+                console.error("CSV読み込みエラー:", error);
+            },
         })
     })
+
 }
 
 main()

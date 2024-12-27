@@ -139,6 +139,28 @@ export async function getUser() {
 
 }
 
+export async function getUserPrefectureAndCity() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) {
+        return;
+    }
+    try {
+        const user = await prisma.user.findFirst({
+            select: {
+                id: true,
+                prefectureId: true
+            },
+            where: {
+                id: session.user.id
+            }
+        });
+        return user;
+    } catch (err) {
+        console.dir(err);
+    }
+
+}
+
 export async function getStatuses() {
     const statuses = await prisma.status.findMany({})
     return statuses;
@@ -146,6 +168,11 @@ export async function getStatuses() {
 export async function getPrefectures() {
     const prefectures = await prisma.prefecture.findMany({ orderBy: { id: "asc" } });
     return prefectures;
+}
+
+export async function getCities(prefectureId) {
+    const cities = await prisma.city.findMany({ where: { prefectureId }, orderBy: { id: "asc" } });
+    return cities;
 }
 
 export async function getGenders() {
@@ -169,10 +196,11 @@ export async function getRegions() {
     });
     return regions;
 }
-const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) => {
+const getTherapistWhere = ({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange }) => {
     const prices = priceRange ? priceRange.split("-").map(s => parseInt(s)) : []
     const where = {
         ...(prefectureId && { prefectureId }),
+        ...(cityId && { cityId }),
         ...(genderId && { genderId }),
         ...(freeWord && {
             OR: [
@@ -205,9 +233,9 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWo
     return where;
 }
 
-export async function getTherapists({ page = 1, take = 10, sort = "createdDesc", treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
+export async function getTherapists({ page = 1, take = 10, sort = "createdDesc", treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange }) {
     const session = await getServerSession(authOptions);
-    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
+    const where = getTherapistWhere({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange })
     try {
         const therapists = await prisma.therapist.findMany({
             select: {
@@ -220,6 +248,7 @@ export async function getTherapists({ page = 1, take = 10, sort = "createdDesc",
                 imageFileName: true,
                 prefectureId: true,
                 prefecture: true,
+                cityId: true,
                 city: true,
                 workYear: true,
                 created: true,
@@ -284,8 +313,8 @@ export async function getTherapists({ page = 1, take = 10, sort = "createdDesc",
     }
 }
 
-export async function getTherapistsCount({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
-    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
+export async function getTherapistsCount({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange }) {
+    const where = getTherapistWhere({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange })
     const itemCount = await prisma.therapist.count({ where });
     return itemCount;
 }
@@ -369,6 +398,7 @@ export async function getTherapistProfile() {
                 imageFileName: true,
                 prefectureId: true,
                 prefecture: true,
+                cityId: true,
                 city: true,
                 workYear: true
             }
@@ -389,7 +419,7 @@ export async function putTherapist(formData) {
         const tel = formData.get("tel");
         const imageFile = formData.get("imageFileName");
         const prefectureId = parseInt(formData.get("prefectureId"))
-        const city = formData.get("city")
+        const cityId = formData.get("cityId")
         const workYear = parseInt(formData.get("workYear"))
         const comment = formData.get("comment")
 
@@ -416,7 +446,7 @@ export async function putTherapist(formData) {
                 tel,
                 imageFileName: imageFile.name,
                 prefectureId,
-                city,
+                cityId,
                 workYear,
                 comment
             }
@@ -448,6 +478,7 @@ export async function getTherapist(id) {
                     }
                 }
             },
+            therapistView: true,
         }
     })
     if (therapist) {
@@ -455,7 +486,7 @@ export async function getTherapist(id) {
 
         therapist.name0 = therapist?.name && therapist.name.length > 0 ? therapist.name[0].toUpperCase() : ""
 
-        therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city || "-"}`;
+        therapist.prefectureAndCity = `${therapist.prefecture?.name || "-"}／${therapist.city?.city || "-"}`;
 
         therapist.rateAverage = therapist?.reservations?.filter(reservation => reservation?.review)
             .map(reservation => reservation.review.rate)
@@ -672,16 +703,64 @@ export async function getReservations() {
                     select: {
                         id: true,
                         name: true,
-                        imageFileName: true
+                        imageFileName: true,
+                        therapistView: true
                     }
                 },
-                status: true
+                status: true,
+                review: true
             },
             orderBy: {
                 created: "desc"
             }
         });
         return reservations;
+    } catch (err) {
+        console.dir(err);
+    }
+}
+export async function getReservation(id) {
+    const session = await getServerSession(authOptions);
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
+
+    try {
+        const reservation = await prisma.reservation.findFirst({
+            where: {
+                ...(session.user.role == "user" ? { userId: session.user.id } : { therapistId: session.user.id }),
+                id
+            },
+            select: {
+                id: true,
+                userId: true,
+                therapistId: true,
+                therapistMenuId: true,
+                startDt: true,
+                created: true,
+                statusId: true,
+                therapistMenu: {
+                    select: {
+                        menu: true
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                therapist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                status: true,
+                review: true
+            }
+        });
+        return reservation;
     } catch (err) {
         console.dir(err);
     }
@@ -835,6 +914,45 @@ export async function getHistories() {
     }
 }
 
+
+export async function postReview(data) {
+    console.log("data is")
+    console.dir(data)
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "user")) return;
+
+    try {
+        const reservation = await prisma.reservation.findFirst({
+            where: {
+                id: data.reservationId,
+                userId: session.user.id
+            }
+        })
+        if (!reservation) return;
+
+        if (data.reviewId) {
+            await prisma.review.update({
+                where: {
+                    id: data.reviewId
+                },
+                data: {
+                    rate: data.rate,
+                    comment: data.comment
+                }
+            })
+        } else {
+            await prisma.review.create({
+                data: {
+                    reservationId: data.reservationId,
+                    rate: data.rate,
+                    comment: data.comment
+                }
+            })
+        }
+    } catch (err) {
+        console.dir(err);
+    }
+}
 export async function postReservation(data) {
     const session = await getServerSession(authOptions);
     if (!(session?.user?.role == "user")) return;

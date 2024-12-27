@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["views"]
+  previewFeatures = ["views", "omitApi"]
 }
 
 datasource db {
@@ -27,6 +27,19 @@ model Gender {
   therapists Therapist[]
 }
 
+model City {
+  id           String      @id
+  prefectureId Int
+  prefecture   Prefecture  @relation(fields: [prefectureId], references: [id])
+  country      String?
+  countryKana  String?
+  city         String?
+  cityKana     String?
+  ward         String?
+  wardKana     String?
+  Therapist    Therapist[]
+}
+
 model Prefecture {
   id        Int         @id
   regionId  Int
@@ -35,6 +48,7 @@ model Prefecture {
   kana      String
   user      User[]
   therapist Therapist[]
+  City      City[]
 }
 
 model Region {
@@ -76,7 +90,8 @@ model Therapist {
   imageFileName String?
   prefectureId  Int?
   prefecture    Prefecture?         @relation(fields: [prefectureId], references: [id])
-  city          String?
+  cityId        String?
+  city          City?               @relation(fields: [cityId], references: [id])
   workYear      Int?
   created       DateTime            @default(now())
   menus         TherapistsOnMenus[]
@@ -188,6 +203,6 @@ view TherapistView {
   reviewRate        Float?
   reviewCount       Int?
   isNew             Boolean
-  minMenuPrice Int?
+  minMenuPrice      Int?
   therapist         Therapist? @relation(fields: [id], references: [id])
 }
