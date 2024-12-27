@@ -123,6 +123,7 @@ export async function putUser(formData) {
 
 export async function getUser() {
     const session = await getServerSession(authOptions);
+    console.log("test")
     if (!(session?.user?.role == "user")) {
         return;
     }
@@ -148,6 +149,11 @@ export async function getPrefectures() {
     return prefectures;
 }
 
+export async function getCities(prefectureId) {
+    const cities = await prisma.city.findMany({ where: { prefectureId }, orderBy: { id: "asc" } });
+    return cities;
+}
+
 export async function getGenders() {
     const genders = await prisma.gender.findMany({ orderBy: { id: "asc" } });
     return genders;
@@ -169,10 +175,11 @@ export async function getRegions() {
     });
     return regions;
 }
-const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) => {
+const getTherapistWhere = ({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange }) => {
     const prices = priceRange ? priceRange.split("-").map(s => parseInt(s)) : []
     const where = {
         ...(prefectureId && { prefectureId }),
+        ...(cityId && { cityId }),
         ...(genderId && { genderId }),
         ...(freeWord && {
             OR: [
@@ -205,9 +212,9 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, genderId, menuId, freeWo
     return where;
 }
 
-export async function getTherapists({ page = 1, take = 10, sort = "createdDesc", treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
+export async function getTherapists({ page = 1, take = 10, sort = "createdDesc", treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange }) {
     const session = await getServerSession(authOptions);
-    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
+    const where = getTherapistWhere({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange })
     try {
         const therapists = await prisma.therapist.findMany({
             select: {
@@ -285,8 +292,8 @@ export async function getTherapists({ page = 1, take = 10, sort = "createdDesc",
     }
 }
 
-export async function getTherapistsCount({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange }) {
-    const where = getTherapistWhere({ treatmentDt, prefectureId, genderId, menuId, freeWord, priceRange })
+export async function getTherapistsCount({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange }) {
+    const where = getTherapistWhere({ treatmentDt, prefectureId, cityId, genderId, menuId, freeWord, priceRange })
     const itemCount = await prisma.therapist.count({ where });
     return itemCount;
 }
