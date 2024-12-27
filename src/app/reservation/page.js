@@ -4,6 +4,7 @@ import { AppBar, BottomBar } from "@/app/components";
 import { Button, Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -15,13 +16,14 @@ function a11yProps(index) {
 }
 
 export default function ReservationPage() {
-
+    const router = useRouter();
     const [statuses, setStatuses] = useState([]);
     const [reservations, setReservations] = useState([]);
 
     const fetchData = async () => {
         setStatuses(await getStatuses());
         setReservations(await getReservations());
+        console.dir(await getReservations())
     }
 
     useEffect(() => {
@@ -125,6 +127,18 @@ export default function ReservationPage() {
                                                                 <Button onClick={() => cancelReservation(reservation.id)}>
                                                                     キャンセル
                                                                 </Button>
+                                                            </Box>
+                                                        }
+                                                        {[4].includes(reservation?.statusId) &&
+                                                            <Box>
+                                                                {reservation?.review ?
+                                                                    <Button onClick={() => router.push(`/reservation/${reservation.id}/review`)}>
+                                                                        レビューを確認
+                                                                    </Button>
+                                                                    : <Button onClick={() => router.push(`/reservation/${reservation.id}/review/create`)}>
+                                                                        レビューを投稿!
+                                                                    </Button>
+                                                                }
                                                             </Box>
                                                         }
                                                     </Stack>

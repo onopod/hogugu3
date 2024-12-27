@@ -25,7 +25,7 @@ export default function ReviewPage() {
             <Container maxWidth="sm">
                 <Stack spacing={1} sx={{ my: 2, width: "100%" }}>
                     <Typography>
-                        レート：<Rating value={reservation?.review?.rate || 0} readonly />
+                        レート：<Rating value={reservation?.review?.rate || 0} readOnly />
                     </Typography>
                     <Typography>
                         コメント：{reservation?.review?.comment}
