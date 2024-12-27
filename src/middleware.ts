@@ -7,6 +7,7 @@ export const config = {
         "/profile(.*)",
         "/logout(.*)",
         "/favorites(.*)",
+        "/review(.*)",
         "/t/reservation(.*)",
         "/t/message(.*)",
         "/t/profile(.*)",
