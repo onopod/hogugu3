@@ -1,6 +1,6 @@
 "use client"
 
-import { getGenders, getMenus, getPrefectures, getCities, getRegions, getTherapists, getTherapistsCount, toggleFavorite, getUserPrefectureAndCity } from "@/app/actions";
+import { getCities, getGenders, getMenus, getPrefectures, getRegions, getTherapists, getTherapistsCount, getUserPrefectureAndCity, toggleFavorite } from "@/app/actions";
 import { AppBar, BottomBar, Card, SearchDialog, } from '@/app/components';
 import { Box, Chip, Container, Pagination, Skeleton, Stack } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -71,11 +71,12 @@ export default function Home() {
     // eslint-disable-next-line
   }, [])
 
+  const fetchCities = async () => {
+    setCities(selectedPrefectureId ? await getCities(Number(selectedPrefectureId)) : [])
+  }
   useEffect(() => {
-    const fetchCities = async () => {
-      setCities(selectedPrefectureId ? await getCities(Number(selectedPrefectureId)) : [])
-    }
     fetchCities();
+    // eslint-disable-next-line
   }, [selectedPrefectureId])
 
   const onPageChange = (_, page) => {
@@ -105,6 +106,7 @@ export default function Home() {
       <AppBar />
       <Container maxWidth="sm">
         <SearchDialog
+          fetchCities={fetchCities}
           user={user}
           prefectures={prefectures}
           cities={cities}

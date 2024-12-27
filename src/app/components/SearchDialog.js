@@ -1,13 +1,37 @@
+import { getCityFromReverseGeocoding } from "@/app/actions";
 import { Box, Button, Chip, FormControl, Grid2, Input, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import { addDays, addHours, format } from "date-fns";
 
-export default function SearchDialog({ user, prefectures, cities, genders, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
+export default function SearchDialog({ fetchCities, user, prefectures, cities, genders, menus, handleSubmit, onSubmit, register, setValue, watch, reset }) {
     const selectedPrefectureId = watch("prefectureId");
     const selectedCityId = watch("cityId");
     const selectedGender = watch("genderId");
     const selectedMenuId = watch("menuId");
     const selectedPriceRange = watch("priceRange")
     const selectedSort = watch("sort")
+    const getGeolocation = async () => {
+        navigator.geolocation.getCurrentPosition((pos) => {
+            fetch(`https://nominatim.openstreetmap.org/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&format=json`)
+                .then(res => res.json())
+                .then(data => {
+                    console.log("data is")
+                    console.dir(data)
+                    console.log("result is")
+                    getCityFromReverseGeocoding(data).then(res => {
+                        if (res?.prefectureId) {
+                            setValue("cityId", "")
+                            setValue("prefectureId", res.prefectureId)
+                            fetchCities()
+                            if (res.id) {
+                                setValue("cityId", res.id)
+                            }
+                            onSubmit()
+                        }
+                    })
+                })
+        })
+    }
+
 
     const priceRanges = ["-5000", "5000-6000", "6000-7000", "7000-8000", "8000-10000", "10000-13000", "13000-16000", "16000-"]
     const sorts = [
@@ -38,12 +62,12 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                             />
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={6} sx={{ pt: 2, pl: 1 }}>
-                        <Chip variant="outlined" label="1時間後" clickable onClick={() => {
+                    <Grid2 size={6} sx={{ pt: 2, pl: 1, }}>
+                        <Chip size="small" variant="outlined" label="1時間後" clickable onClick={() => {
                             setValue("treatmentDt", format(addHours(new Date(), 1), "yyyy-MM-dd kk:mm"))
                             onSubmit()
                         }} />
-                        <Chip sx={{ ml: 1 }} variant="outlined" label="明日" clickable onClick={() => {
+                        <Chip size="small" sx={{ ml: 1 }} variant="outlined" label="明日" clickable onClick={() => {
                             setValue("treatmentDt", format(addDays(new Date(), 1), "yyyy-MM-dd kk:mm"))
                             onSubmit()
                         }} />
@@ -65,7 +89,7 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={3}>
+                    <Grid2 size={4}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="cityId">市区</InputLabel>
                             <Select labelId="cityId"
@@ -85,17 +109,20 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={6} sx={{ pt: 2, pl: 1 }}>
+                    <Grid2 size={5} sx={{ pt: 2, pl: 1 }}>
                         {user ?
-                            <Chip variant="outlined" label="登録地域" clickable onClick={() => {
+                            <Chip size="small" variant="outlined" label="登録地" clickable onClick={() => {
                                 if (user.prefectureId) {
                                     setValue("prefectureId", user.prefectureId)
                                 }
                                 onSubmit()
                             }} />
                             : ""}
+                        <Chip size="small" sx={{ ml: 1 }} variant="outlined" label="現在地" clickable onClick={() => {
+                            getGeolocation()
+                        }} />
                     </Grid2>
-                    <Grid2 size={3}>
+                    <Grid2 size={2}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="genderId">性別</InputLabel>
                             <Select id="genderId"
@@ -112,7 +139,7 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={3}>
+                    <Grid2 size={6}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="menuId">メニュー</InputLabel>
                             <Select labelId="menuId"
@@ -127,7 +154,7 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                             </Select>
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={3}>
+                    <Grid2 size={4}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="priceRange">価格</InputLabel>
                             <Select labelId="priceRange"
@@ -162,6 +189,7 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                                 reset({
                                     treatmentDt: null,
                                     prefectureId: "",
+                                    cityId: "",
                                     genderId: "",
                                     menuId: "",
                                     freeWord: "",
@@ -172,7 +200,7 @@ export default function SearchDialog({ user, prefectures, cities, genders, menus
                             }}>リセット</Button>
                         </FormControl>
                     </Grid2>
-                    <Grid2 size={4}>
+                    <Grid2 size={6}>
                         <FormControl variant="standard" fullWidth>
                             <InputLabel id="sort">並び順</InputLabel>
                             <Select labelId="sort"

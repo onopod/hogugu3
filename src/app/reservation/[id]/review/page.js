@@ -1,7 +1,7 @@
 "use client";
 import { getReservation } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
-import { FormControl, Button, Rating, Avatar, Box, Container, Stack, Tab, Tabs, Typography, TextField, InputLabel, FormHelperText } from "@mui/material";
+import { Button, Container, FormControl, Rating, Stack, Typography } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
@@ -15,6 +15,7 @@ export default function ReviewPage() {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
     console.log("reservation is")
     console.dir(reservation)

@@ -10,6 +10,24 @@ import Stripe from 'stripe';
 import { join } from "path";
 const bcrypt = require('bcrypt');
 
+export async function getCityFromReverseGeocoding(data) {
+    const prefectureId = data.address?.["ISO3166-2-lvl4"] ? Number(data.address["ISO3166-2-lvl4"].split("-")[1]) : null;
+    const cityName = (data.address?.city || "") + (data.address?.suburb || "");
+    console.log(`'${cityName}'`)
+    const cities = await prisma.$queryRaw`
+    SELECT * FROM public."City"
+    WHERE "prefectureId" = ${prefectureId} 
+    AND CONCAT(country, city, ward) = ${cityName}`;
+
+    console.dir(cities)
+    if (cities?.length == 1) {
+        return cities[0]
+    } else {
+        return { prefectureId }
+    }
+}
+
+
 export async function checkSuccessStripe({ reservation_id, stripe_session_id }) {
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const stripeSession = await stripe.checkout.sessions.retrieve(stripe_session_id);

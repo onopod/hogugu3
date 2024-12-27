@@ -1,11 +1,10 @@
 "use client";
 import { getReservation, postReview } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
-import { FormControl, Button, Rating, Avatar, Box, Container, Stack, Tab, Tabs, Typography, TextField, InputLabel, FormHelperText } from "@mui/material";
-import { format } from "date-fns";
-import { Controller, useForm } from "react-hook-form";
+import { Button, Container, FormControl, FormHelperText, Rating, Stack, TextField } from "@mui/material";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 
 export default function ReviewPage() {
     const router = useRouter();
@@ -31,6 +30,7 @@ export default function ReviewPage() {
 
     useEffect(() => {
         fetchData();
+        // eslint-disable-next-line
     }, []);
 
     const onSubmit = (data) => {
