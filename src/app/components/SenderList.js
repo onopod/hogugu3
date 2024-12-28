@@ -1,3 +1,5 @@
+"use client"
+
 import { Avatar, Badge, List, ListItemButton, ListItemText } from "@mui/material";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";

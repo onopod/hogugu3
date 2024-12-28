@@ -1,3 +1,4 @@
+"use client"
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link, Slide } from '@mui/material';
 import { forwardRef, Fragment, useState } from 'react';
 

@@ -1,3 +1,5 @@
+"use client"
+
 import { Avatar, List, ListItemButton, ListItemText } from "@mui/material";
 import { useRouter } from "next/navigation";
 

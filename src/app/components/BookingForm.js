@@ -1,3 +1,5 @@
+"use client"
+
 import { postMessage, postReservation } from "@/app/actions";
 import { Button, FormControl, FormHelperText, FormLabel, ListSubheader, MenuItem, Select } from '@mui/material';
 import { format } from "date-fns";
