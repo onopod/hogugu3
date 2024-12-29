@@ -1,7 +1,9 @@
-import { useState } from "react";
-import { Drawer, IconButton } from '@mui/material';
-import { MenuIcon } from "@/app/icons";
+"use client"
+
 import DrawerList from '@/app/components/DrawerList'; // 切り出したDrawerListコンポーネントをインポート
+import { MenuIcon } from "@/app/icons";
+import { Drawer, IconButton } from '@mui/material';
+import { useState } from "react";
 
 function DrawerListContainer() {
     const [leftOpen, setLeftOpen] = useState(false);

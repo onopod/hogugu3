@@ -1,3 +1,5 @@
+import { getTherapist } from "@/app/actions";
+
 import {
     AccessTimeIcon,
     CommentIcon,
@@ -6,7 +8,8 @@ import {
 } from "@/app/icons";
 import { Avatar, Box, Card, CardContent, CardHeader, Stack, Typography } from '@mui/material';
 import "swiper/css";
-export default function Therapist({ therapist }) {
+export default async function Therapist({ id }) {
+    const therapist = await getTherapist(id)
     return (
         <Card variant="outlined"
             sx={{ my: 2, width: "100%", overflow: 'auto' }}>

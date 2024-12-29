@@ -1,3 +1,5 @@
+"use client"
+
 import { BookmarksIcon, HotelIcon, MessageIcon } from '@/app/icons';
 import GradeIcon from '@mui/icons-material/Grade';
 import { BottomNavigation, BottomNavigationAction, Box, Paper } from '@mui/material';

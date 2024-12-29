@@ -1,9 +1,11 @@
+"use client"
+
+import { DrawerListContainer } from '@/app/components';
 import { SpaIcon } from '@/app/icons';
 import { AppBar, Avatar, Box, Container, IconButton, Menu, MenuItem, Toolbar, Typography } from '@mui/material';
 import { signIn, signOut, useSession } from "next-auth/react";
-import { useState } from "react";
-import { DrawerListContainer } from '@/app/components';
 import { useRouter } from 'next/navigation';
+import { useState } from "react";
 
 
 function MyAppBar() {
