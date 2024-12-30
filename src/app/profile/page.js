@@ -73,7 +73,7 @@ export default function ProfilePage() {
                     mail: user.mail || "",
                     tel: user.tel || "",
                     genderId: user.genderId || "",
-                    imageFileName: user.imageFileName || "",
+                    imageFileName: user?.imageFileName || "",
                     zipcode: user.zipcode || "",
                     prefectureId: user.prefectureId || "",
                     city: user.city || "",
