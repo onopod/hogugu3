@@ -708,6 +708,57 @@ export async function setHistory(id) {
     }
 }
 
+export async function getPurchasedReservations() {
+    const session = await getServerSession(authOptions);
+    if (!(["user", "therapist"].includes(session?.user?.role))) return;
+
+    try {
+        const purchasedReservations = await prisma.reservation.findMany({
+            where: {
+                ...(session.user.role == "user" ? { userId: session.user.id } : { therapistId: session.user.id }),
+                statusId: 4
+            },
+            select: {
+                id: true,
+                userId: true,
+                therapistId: true,
+                therapistMenuId: true,
+                startDt: true,
+                therapistMenu: {
+                    select: {
+                        menu: true,
+                        treatmentTime: true,
+                        price: true
+                    }
+                },
+                user: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true
+                    }
+                },
+                therapist: {
+                    select: {
+                        id: true,
+                        name: true,
+                        imageFileName: true,
+                        therapistView: true
+                    }
+                },
+                status: true,
+                review: true
+            },
+            orderBy: {
+                created: "desc"
+            }
+        });
+        return purchasedReservations;
+    } catch (err) {
+        console.dir(err);
+    }
+}
+
 export async function getReservations() {
     const session = await getServerSession(authOptions);
     if (!(["user", "therapist"].includes(session?.user?.role))) return;

@@ -74,6 +74,7 @@ function MyAppBar() {
               {session?.user?.role == "user" ? (
                 <div key={1}>
                   <MenuItem onClick={() => router.push("/profile")}>プロフィール</MenuItem>
+                  <MenuItem onClick={() => router.push("/reservation/purchased")}>支払い履歴</MenuItem>
                   <MenuItem onClick={() => signOut("user")}>ログアウト</MenuItem>
                 </div>
               )
