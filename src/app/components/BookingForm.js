@@ -1,12 +1,25 @@
 "use client"
 
-import { postMessage, postReservation } from "@/app/actions";
+import { getTherapist, getTherapistMenus, postMessage, postReservation } from "@/app/actions";
 import { Button, FormControl, FormHelperText, FormLabel, ListSubheader, MenuItem, Select } from '@mui/material';
 import { format } from "date-fns";
 import { useRouter } from 'next/navigation';
+import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-export default function BookingForm({ therapist, therapistMenus }) {
+export default function BookingForm({ id }) {
     const router = useRouter();
+    const [therapist, setTherapist] = useState({})
+    const [therapistMenus, setTherapistMenus] = useState([])
+
+    useEffect(() => {
+        const actions = async () => {
+            setTherapistMenus(await getTherapistMenus(id))
+            setTherapist(await getTherapist(id));
+        }
+        actions();
+    }, [id])
+
+
     const { control, handleSubmit, reset, setValue, register, formState: { errors } } = useForm({
         defaultValues: {
             startDt: "",
@@ -34,7 +47,7 @@ export default function BookingForm({ therapist, therapistMenus }) {
         }
         save(data);
     };
-
+    console.log("booking form")
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl fullWidth error={!!errors.therapistMenuId}>
