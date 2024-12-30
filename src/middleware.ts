@@ -8,6 +8,7 @@ export const config = {
         "/logout(.*)",
         "/favorites(.*)",
         "/review(.*)",
+        "/profile(.*)",
         "/t/reservation(.*)",
         "/t/message(.*)",
         "/t/profile(.*)",

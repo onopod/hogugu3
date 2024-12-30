@@ -97,7 +97,7 @@ export default function Profile({ changeZipCode, prefectures, genders, user, con
 
                     <FormControl>
                         市区
-                        <TextField id="cityId" {...register("cityId")} />
+                        <TextField id="cityId" {...register("city")} />
                     </FormControl>
 
                     <FormControl>
