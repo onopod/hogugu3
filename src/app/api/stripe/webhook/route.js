@@ -25,6 +25,8 @@ export async function POST(req) {
     }
 
     // Handle the event
+    console.log("event type is", event.type)
+    console.dir(event);
     if (event.type == "checkout.session.completed") {
         console.log(`event type ${event.type}`);
         console.dir(event)

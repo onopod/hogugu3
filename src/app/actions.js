@@ -30,7 +30,7 @@ export async function getCityFromReverseGeocoding(data) {
 
 
 export async function checkoutStripe(reservationId) {
-    console.log("rid is", reservationId)
+    const url = process.env?.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : "http://localhost:3000";
     const reservation = await getReservationFromStripe(Number(reservationId))
     if (!(reservation?.therapistMenu?.price)) return;
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
@@ -48,8 +48,8 @@ export async function checkoutStripe(reservationId) {
             },
         ],
         mode: 'payment',
-        success_url: "http://localhost:3000/reservation",
-        cancel_url: "http://localhost:3000/reservation",
+        success_url: `${url}/reservation`,
+        cancel_url: `${url}/reservation`,
         metadata: { reservationId },
     });
     if (stripeSession) {
