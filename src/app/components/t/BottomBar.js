@@ -1,3 +1,4 @@
+"use client"
 import { EditCalendarIcon, HotelIcon, MenuBookIcon, MessageIcon } from '@/app/icons';
 import { BottomNavigation, BottomNavigationAction, Box, Paper } from '@mui/material';
 import { useRouter } from "next/navigation";

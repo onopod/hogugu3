@@ -2,7 +2,7 @@
 
 import authOptions from "@/app/api/auth/[...nextauth]/authOptions";
 import prisma from '@/lib/prisma';
-import { subWeeks } from "date-fns";
+import { endOfMonth, format, subWeeks } from "date-fns";
 import { promises as fs } from "fs";
 import { getServerSession } from "next-auth/next";
 import Stripe from 'stripe';
@@ -1223,6 +1223,51 @@ export async function postSchedule(data) {
             })
             return schedule;
         }
+    } catch (err) {
+        console.dir(err)
+    }
+}
+
+
+export async function getSales({ targetYM }) {
+    const range = [
+        targetYM + "-01T00:00:00.000+09:00",
+        format(endOfMonth(targetYM), "yyyy-MM-dd") + "T23:59:59.999+09:00"
+    ]
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const sales = await prisma.reservation.findMany({
+            where: {
+                therapistId: session.user.id,
+                statusId: 4,
+                startDt: {
+                    gte: range[0],
+                    lte: range[1]
+                }
+
+            },
+            select: {
+                id: true,
+                startDt: true,
+                user: {
+                    select: {
+                        name: true
+                    }
+                },
+                therapistMenu: {
+                    select: {
+                        menu: true,
+                        treatmentTime: true,
+                        price: true
+                    }
+                }
+            },
+            orderBy: [
+                { startDt: "asc" }
+            ]
+        })
+        return sales
     } catch (err) {
         console.dir(err)
     }
