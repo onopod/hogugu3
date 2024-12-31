@@ -24,18 +24,12 @@ export async function POST(req) {
         return NextResponse.json({ error: `Webhook Error: ${err.message}` }, { status: 400 });
     }
 
-    // Handle the event
-    console.log("event type is", event.type)
-    console.dir(event);
     if (event.type == "checkout.session.completed") {
-        console.log(`event type ${event.type}`);
-        console.dir(event)
         if (event.data.object?.metadata?.reservationId) {
             changeReservationStatusToPaid(Number(event.data.object?.metadata?.reservationId))
         }
     }
 
-    // Return a 200 response to acknowledge receipt of the event
     return NextResponse.json({ received: true }, { status: 200 });
 }
 

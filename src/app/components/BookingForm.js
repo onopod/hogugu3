@@ -47,7 +47,6 @@ export default function BookingForm({ id }) {
         }
         save(data);
     };
-    console.log("booking form")
     return (
         <form onSubmit={handleSubmit(onSubmit)}>
             <FormControl fullWidth error={!!errors.therapistMenuId}>

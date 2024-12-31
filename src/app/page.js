@@ -57,8 +57,6 @@ export default function Home() {
     }
     const currentItemCount = await getTherapistsCount(where);
     const currentTherapists = await getTherapists(where)
-    console.log("therapist is")
-    console.dir(currentTherapists)
     setTherapists(currentTherapists)
     setItemCount(currentItemCount);
     setCount(Math.ceil(currentItemCount / pageSize))

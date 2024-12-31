@@ -13,13 +13,11 @@ const bcrypt = require('bcrypt');
 export async function getCityFromReverseGeocoding(data) {
     const prefectureId = data.address?.["ISO3166-2-lvl4"] ? Number(data.address["ISO3166-2-lvl4"].split("-")[1]) : null;
     const cityName = (data.address?.city || "") + (data.address?.suburb || "");
-    console.log(`'${cityName}'`)
     const cities = await prisma.$queryRaw`
     SELECT * FROM public."City"
     WHERE "prefectureId" = ${prefectureId} 
     AND CONCAT(country, city, ward) = ${cityName}`;
 
-    console.dir(cities)
     if (cities?.length == 1) {
         return cities[0]
     } else {
@@ -55,8 +53,7 @@ export async function checkoutStripe(reservationId) {
     if (stripeSession) {
         return stripeSession.url
     }
-    console.dir(reservationId)
-    console.dir(stripeSession)
+
 }
 
 
@@ -248,8 +245,7 @@ const getTherapistWhere = ({ treatmentDt, prefectureId, cityId, genderId, menuId
             }
         })
     }
-    console.log("where is")
-    console.log(JSON.stringify(where))
+
     return where;
 }
 
@@ -445,7 +441,7 @@ export async function getTherapistProfile() {
         })
         return therapist;
     } catch (err) {
-        console.log(err);
+        console.dir(err);
     }
 }
 
@@ -830,7 +826,7 @@ async function getReservationFromStripe(reservationId) {
         })
         return reservation
     } catch (err) {
-        console.log(err)
+        console.dir(err)
     }
 }
 export async function getReservation(id) {
@@ -897,7 +893,7 @@ export async function changeReservationStatusToAccept(id) {
         })
         return reservation;
     } catch (err) {
-        console.log(err)
+        console.dir(err)
     }
 }
 
@@ -915,7 +911,7 @@ export async function changeReservationStatusToPaid(id) {
         })
         return reservation;
     } catch (err) {
-        console.log(err)
+        console.dir(err)
     }
 }
 
@@ -936,7 +932,7 @@ export async function changeReservationStatusToComplete(id) {
         })
         return reservation;
     } catch (err) {
-        console.log(err)
+        console.dir(err)
     }
 }
 export async function changeReservationStatusToCancel(id) {
@@ -964,7 +960,7 @@ export async function changeReservationStatusToCancel(id) {
         })
         return reservation;
     } catch (err) {
-        console.log(err)
+        console.dir(err)
     }
 }
 export async function toggleFavorite(id) {
@@ -1017,8 +1013,7 @@ export async function getHistories() {
 
 
 export async function postReview(data) {
-    console.log("data is")
-    console.dir(data)
+
     const session = await getServerSession(authOptions);
     if (!(session?.user?.role == "user")) return;
 

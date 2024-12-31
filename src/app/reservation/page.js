@@ -23,7 +23,6 @@ export default function ReservationPage() {
     const fetchData = async () => {
         setStatuses(await getStatuses());
         setReservations(await getReservations());
-        console.dir(await getReservations())
     }
 
     useEffect(() => {
