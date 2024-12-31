@@ -1,10 +1,10 @@
 "use client";
-import { getReservations, getStatuses, changeReservationStatusToCancel, checkoutStripe } from "@/app/actions";
+import { changeReservationStatusToCancel, checkoutStripe, getReservations, getStatuses } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
-import { Button, Avatar, Box, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
+import { Avatar, Box, Button, Container, Stack, Tab, Tabs, Typography } from "@mui/material";
 import { format } from "date-fns";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import "swiper/css";
 import { Swiper, SwiperSlide } from "swiper/react";
 
@@ -112,7 +112,7 @@ export default function ReservationPage() {
                                                                 から
                                                                 {reservation.therapistMenu.treatmentTime}
                                                                 分{" "}
-                                                                {reservation.therapist.name}
+                                                                {reservation.therapistMenu.price}円
                                                             </Typography>
                                                         </Box>
                                                         {reservation?.statusId == 2 &&

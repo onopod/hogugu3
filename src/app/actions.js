@@ -28,27 +28,29 @@ export async function getCityFromReverseGeocoding(data) {
 }
 
 
-export async function checkSuccessStripe({ reservation_id, stripe_session_id }) {
-    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-    const stripeSession = await stripe.checkout.sessions.retrieve(stripe_session_id);
-    if (stripeSession?.payment_status == "paid") {
-        // 予約ステータスを決済後に変更
-        await changeReservationStatusToPaid(reservation_id)
-    }
-}
 
 export async function checkoutStripe(reservationId) {
+    console.log("rid is", reservationId)
+    const reservation = await getReservationFromStripe(Number(reservationId))
+    if (!(reservation?.therapistMenu?.price)) return;
     const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
     const stripeSession = await stripe.checkout.sessions.create({
         line_items: [
             {
-                price: 'price_1Qa7DSCjiodSo9Y9S72OE3X2',
+                price_data: {
+                    currency: 'jpy',
+                    product_data: {
+                        name: 'hogugu',
+                    },
+                    unit_amount: reservation.therapistMenu.price,
+                },
                 quantity: 1,
             },
         ],
         mode: 'payment',
-        success_url: `http://localhost:3000/checkout/success/${reservationId}/{CHECKOUT_SESSION_ID}`,
-        cancel_url: "http://localhost:3000/checkout/cancel",
+        success_url: "http://localhost:3000/reservation",
+        cancel_url: "http://localhost:3000/reservation",
+        metadata: { reservationId },
     });
     if (stripeSession) {
         return stripeSession.url
@@ -716,7 +718,9 @@ export async function getPurchasedReservations() {
         const purchasedReservations = await prisma.reservation.findMany({
             where: {
                 ...(session.user.role == "user" ? { userId: session.user.id } : { therapistId: session.user.id }),
-                statusId: 4
+                statusId: {
+                    in: [3, 4]
+                }
             },
             select: {
                 id: true,
@@ -778,6 +782,8 @@ export async function getReservations() {
                 statusId: true,
                 therapistMenu: {
                     select: {
+                        price: true,
+                        treatmentTime: true,
                         menu: true
                     }
                 },
@@ -806,6 +812,25 @@ export async function getReservations() {
         return reservations;
     } catch (err) {
         console.dir(err);
+    }
+}
+async function getReservationFromStripe(reservationId) {
+    try {
+        const reservation = await prisma.reservation.findFirst({
+            where: {
+                id: reservationId
+            },
+            select: {
+                therapistMenu: {
+                    select: {
+                        price: true
+                    }
+                }
+            }
+        })
+        return reservation
+    } catch (err) {
+        console.log(err)
     }
 }
 export async function getReservation(id) {
@@ -875,24 +900,11 @@ export async function changeReservationStatusToAccept(id) {
         console.log(err)
     }
 }
-export async function payment(id) {
-    const session = await getServerSession(authOptions);
-    if (!(session?.user?.role == "user")) return;
-    if (!is_paid()) return;
-    await changeReservationStatusToPaid(id)
-}
-function is_paid() {
-    // 支払い部分は後で実装
-    return true;
-}
 
-async function changeReservationStatusToPaid(id) {
-    const session = await getServerSession(authOptions);
-    if (!(session?.user?.role == "user")) return;
+export async function changeReservationStatusToPaid(id) {
     const where = {
         id,
-        userId: session.user.id,
-        statusId: 2 // ステータスが「予約確定」の状態のみ
+        statusId: 2
     }
     try {
         const reservation = prisma.reservation.update({
