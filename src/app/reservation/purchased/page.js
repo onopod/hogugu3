@@ -1,6 +1,6 @@
 import { getPurchasedReservations } from "@/app/actions";
 import { AppBar, BottomBar } from "@/app/components";
-import { Button, Avatar, Box, Container, Stack, Tab, Tabs, Typography, List, ListItem, ListItemText, ListItemAvatar } from "@mui/material";
+import { Avatar, Box, Container, List, ListItem, ListItemAvatar, ListItemText, Typography } from "@mui/material";
 import { format } from "date-fns";
 
 export default async function ReservationPage() {

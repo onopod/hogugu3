@@ -17,8 +17,6 @@ export default function ReviewPage() {
         fetchData();
         // eslint-disable-next-line
     }, []);
-    console.log("reservation is")
-    console.dir(reservation)
 
     return (
         <>

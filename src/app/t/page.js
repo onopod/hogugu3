@@ -7,7 +7,6 @@ import { useEffect } from "react";
 export default function T() {
     useEffect(() => {
         const updateLogin = async () => {
-            console.log("test")
             await updateTherapistLastLoginDt()
         }
         updateLogin();

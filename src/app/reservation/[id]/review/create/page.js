@@ -47,7 +47,6 @@ export default function ReviewPage() {
         fetchData();
     }
 
-    console.log(reservation);
     return (
         <>
             <AppBar />
