@@ -1,9 +1,10 @@
 "use client"
 import { AppBar } from "@/app/components";
-import { FormHelperText, Button, Container, FormControl, Stack, TextField } from "@mui/material";
+import { Button, Container, FormControl, FormHelperText, Stack, TextField } from "@mui/material";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
-import { signIn } from "next-auth/react";
 export default function Login() {
     const router = useRouter();
 
@@ -36,6 +37,7 @@ export default function Login() {
                         </Stack>
                     </FormControl>
                 </form>
+                <Button><Link href="/forgot-password">パスワードを忘れた</Link></Button>
             </Container>
         </>
     )

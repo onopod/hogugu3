@@ -9,6 +9,8 @@ const prisma = new PrismaClient();
 
 async function main() {
     // truncate
+    await prisma.passwordResetToken.deleteMany({})
+    await prisma.therapistPasswordResetToken.deleteMany({})
     await prisma.schedule.deleteMany({})
     await prisma.history.deleteMany({})
     await prisma.review.deleteMany({})

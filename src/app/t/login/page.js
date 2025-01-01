@@ -2,6 +2,7 @@
 import { AppBar } from "@/app/components/t";
 import { Button, Container, FormControl, FormHelperText, Stack, TextField } from "@mui/material";
 import { signIn } from "next-auth/react";
+import Link from "next/link";
 import { useRouter } from 'next/navigation';
 import { useForm } from "react-hook-form";
 export default function Login() {
@@ -37,6 +38,7 @@ export default function Login() {
                         </Stack>
                     </FormControl>
                 </form>
+                <Button><Link href="/t/forgot-password">パスワードを忘れた</Link></Button>
             </Container>
         </>
     )

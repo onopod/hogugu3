@@ -59,50 +59,52 @@ model Region {
 }
 
 model User {
-  id            Int           @id @default(autoincrement())
-  name          String?
-  genderId      Int?
-  gender        Gender?       @relation(fields: [genderId], references: [id])
-  mail          String        @unique
-  tel           String?
-  password      String
-  imageFileName String?
-  zipcode       String?
-  prefectureId  Int?
-  prefecture    Prefecture?   @relation(fields: [prefectureId], references: [id])
-  city          String?
-  address       String?
-  reservations  Reservation[]
-  messages      Message[]
-  favorites     Favorite[]
-  histories     History[]
+  id                 Int                  @id @default(autoincrement())
+  name               String?
+  genderId           Int?
+  gender             Gender?              @relation(fields: [genderId], references: [id])
+  mail               String               @unique
+  tel                String?
+  password           String
+  imageFileName      String?
+  zipcode            String?
+  prefectureId       Int?
+  prefecture         Prefecture?          @relation(fields: [prefectureId], references: [id])
+  city               String?
+  address            String?
+  reservations       Reservation[]
+  messages           Message[]
+  favorites          Favorite[]
+  histories          History[]
+  PasswordResetToken PasswordResetToken[]
 }
 
 model Therapist {
-  id            Int                 @id @default(autoincrement())
-  name          String
-  mail          String
-  password      String
-  tel           String
-  genderId      Int?
-  gender        Gender?             @relation(fields: [genderId], references: [id])
-  comment       String?
-  imageFileName String?
-  prefectureId  Int?
-  prefecture    Prefecture?         @relation(fields: [prefectureId], references: [id])
-  cityId        String?
-  city          City?               @relation(fields: [cityId], references: [id])
-  workYear      Int?
-  lastLoginDt   DateTime            @default(now())
-  created       DateTime            @default(now())
-  menus         TherapistsOnMenus[]
-  reservations  Reservation[]
-  messages      Message[]
-  favorites     Favorite[]
-  histories     History[]
-  schedules     Schedule[]
-  photos Photo[]
-  therapistView TherapistView?
+  id                          Int                           @id @default(autoincrement())
+  name                        String
+  mail                        String                        @unique
+  password                    String
+  tel                         String
+  genderId                    Int?
+  gender                      Gender?                       @relation(fields: [genderId], references: [id])
+  comment                     String?
+  imageFileName               String?
+  prefectureId                Int?
+  prefecture                  Prefecture?                   @relation(fields: [prefectureId], references: [id])
+  cityId                      String?
+  city                        City?                         @relation(fields: [cityId], references: [id])
+  workYear                    Int?
+  lastLoginDt                 DateTime                      @default(now())
+  created                     DateTime                      @default(now())
+  menus                       TherapistsOnMenus[]
+  reservations                Reservation[]
+  messages                    Message[]
+  favorites                   Favorite[]
+  histories                   History[]
+  schedules                   Schedule[]
+  photos                      Photo[]
+  therapistView               TherapistView?
+  TherapistPasswordResetToken TherapistPasswordResetToken[]
 }
 
 model Favorite {
@@ -141,11 +143,11 @@ model Message {
 }
 
 model Photo {
-  id Int @id @default(autoincrement())
+  id          Int       @id @default(autoincrement())
   therapistId Int
-  therapist Therapist @relation(fields:[therapistId], references:[id])
-  filename String
-  created DateTime @default(now())
+  therapist   Therapist @relation(fields: [therapistId], references: [id])
+  filename    String
+  created     DateTime  @default(now())
 }
 
 model Menu {
@@ -217,4 +219,20 @@ view TherapistView {
   isNew             Boolean
   minMenuPrice      Int?
   therapist         Therapist? @relation(fields: [id], references: [id])
+}
+
+model PasswordResetToken {
+  id      Int      @id @default(autoincrement())
+  token   String   @unique
+  expires DateTime
+  userId  Int
+  user    User     @relation(fields: [userId], references: [id])
+}
+
+model TherapistPasswordResetToken {
+  id          Int       @id @default(autoincrement())
+  token       String    @unique
+  expires     DateTime
+  therapistId Int
+  therapist   Therapist @relation(fields: [therapistId], references: [id])
 }
