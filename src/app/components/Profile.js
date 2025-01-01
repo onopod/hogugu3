@@ -1,3 +1,5 @@
+"use client"
+
 import { Button, FormControl, MenuItem, Select, Stack, TextField } from "@mui/material";
 import Image from "next/image";
 import { Controller } from "react-hook-form";
