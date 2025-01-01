@@ -28,7 +28,7 @@ export async function POST(req) {
             },
         });
 
-        const resetUrl = `${process.env.NEXTAUTH_URL}/reset-password?token=${token}`;
+        const resetUrl = `${process.env.NEXTAUTH_URL || process.env.VERCEL_URL}/reset-password?token=${token}`;
         await sendResetEmail(mail, resetUrl);
 
         return new Response(
