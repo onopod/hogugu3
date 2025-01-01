@@ -1298,3 +1298,45 @@ export async function getPhotos() {
         console.dir(err)
     }
 }
+
+export async function postPhoto({ files }) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    if (!(files?.length > 0)) return;
+
+    console.log("files is")
+    console.dir(files)
+    try {
+        const distDir = `./public/therapistPhoto/${session.user.id}`
+        await fs.mkdir(distDir, { recursive: true })
+        for (const file of files) {
+            const arrayBuffer = await file.arrayBuffer();
+            await fs.writeFile(`${distDir}/${file.name}`, Buffer.from(arrayBuffer));
+
+            await prisma.photo.create({
+                data: {
+                    therapistId: session.user.id,
+                    filename: file.name
+                }
+            })
+
+        }
+    } catch (err) {
+        console.dir(err)
+    }
+}
+
+export async function deletePhoto(photoId) {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        await prisma.photo.delete({
+            where: {
+                id: photoId,
+                therapistId: session.user.id
+            }
+        })
+    } catch (err) {
+        console.dir(err)
+    }
+}

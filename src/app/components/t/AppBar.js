@@ -79,6 +79,7 @@ function MyAppBar() {
               {session?.user?.role == "therapist" ? (
                 <div key={1}>
                   <MenuItem onClick={() => router.push("/t/profile")}>プロフィール</MenuItem>
+                  <MenuItem onClick={() => router.push("/t/photo")}>フォト</MenuItem>
                   <MenuItem onClick={() => router.push("/t/sales")}>売上明細</MenuItem>
                   <MenuItem onClick={() => onSignOut()}>ログアウト</MenuItem>
                 </div>
