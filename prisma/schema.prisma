@@ -101,6 +101,7 @@ model Therapist {
   favorites     Favorite[]
   histories     History[]
   schedules     Schedule[]
+  photos Photo[]
   therapistView TherapistView?
 }
 
@@ -137,6 +138,14 @@ model Message {
   messageStatus   MessageStatus @relation(fields: [messageStatusId], references: [id])
   isRead          Boolean       @default(false)
   created         DateTime      @default(now())
+}
+
+model Photo {
+  id Int @id @default(autoincrement())
+  therapistId Int
+  therapist Therapist @relation(fields:[therapistId], references:[id])
+  filename String
+  created DateTime @default(now())
 }
 
 model Menu {

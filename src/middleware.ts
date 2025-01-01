@@ -12,6 +12,7 @@ export const config = {
         "/t/reservation(.*)",
         "/t/message(.*)",
         "/t/profile(.*)",
+        "/t/photo(.*)",
         "/t/logout(.*)",
         "/t/favorites(.*)",
         "/t/menu(.*)",
