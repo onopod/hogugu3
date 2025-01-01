@@ -1272,3 +1272,29 @@ export async function getSales({ targetYM }) {
         console.dir(err)
     }
 }
+
+
+
+export async function getPhotos() {
+    const session = await getServerSession(authOptions);
+    if (!(session?.user?.role == "therapist")) return;
+    try {
+        const photos = prisma.photo.findMany({
+            where: {
+                therapistId: session.user.id
+            },
+            select: {
+                id: true,
+                therapistId: true,
+                filename: true,
+                created: true
+            },
+            orderBy: [
+                { created: "desc" }
+            ]
+        })
+        return photos
+    } catch (err) {
+        console.dir(err)
+    }
+}

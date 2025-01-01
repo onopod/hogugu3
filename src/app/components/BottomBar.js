@@ -11,7 +11,7 @@ export default function FixedBottomNavigation() {
     const [value, setValue] = useState(0);
     const ref = useRef(null);
     return (
-        <Box maxWidth="sm" sx={{ display: "flex", pb: 7 }} ref={ref}>
+        <Box maxWidth="sm" sx={{ zIndex: 1300, display: "flex", pb: 7 }} ref={ref}>
             <Paper sx={{ position: 'fixed', bottom: 0, left: 0, right: 0 }} elevation={3}>
                 <BottomNavigation
                     showLabels

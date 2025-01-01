@@ -16,6 +16,7 @@ async function main() {
     await prisma.message.deleteMany({})
     await prisma.reservation.deleteMany({})
     await prisma.therapistsOnMenus.deleteMany({})
+    await prisma.photo.deleteMany({})
     await prisma.therapist.deleteMany({})
     await prisma.menu.deleteMany({})
     await prisma.user.deleteMany({})
@@ -223,9 +224,30 @@ async function main() {
 
                     })
 
-                    // therapistsOnMenus
                     const firstTherapistId = therapists[0].id;
                     const secondTherapistId = therapists[1].id;
+                    // photo
+                    const photos = await prisma.photo.createManyAndReturn({
+                        data: [
+                            { therapistId: firstTherapistId, filename: "mountain1.png" },
+                            { therapistId: firstTherapistId, filename: "mountain2.png" },
+                            { therapistId: firstTherapistId, filename: "mountain3.png" },
+                            { therapistId: secondTherapistId, filename: "mountain4.png" }
+                        ]
+                    })
+
+                    fs.rm("./public/therapistPhoto", { recursive: true, force: true }, () => {
+                        photos.forEach(photo => {
+                            const filePath = `./public/photo/mountain.png`;
+                            const distDir = `./public/therapistPhoto/${photo.therapistId}`
+                            fs.mkdir(distDir, { recursive: true }, () => {
+                                fs.copyFile(filePath, `${distDir}/${photo.filename}`, () => { })
+                            })
+                        })
+
+                    })
+
+                    // therapistsOnMenus
                     const therapistsOnMenus = await prisma.therapistsOnMenus.createManyAndReturn({
                         data: [
                             { therapistId: firstTherapistId, menuId: 1, treatmentTime: 60, price: 6000 },
