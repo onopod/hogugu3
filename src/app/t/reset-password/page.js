@@ -10,7 +10,7 @@ import { useState } from 'react';
 export default function ResetPassword() {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const token = searchParams.get("token");
+    const token = searchParams?.get("token");
 
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
