@@ -2,18 +2,22 @@
 import AppBar from "@/app/components/t/AppBar";
 import BottomBar from "@/app/components/t/BottomBar";
 import { Button, Container, FormControl, Input } from "@mui/material";
-
-
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 
 export default function ResetPassword() {
     const router = useRouter();
-    const searchParams = useSearchParams();
-    const token = searchParams?.get("token");
-
+    const [token, setToken] = useState(null); // 初期値はnull
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+
+    useEffect(() => {
+        // クライアントサイドでのみ検索パラメータを取得
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            setToken(params.get("token"));
+        }
+    }, []);
 
     async function handleSubmit(e) {
         e.preventDefault();
